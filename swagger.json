@@ -1,0 +1,876 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "description" : "Especificaciónes de la API privada de CRM",
+    "version" : "0.1.0-private",
+    "title" : "Api CRM",
+    "contact" : {
+      "url" : "https://cotesa.grupotecopy.es/",
+      "name" : "Cotesa",
+      "email" : "juancromero@grupotecopy.es"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "Personas",
+    "description" : "Gestión de personas en CRM. Identificación única de personas físicas y personas jurídicas"
+  }, {
+    "name" : "Usuarios",
+    "description" : "Gestión de usuarios de CRM."
+  }, {
+    "name" : "Autorizaciones",
+    "description" : "Procesos de autorización."
+  }, {
+    "name" : "Interacciones",
+    "description" : "Métodos para la incorporación de interacciones."
+  }, {
+    "name" : "Solicitudes",
+    "description" : "Métodos para la incorporación de solicitudes."
+  } ],
+  "paths" : {
+    "/person" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "post" : {
+        "tags" : [ "Personas" ],
+        "summary" : "Alta de persona",
+        "description" : "Crea una nueva persona",
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Person"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Person"
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
+      }
+    },
+    "/person/{personId}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "get" : {
+        "tags" : [ "Personas" ],
+        "summary" : "Obtener persona",
+        "description" : "Retorna una única persona por su id",
+        "parameters" : [ {
+          "name" : "personId",
+          "in" : "path",
+          "description" : "ID de la persona",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Person"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidID"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Personas" ],
+        "summary" : "Modificación de persona (Creación si no existe)",
+        "description" : "Actualiza la persona por su id con la persona recibida en body, si no existe el recurso",
+        "parameters" : [ {
+          "name" : "personId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No content, upadate OK"
+          },
+          "201" : {
+            "description" : "created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Person"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/InvalidID"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Person"
+        }
+      },
+      "delete" : {
+        "tags" : [ "Personas" ],
+        "summary" : "Eliminar persona",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "personId",
+          "in" : "path",
+          "description" : "id de la persona a eliminar",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/person/card/{sgtcId}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "get" : {
+        "tags" : [ "Personas" ],
+        "summary" : "Obtiene una persona por su tarjeta ciudadana",
+        "description" : "Retorna una única persona",
+        "parameters" : [ {
+          "name" : "sgtcId",
+          "in" : "path",
+          "description" : "ID de la tarjeta ciudadana",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Person"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/user" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "post" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Alta de usuario",
+        "description" : "Crea el perfil de la persona asociada en el módulo de indetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado",
+        "responses" : {
+          "201" : {
+            "description" : "created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        },
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/Person"
+        }
+      }
+    },
+    "/user/{userId}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Obtiene un usuario por su ID",
+        "description" : "Retorna un usuario",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "ID del usuario a recuperar",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Actualiza un usuario con el objeto recibido en el body",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "$ref" : "#/components/responses/Created"
+          },
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          }
+        },
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "description" : "objeto usuario",
+          "required" : true
+        }
+      },
+      "delete" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Elimina una persona",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "id del usuario a eliminar",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/auth/token" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Obtiene un token de acceso proporcionando un código de autorización o un token de refresco",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "authType",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "authCode",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "refreshToken",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "description" : ""
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/token/tc" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Obtiene un token de acceso proporcionando el id de la tarjeta ciudadana",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "authType",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "authCode",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "refreshToken",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/logout" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Realiza el logout de un usuario invalidando su token de acceso",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "authType",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "authCode",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "refreshToken",
+          "in" : "header",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/changeMePassword" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "modifica la contarseña del usuario autorizado por el token",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "newPassword",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/changeUserPassword" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "modifica la contraseña del usuario pasado por parámetro",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "newPassword",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/lostPassword" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Envía notificación al usuario para la recuperación de la contraseña mediante el paso del email o el id de su tarjeta ciudadana",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "type",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "email",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "idSGTC",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/auth/recoverPassword" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Restaura la contraseña de un usuario mediante un código de autorización y la neuva password",
+        "description" : "",
+        "parameters" : [ {
+          "name" : "token",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "confirmationKey",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "newPassword",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "401" : {
+            "description" : "Invalid input"
+          },
+          "405" : {
+            "description" : "Invalid input"
+          }
+        }
+      }
+    },
+    "/interaction" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      } ],
+      "post" : {
+        "parameters" : [ ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Interaction"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "$ref" : "#/components/responses/Created"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          },
+          "405" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        },
+        "tags" : [ "Interacciones" ]
+      }
+    }
+  },
+  "components" : {
+    "requestBodies" : {
+      "Person" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Person"
+            }
+          }
+        },
+        "description" : "objeto persona",
+        "required" : true
+      },
+      "User" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          }
+        },
+        "description" : "objeto Usuario",
+        "required" : true
+      }
+    },
+    "schemas" : {
+      "Person" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "tipoPersonal" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "nombre" : {
+            "type" : "string"
+          },
+          "tipoDoc" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "documento" : {
+            "type" : "string"
+          },
+          "segmentos" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "ObjectId"
+            }
+          }
+        }
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "username" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          },
+          "userStatus" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "person" : {
+            "$ref" : "#/components/schemas/Person"
+          }
+        }
+      },
+      "Interaction" : {
+        "type" : "object",
+        "properties" : {
+          "subjectId" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "source" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "userAgentId" : {
+            "type" : "string"
+          },
+          "typeId" : {
+            "type" : "number"
+          },
+          "detail" : {
+            "type" : "string"
+          },
+          "areaId" : {
+            "type" : "string"
+          },
+          "serviceId" : {
+            "type" : "string"
+          },
+          "timestamp" : {
+            "type" : "number"
+          }
+        }
+      },
+      "RequestError" : {
+        "type" : "object",
+        "required" : [ "errorId", "errorName", "errorDescription" ],
+        "properties" : {
+          "errorId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "errorName" : {
+            "type" : "string"
+          },
+          "errorDescription" : {
+            "type" : "string"
+          },
+          "aditionalErrors" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        },
+        "example" : {
+          "errorId" : 524,
+          "errorName" : "AREA_ERROR",
+          "errorDescription" : "ERROR EN EL ID DE AREA, NO ENCONTRADO",
+          "aditionalErrors" : [ "Id de área 50 no existe", "No se ha podido obtener área relacionada" ]
+        }
+      }
+    },
+    "responses" : {
+      "Ok" : {
+        "description" : "success"
+      },
+      "NoContent" : {
+        "description" : "No content"
+      },
+      "Created" : {
+        "description" : "Created"
+      },
+      "InvalidID" : {
+        "description" : "Invalid Path ID"
+      },
+      "InvalidRequestBody" : {
+        "description" : "Invalid request body",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/RequestError"
+            }
+          }
+        }
+      },
+      "NotFound" : {
+        "description" : "Not found"
+      },
+      "UnauthorizedError" : {
+        "description" : "Access token is missing or invalid"
+      }
+    },
+    "securitySchemes" : {
+      "BearerToken" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      },
+      "ApiKey" : {
+        "type" : "apiKey",
+        "in" : "header",
+        "name" : "X-API-Key"
+      }
+    },
+    "parameters" : {
+      "bearerToken" : {
+        "name" : "bearerToken",
+        "description" : "Token obtenido en el proceso de login  (Obligatorio si no se dispone de ApiKey)",
+        "in" : "header",
+        "required" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      },
+      "apiKey" : {
+        "name" : "apiKey",
+        "description" : "ApiKey de aplicación de terceros (Obligatoria si no se dispone de token)",
+        "in" : "header",
+        "required" : false,
+        "schema" : {
+          "type" : "string"
+        }
+      }
+    }
+  },
+  "externalDocs" : {
+    "description" : "Especificación Api rest",
+    "url" : "https://restfulapi.net/http-status-codes/"
+  },
+  "servers" : [ {
+    "url" : "{servidor}/private/{version}",
+    "description" : "Servidor CRM",
+    "variables" : {
+      "servidor" : {
+        "enum" : [ "https://desacrm.grupotecopy.es", "http://localhost:8080" ],
+        "default" : "http://localhost:8080"
+      },
+      "version" : {
+        "enum" : [ "v0", "v1" ],
+        "default" : "v0",
+        "description" : "Versión de la api"
+      }
+    }
+  }, {
+    "url" : "http://localhost:8080/private"
+  } ]
+}

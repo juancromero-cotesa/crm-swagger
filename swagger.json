@@ -353,6 +353,83 @@
         }
       }
     },
+    "/user/userName/{userName}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      }, {
+        "name" : "userName",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Obtener usuario por nombre de usuario",
+        "description" : "Obtiene el usuario pasado por parámetro en el path de la url.",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/user/tc/{idSgtc}" : {
+      "parameters" : [ {
+        "$ref" : "#/components/parameters/bearerToken"
+      }, {
+        "$ref" : "#/components/parameters/apiKey"
+      }, {
+        "name" : "idSgtc",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Obtener usuario por id de tarjeta ciudadana",
+        "description" : "Obtiene el usuario a partir de su identificador de tarjeta ciudadana.",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
     "/auth/token" : {
       "post" : {
         "tags" : [ "Autorizaciones" ],
@@ -393,29 +470,10 @@
     "/auth/token/tc" : {
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "Obtiene un token de acceso proporcionando el id de la tarjeta ciudadana",
-        "description" : "",
+        "summary" : "Obtiene un token de acceso mediante id de la tarjeta ciudadana de",
+        "description" : "Obtiene un token de acceso para un usuario proporcionando el id de la tarjeta ciudadana",
         "parameters" : [ {
-          "name" : "authType",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "authCode",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "refreshToken",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+          "$ref" : "#/components/parameters/apiKey"
         } ],
         "responses" : {
           "401" : {

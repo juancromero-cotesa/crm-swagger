@@ -1,0 +1,1414 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Api CRM</title>
+    <style type="text/css">
+      body {
+      	font-family: Trebuchet MS, sans-serif;
+      	font-size: 15px;
+      	color: #444;
+      	margin-right: 24px;
+      }
+      
+      h1	{
+      	font-size: 25px;
+      }
+      h2	{
+      	font-size: 20px;
+      }
+      h3	{
+      	font-size: 16px;
+      	font-weight: bold;
+      }
+      hr	{
+      	height: 1px;
+      	border: 0;
+      	color: #ddd;
+      	background-color: #ddd;
+      }
+      
+      .app-desc {
+        clear: both;
+        margin-left: 20px;
+      }
+      .param-name {
+        width: 100%;
+      }
+      .license-info {
+        margin-left: 20px;
+      }
+      
+      .license-url {
+        margin-left: 20px;
+      }
+      
+      .model {
+        margin: 0 0 0px 20px;
+      }
+      
+      .method {
+        margin-left: 20px;
+      }
+      
+      .method-notes	{
+      	margin: 10px 0 20px 0;
+      	font-size: 90%;
+      	color: #555;
+      }
+      
+      pre {
+        padding: 10px;
+        margin-bottom: 2px;
+      }
+      
+      .http-method {
+       text-transform: uppercase;
+      }
+      
+      pre.get {
+        background-color: #0f6ab4;
+      }
+      
+      pre.post {
+        background-color: #10a54a;
+      }
+      
+      pre.put {
+        background-color: #c5862b;
+      }
+      
+      pre.delete {
+        background-color: #a41e22;
+      }
+      
+      .huge	{
+      	color: #fff;
+      }
+      
+      pre.example {
+        background-color: #f3f3f3;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      
+      code {
+        white-space: pre;
+      }
+      
+      .nickname {
+        font-weight: bold;
+      }
+      
+      .method-path {
+        font-size: 1.5em;
+        background-color: #0f6ab4;
+      }
+      
+      .up {
+        float:right;
+      }
+      
+      .parameter {
+        width: 500px;
+      }
+      
+      .param {
+        width: 500px;
+        padding: 10px 0 0 20px;
+        font-weight: bold;
+      }
+      
+      .param-desc {
+        width: 700px;
+        padding: 0 0 0 20px;
+        color: #777;
+      }
+      
+      .param-type {
+        font-style: italic;
+      }
+      
+      .param-enum-header {
+      width: 700px;
+      padding: 0 0 0 60px;
+      color: #777;
+      font-weight: bold;
+      }
+      
+      .param-enum {
+      width: 700px;
+      padding: 0 0 0 80px;
+      color: #777;
+      font-style: italic;
+      }
+      
+      .field-label {
+        padding: 0;
+        margin: 0;
+        clear: both;
+      }
+      
+      .field-items	{
+      	padding: 0 0 15px 0;
+      	margin-bottom: 15px;
+      }
+      
+      .return-type {
+        clear: both;
+        padding-bottom: 10px;
+      }
+      
+      .param-header {
+        font-weight: bold;
+      }
+      
+      .method-tags {
+        text-align: right;
+      }
+      
+      .method-tag {
+        background: none repeat scroll 0% 0% #24A600;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin: 2px;
+        color: #FFF;
+        display: inline-block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>Api CRM</h1>
+    <div class="app-desc"><p>Especificaciónes de la API pública de CRM.</p>
+<p>Versión 1 parte privada.</p>
+<p>Los métodos estánran protegidos mediante el paso de un token válido.</p>
+<p>Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos poe el paso de una api key.</p>
+<p>Se dispone de una versión pública donde se expondrán los métodos disponibles para aplicaciones de tereceros u otros componenes de la iniciativa</p>
+</div>
+    <div class="app-desc">More information: <a href="https://cotesa.grupotecopy.es/">https://cotesa.grupotecopy.es/</a></div>
+    <div class="app-desc">Contact Info: <a href="juancromero@grupotecopy.es">juancromero@grupotecopy.es</a></div>
+    <div class="app-desc">Version: 0.1.0-PUBLIC</div>
+    
+    <div class="license-info">Apache 2.0</div>
+    <div class="license-url">http://www.apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+    <ol>
+      <li>APIKey KeyParamName:X-API-Key KeyInQuery:false KeyInHeader:true</li>
+      <li></li>
+    </ol>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Autorizaciones">Autorizaciones</a></h4>
+  <ul>
+  <li><a href="#authLoginPost"><code><span class="http-method">post</span> /auth/login</code></a></li>
+  <li><a href="#authLogoutPost"><code><span class="http-method">post</span> /auth/logout</code></a></li>
+  <li><a href="#authPasswordChangePost"><code><span class="http-method">post</span> /auth/password/change</code></a></li>
+  <li><a href="#authPasswordLostPost"><code><span class="http-method">post</span> /auth/password/lost</code></a></li>
+  <li><a href="#authPasswordRecoverPost"><code><span class="http-method">post</span> /auth/password/recover</code></a></li>
+  <li><a href="#authRefreshTokenPost"><code><span class="http-method">post</span> /auth/refreshToken</code></a></li>
+  </ul>
+  <h4><a href="#Interacciones">Interacciones</a></h4>
+  <ul>
+  <li><a href="#interactionPost"><code><span class="http-method">post</span> /interaction</code></a></li>
+  </ul>
+  <h4><a href="#Personas">Personas</a></h4>
+  <ul>
+  <li><a href="#personCardSgtcIdGet"><code><span class="http-method">get</span> /person/card/{sgtcId}</code></a></li>
+  <li><a href="#personPersonIdDelete"><code><span class="http-method">delete</span> /person/{personId}</code></a></li>
+  <li><a href="#personPersonIdGet"><code><span class="http-method">get</span> /person/{personId}</code></a></li>
+  <li><a href="#personPersonIdPut"><code><span class="http-method">put</span> /person/{personId}</code></a></li>
+  <li><a href="#personPost"><code><span class="http-method">post</span> /person</code></a></li>
+  </ul>
+  <h4><a href="#Usuarios">Usuarios</a></h4>
+  <ul>
+  <li><a href="#userPost"><code><span class="http-method">post</span> /user</code></a></li>
+  <li><a href="#userTcIdSgtcGet"><code><span class="http-method">get</span> /user/tc/{idSgtc}</code></a></li>
+  <li><a href="#userUserIdDelete"><code><span class="http-method">delete</span> /user/{userId}</code></a></li>
+  <li><a href="#userUserIdGet"><code><span class="http-method">get</span> /user/{userId}</code></a></li>
+  <li><a href="#userUserIdPut"><code><span class="http-method">put</span> /user/{userId}</code></a></li>
+  <li><a href="#userUserNameUserNameGet"><code><span class="http-method">get</span> /user/userName/{userName}</code></a></li>
+  </ul>
+
+  <h1><a name="Autorizaciones">Autorizaciones</a></h1>
+  <div class="method"><a name="authLoginPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/login</code></pre></div>
+    <div class="method-summary">login de usuario (<span class="nickname">authLoginPost</span>)</div>
+    <div class="method-notes">&lt;p&gt;Autentica un usuario mediante el uso de un identificador admitido (nombre, emil, id terjate ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su perdiodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt;&lt;/p&gt;&lt;/p&gt;
+</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Login">Login</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para el login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana los cuales son excluyentes.  Si se proporciona mas de uno devolverá error 400 en la petición </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#TokenResponse">TokenResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token_type" : "bearer",
+  "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4",
+  "expires_in" : 20,
+  "refresh_token" : "fdb8fdbecf1d03ce5e6125c067733c0d51de209c"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Login ok
+        <a href="#TokenResponse">TokenResponse</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authLogoutPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/logout</code></pre></div>
+    <div class="method-summary">Realiza el logout de un usuario invalidando su token de acceso (<span class="nickname">authLogoutPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authPasswordChangePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/password/change</code></pre></div>
+    <div class="method-summary">Cambio de contraseña (<span class="nickname">authPasswordChangePost</span>)</div>
+    <div class="method-notes">Modifica la contraseña del usuario pasado por body. Si el usuario recibido no es el propietario del token, debera tener los permisos necesarios.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#ChangePasswordRequest">ChangePasswordRequest</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authPasswordLostPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/password/lost</code></pre></div>
+    <div class="method-summary">Contraseña olvidada (<span class="nickname">authPasswordLostPost</span>)</div>
+    <div class="method-notes">Envía notificación al usuario para la recuperación de la contraseña mediante el paso del email o el id de su tarjeta ciudadana. Si se pasa el email se envía el enlace de recuperación sin realizar mas comprobaciones. Si no se recibe email y se recibe el id de tarjeta, se obtendrá el email asociado al propietario. Si no se encuentra email asociado o no se localiza el usuario con la tarjeta se retorna error 400</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#ForgotPasswordRequest">ForgotPasswordRequest</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authPasswordRecoverPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/password/recover</code></pre></div>
+    <div class="method-summary">Establece la nueva contraseña para el usuario asociado al token de recuperación (<span class="nickname">authPasswordRecoverPost</span>)</div>
+    <div class="method-notes">Tras una solicitud de restauración de contraseña, se ha enviado al usuario un enlace con un token de recuperación asociado. Mediante el uso de este token se podrá enviar una nueva contraseña que se establecerá como contraseña del usuario asociado al token de recuperación.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#RecoverPasswordRequest">RecoverPasswordRequest</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authRefreshTokenPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/refreshToken</code></pre></div>
+    <div class="method-summary">Refresca el token de autorización (<span class="nickname">authRefreshTokenPost</span>)</div>
+    <div class="method-notes">Obtiene un nuevo token de acceso a partir del token válido actual y el token de refresco</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#TokenResponse">TokenResponse</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#TokenResponse">TokenResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token_type" : "bearer",
+  "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4",
+  "expires_in" : 20,
+  "refresh_token" : "fdb8fdbecf1d03ce5e6125c067733c0d51de209c"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Refresh ok
+        <a href="#TokenResponse">TokenResponse</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">405</h4>
+    Invalid input
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Interacciones">Interacciones</a></h1>
+  <div class="method"><a name="interactionPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /interaction</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">interactionPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Interaction">Interaction</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Interaction">Interaction</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "sourceId" : "sourceId",
+  "area" : {
+    "name" : "name",
+    "id" : { },
+    "Identificator" : "CONJUV"
+  },
+  "userAgentId" : "userAgentId",
+  "service" : {
+    "name" : "name",
+    "id" : { },
+    "Identificator" : "SERSOC"
+  },
+  "typeId" : 0.8008281904610115,
+  "id" : "id",
+  "detail" : "detail",
+  "subjectId" : "subjectId",
+  "timestamp" : "timestamp"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Interacción creada
+        <a href="#Interaction">Interaction</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Personas">Personas</a></h1>
+  <div class="method"><a name="personCardSgtcIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /person/card/{sgtcId}</code></pre></div>
+    <div class="method-summary">Obtiene una persona por su tarjeta ciudadana (<span class="nickname">personCardSgtcIdGet</span>)</div>
+    <div class="method-notes">Retorna una única persona</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">sgtcId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la tarjeta ciudadana </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Person">Person</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "tipoDoc" : "tipoDoc",
+  "documento" : "documento",
+  "tipoPersonal" : "tipoPersonal",
+  "id" : "id",
+  "nombre" : "nombre",
+  "segmentos" : [ "segmentos", "segmentos" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    successful operation
+        <a href="#Person">Person</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPersonIdDelete"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /person/{personId}</code></pre></div>
+    <div class="method-summary">Eliminar persona (<span class="nickname">personPersonIdDelete</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">personId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id de la persona a eliminar </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPersonIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /person/{personId}</code></pre></div>
+    <div class="method-summary">Obtener persona (<span class="nickname">personPersonIdGet</span>)</div>
+    <div class="method-notes">Retorna una única persona por su id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">personId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la persona </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Person">Person</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "tipoDoc" : "tipoDoc",
+  "documento" : "documento",
+  "tipoPersonal" : "tipoPersonal",
+  "id" : "id",
+  "nombre" : "nombre",
+  "segmentos" : [ "segmentos", "segmentos" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    successful operation
+        <a href="#Person">Person</a>
+    <h4 class="field-label">400</h4>
+    Invalid Path ID
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPersonIdPut"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /person/{personId}</code></pre></div>
+    <div class="method-summary">Modificación de persona (Creación si no existe) (<span class="nickname">personPersonIdPut</span>)</div>
+    <div class="method-notes">Actualiza la persona por su id con la persona recibida en body, si no existe el recurso</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">personId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Person">Person</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto persona </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Person">Person</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "tipoDoc" : "tipoDoc",
+  "documento" : "documento",
+  "tipoPersonal" : "tipoPersonal",
+  "id" : "id",
+  "nombre" : "nombre",
+  "segmentos" : [ "segmentos", "segmentos" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content, upadate OK
+        <a href="#"></a>
+    <h4 class="field-label">201</h4>
+    created
+        <a href="#Person">Person</a>
+    <h4 class="field-label">401</h4>
+    Invalid Path ID
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+    <h4 class="field-label">405</h4>
+    Invalid input
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /person</code></pre></div>
+    <div class="method-summary">Alta de persona (<span class="nickname">personPost</span>)</div>
+    <div class="method-notes">Crea una nueva persona</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Person">Person</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto persona </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Person">Person</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "tipoDoc" : "tipoDoc",
+  "documento" : "documento",
+  "tipoPersonal" : "tipoPersonal",
+  "id" : "id",
+  "nombre" : "nombre",
+  "segmentos" : [ "segmentos", "segmentos" ]
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Created
+        <a href="#Person">Person</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Usuarios">Usuarios</a></h1>
+  <div class="method"><a name="userPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /user</code></pre></div>
+    <div class="method-summary">Alta de usuario (<span class="nickname">userPost</span>)</div>
+    <div class="method-notes">Crea el perfil de la persona asociada en el módulo de indetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Person">Person</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto persona </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#User">User</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "password" : "password",
+  "userStatus" : 0,
+  "person" : {
+    "tipoDoc" : "tipoDoc",
+    "documento" : "documento",
+    "tipoPersonal" : "tipoPersonal",
+    "id" : "id",
+    "nombre" : "nombre",
+    "segmentos" : [ "segmentos", "segmentos" ]
+  },
+  "id" : "id",
+  "email" : "email",
+  "username" : "username"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    created
+        <a href="#User">User</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="userTcIdSgtcGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/tc/{idSgtc}</code></pre></div>
+    <div class="method-summary">Obtener usuario por id de tarjeta ciudadana (<span class="nickname">userTcIdSgtcGet</span>)</div>
+    <div class="method-notes">Obtiene el usuario a partir de su identificador de tarjeta ciudadana.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">idSgtc (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#User">User</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "password" : "password",
+  "userStatus" : 0,
+  "person" : {
+    "tipoDoc" : "tipoDoc",
+    "documento" : "documento",
+    "tipoPersonal" : "tipoPersonal",
+    "id" : "id",
+    "nombre" : "nombre",
+    "segmentos" : [ "segmentos", "segmentos" ]
+  },
+  "id" : "id",
+  "email" : "email",
+  "username" : "username"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    successful operation
+        <a href="#User">User</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="userUserIdDelete"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /user/{userId}</code></pre></div>
+    <div class="method-summary">Elimina una persona (<span class="nickname">userUserIdDelete</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id del usuario a eliminar </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="userUserIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{userId}</code></pre></div>
+    <div class="method-summary">Obtiene un usuario por su ID (<span class="nickname">userUserIdGet</span>)</div>
+    <div class="method-notes">Retorna un usuario</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID del usuario a recuperar </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#User">User</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "password" : "password",
+  "userStatus" : 0,
+  "person" : {
+    "tipoDoc" : "tipoDoc",
+    "documento" : "documento",
+    "tipoPersonal" : "tipoPersonal",
+    "id" : "id",
+    "nombre" : "nombre",
+    "segmentos" : [ "segmentos", "segmentos" ]
+  },
+  "id" : "id",
+  "email" : "email",
+  "username" : "username"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    successful operation
+        <a href="#User">User</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="userUserIdPut"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /user/{userId}</code></pre></div>
+    <div class="method-summary">Actualiza un usuario con el objeto recibido en el body (<span class="nickname">userUserIdPut</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#User">User</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto usuario </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Created
+        <a href="#"></a>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="userUserNameUserNameGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/userName/{userName}</code></pre></div>
+    <div class="method-summary">Obtener usuario por nombre de usuario (<span class="nickname">userUserNameUserNameGet</span>)</div>
+    <div class="method-notes">Obtiene el usuario pasado por parámetro en el path de la url.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">userName (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#User">User</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "password" : "password",
+  "userStatus" : 0,
+  "person" : {
+    "tipoDoc" : "tipoDoc",
+    "documento" : "documento",
+    "tipoPersonal" : "tipoPersonal",
+    "id" : "id",
+    "nombre" : "nombre",
+    "segmentos" : [ "segmentos", "segmentos" ]
+  },
+  "id" : "id",
+  "email" : "email",
+  "username" : "username"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    successful operation
+        <a href="#User">User</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    Access token, is missing , invalid or insuficients rights
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#ChangePasswordRequest"><code>ChangePasswordRequest</code></a></li>
+    <li><a href="#ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a></li>
+    <li><a href="#Interaction"><code>Interaction</code></a></li>
+    <li><a href="#InteractionBatch"><code>InteractionBatch</code></a></li>
+    <li><a href="#InteractionInteractive"><code>InteractionInteractive</code></a></li>
+    <li><a href="#Login"><code>Login</code></a></li>
+    <li><a href="#OrganizationArea"><code>OrganizationArea</code></a></li>
+    <li><a href="#OrganizationService"><code>OrganizationService</code></a></li>
+    <li><a href="#Person"><code>Person</code></a></li>
+    <li><a href="#RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a></li>
+    <li><a href="#Request"><code>Request</code></a></li>
+    <li><a href="#RequestType"><code>RequestType</code></a></li>
+    <li><a href="#ServiceResponseError"><code>ServiceResponseError</code></a></li>
+    <li><a href="#TokenResponse"><code>TokenResponse</code></a></li>
+    <li><a href="#User"><code>User</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="ChangePasswordRequest"><code>ChangePasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">userid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">oldPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">newPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">sgtcId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Interaction"><code>Interaction</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Esquema básico de Interacción  (Pte de definir completamente)</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">subjectId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. format: ObjectId</div>
+<div class="param">sourceId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del medio por el que se produce la interacción format: ObjectId</div>
+<div class="param">userAgentId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Agente que atiende la interacción (puede ser un usuario físico u otro componente o aplicación) </div>
+<div class="param">typeId </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Tipo de interacción. Deberá ser un ID de la tabla de interacciones. </div>
+<div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Detalle de la interacción </div>
+<div class="param">area (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationArea">OrganizationArea</a></span>  </div>
+<div class="param">service (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationService">OrganizationService</a></span>  </div>
+<div class="param">timestamp (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Fecha / hora de la interacción </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionBatch"><code>InteractionBatch</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">geom (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: GeoJSON</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionInteractive"><code>InteractionInteractive</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">resolution (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Solución aportada a la interacción </div>
+<div class="param">resolutionUserAgent (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">User</a></span>  </div>
+<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Login"><code>Login</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana. Si se proporciona mas de uno devolverá error en la petición</div>
+    <div class="field-items">
+      <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">telephone (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">tc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="OrganizationArea"><code>OrganizationArea</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Área de la estructura organizativa</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del área </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="OrganizationService"><code>OrganizationService</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Servicio de la estructura organizativa</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del servicio </div>
+          <div class="param-desc"><span class="param-type">example: SERSOC</span></div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Person"><code>Person</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">tipoPersonal (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">nombre (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">tipoDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">documento (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">segmentos (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">recoverToken (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">newPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Request"><code>Request</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Solicitud realizada (Pte de definir completamente)</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">requestType (optional)</div><div class="param-desc"><span class="param-type"><a href="#RequestType">RequestType</a></span>  </div>
+<div class="param">interactionOrigin (optional)</div><div class="param-desc"><span class="param-type"><a href="#Interaction">Interaction</a></span>  </div>
+<div class="param">interactionRelations (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">array[Object]</a></span> interacciones relacionadas con la solicitud format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RequestType"><code>RequestType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de solicitud</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la solicitud </div>
+          <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
+<div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ServiceResponseError"><code>ServiceResponseError</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">errorId </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">errorName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">errorDescription </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">aditionalErrors (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="TokenResponse"><code>TokenResponse</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">token_type (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">access_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">expires_in (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">refresh_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="User"><code>User</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
+<div class="param">person (optional)</div><div class="param-desc"><span class="param-type"><a href="#Person">Person</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>

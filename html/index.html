@@ -561,9 +561,8 @@
   },
   "userAgentId" : "userAgentId",
   "service" : {
-    "name" : "name",
     "id" : { },
-    "Identificator" : "SERSOC"
+    "Identificator" : "Identificator"
   },
   "typeId" : 0.8008281904610115,
   "id" : "id",
@@ -626,10 +625,14 @@
     <pre class="example"><code>{
   "tipoDoc" : "tipoDoc",
   "documento" : "documento",
-  "tipoPersonal" : "tipoPersonal",
+  "segmentation" : [ "segmentation", "segmentation" ],
   "id" : "id",
-  "nombre" : "nombre",
-  "segmentos" : [ "segmentos", "segmentos" ]
+  "personType" : {
+    "description" : "PersSegmentsica",
+    "id" : { },
+    "identificator" : "PE01"
+  },
+  "nombre" : "nombre"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -720,10 +723,14 @@
     <pre class="example"><code>{
   "tipoDoc" : "tipoDoc",
   "documento" : "documento",
-  "tipoPersonal" : "tipoPersonal",
+  "segmentation" : [ "segmentation", "segmentation" ],
   "id" : "id",
-  "nombre" : "nombre",
-  "segmentos" : [ "segmentos", "segmentos" ]
+  "personType" : {
+    "description" : "PersSegmentsica",
+    "id" : { },
+    "identificator" : "PE01"
+  },
+  "nombre" : "nombre"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -790,10 +797,14 @@
     <pre class="example"><code>{
   "tipoDoc" : "tipoDoc",
   "documento" : "documento",
-  "tipoPersonal" : "tipoPersonal",
+  "segmentation" : [ "segmentation", "segmentation" ],
   "id" : "id",
-  "nombre" : "nombre",
-  "segmentos" : [ "segmentos", "segmentos" ]
+  "personType" : {
+    "description" : "PersSegmentsica",
+    "id" : { },
+    "identificator" : "PE01"
+  },
+  "nombre" : "nombre"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -858,10 +869,14 @@
     <pre class="example"><code>{
   "tipoDoc" : "tipoDoc",
   "documento" : "documento",
-  "tipoPersonal" : "tipoPersonal",
+  "segmentation" : [ "segmentation", "segmentation" ],
   "id" : "id",
-  "nombre" : "nombre",
-  "segmentos" : [ "segmentos", "segmentos" ]
+  "personType" : {
+    "description" : "PersSegmentsica",
+    "id" : { },
+    "identificator" : "PE01"
+  },
+  "nombre" : "nombre"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -921,10 +936,14 @@
   "person" : {
     "tipoDoc" : "tipoDoc",
     "documento" : "documento",
-    "tipoPersonal" : "tipoPersonal",
+    "segmentation" : [ "segmentation", "segmentation" ],
     "id" : "id",
-    "nombre" : "nombre",
-    "segmentos" : [ "segmentos", "segmentos" ]
+    "personType" : {
+      "description" : "PersSegmentsica",
+      "id" : { },
+      "identificator" : "PE01"
+    },
+    "nombre" : "nombre"
   },
   "id" : "id",
   "email" : "email",
@@ -984,10 +1003,14 @@
   "person" : {
     "tipoDoc" : "tipoDoc",
     "documento" : "documento",
-    "tipoPersonal" : "tipoPersonal",
+    "segmentation" : [ "segmentation", "segmentation" ],
     "id" : "id",
-    "nombre" : "nombre",
-    "segmentos" : [ "segmentos", "segmentos" ]
+    "personType" : {
+      "description" : "PersSegmentsica",
+      "id" : { },
+      "identificator" : "PE01"
+    },
+    "nombre" : "nombre"
   },
   "id" : "id",
   "email" : "email",
@@ -1085,10 +1108,14 @@
   "person" : {
     "tipoDoc" : "tipoDoc",
     "documento" : "documento",
-    "tipoPersonal" : "tipoPersonal",
+    "segmentation" : [ "segmentation", "segmentation" ],
     "id" : "id",
-    "nombre" : "nombre",
-    "segmentos" : [ "segmentos", "segmentos" ]
+    "personType" : {
+      "description" : "PersSegmentsica",
+      "id" : { },
+      "identificator" : "PE01"
+    },
+    "nombre" : "nombre"
   },
   "id" : "id",
   "email" : "email",
@@ -1206,10 +1233,14 @@
   "person" : {
     "tipoDoc" : "tipoDoc",
     "documento" : "documento",
-    "tipoPersonal" : "tipoPersonal",
+    "segmentation" : [ "segmentation", "segmentation" ],
     "id" : "id",
-    "nombre" : "nombre",
-    "segmentos" : [ "segmentos", "segmentos" ]
+    "personType" : {
+      "description" : "PersSegmentsica",
+      "id" : { },
+      "identificator" : "PE01"
+    },
+    "nombre" : "nombre"
   },
   "id" : "id",
   "email" : "email",
@@ -1250,9 +1281,11 @@
     <li><a href="#OrganizationArea"><code>OrganizationArea</code></a></li>
     <li><a href="#OrganizationService"><code>OrganizationService</code></a></li>
     <li><a href="#Person"><code>Person</code></a></li>
+    <li><a href="#PersonType"><code>PersonType</code></a></li>
     <li><a href="#RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a></li>
     <li><a href="#Request"><code>Request</code></a></li>
     <li><a href="#RequestType"><code>RequestType</code></a></li>
+    <li><a href="#Schema"><code>Schema</code></a></li>
     <li><a href="#ServiceResponseError"><code>ServiceResponseError</code></a></li>
     <li><a href="#TokenResponse"><code>TokenResponse</code></a></li>
     <li><a href="#User"><code>User</code></a></li>
@@ -1332,9 +1365,7 @@
     <div class='model-description'>Servicio de la estructura organizativa</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
-<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del servicio </div>
-          <div class="param-desc"><span class="param-type">example: SERSOC</span></div>
-<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del servic </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1342,11 +1373,22 @@
     
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
-<div class="param">tipoPersonal (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">personType (optional)</div><div class="param-desc"><span class="param-type"><a href="#PersonType">PersonType</a></span>  </div>
 <div class="param">nombre (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">tipoDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
 <div class="param">documento (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">segmentos (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: ObjectId</div>
+<div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PersonType"><code>PersonType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de persona</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: PE01</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: PersSegmentsica</span></div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1376,6 +1418,14 @@
           <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
 <div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Schema"><code>Schema</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int64io</div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">

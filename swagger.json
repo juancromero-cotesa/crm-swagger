@@ -470,14 +470,19 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       }
     },
     "/auth/token" : {
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "Obtiene un token de acceso proporcionando un código de autorización o un token de refresco",
-        "description" : "",
+        "summary" : "Login de usuario",
+        "description" : "Obtención de un token de usuario mediante el proceso de login",
         "parameters" : [ {
           "name" : "authType",
           "in" : "query",

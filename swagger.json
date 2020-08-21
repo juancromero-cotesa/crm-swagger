@@ -1,7 +1,7 @@
 {
   "openapi" : "3.0.0",
   "info" : {
-    "description" : "Especificaciónes de la API privada de CRM",
+    "description" : "Especificaciónes de la API privada de CRM.\nVersión 1 parte privada. \n\nLos métodos estánran protegidos mediante el paso de un token válido.\n\nLos métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos poe el paso de una api key.\n\nSe dispone de una versión pública donde se expondrán los métodos disponibles para aplicaciones de tereceros u otros componenes de la iniciativa                      ",
     "version" : "0.1.0-private",
     "title" : "Api CRM",
     "contact" : {
@@ -105,7 +105,12 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "Personas" ],
@@ -145,7 +150,12 @@
         },
         "requestBody" : {
           "$ref" : "#/components/requestBodies/Person"
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "Personas" ],
@@ -170,7 +180,12 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       }
     },
     "/person/card/{sgtcId}" : {
@@ -212,7 +227,12 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       }
     },
     "/user" : {
@@ -245,7 +265,12 @@
         },
         "requestBody" : {
           "$ref" : "#/components/requestBodies/Person"
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       }
     },
     "/user/{userId}" : {
@@ -287,7 +312,12 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       },
       "put" : {
         "tags" : [ "Usuarios" ],
@@ -325,7 +355,12 @@
           },
           "description" : "objeto usuario",
           "required" : true
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       },
       "delete" : {
         "tags" : [ "Usuarios" ],
@@ -350,7 +385,10 @@
           "404" : {
             "$ref" : "#/components/responses/NotFound"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        } ]
       }
     },
     "/user/userName/{userName}" : {
@@ -387,7 +425,12 @@
           "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           }
-        }
+        },
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ]
       }
     },
     "/user/tc/{idSgtc}" : {

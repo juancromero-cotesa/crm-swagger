@@ -240,7 +240,7 @@
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/login</code></pre></div>
-    <div class="method-summary">login de usuario (<span class="nickname">authFidLoginPost</span>)</div>
+    <div class="method-summary">login federado (<span class="nickname">authFidLoginPost</span>)</div>
     <div class="method-notes">&lt;h1&gt;Login Federado&lt;/h1&gt;  Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña en una aplicación de terceros. 
 &lt;p&gt;El proceso identifica el usuario y busca una autorización previa de acceso a la aplicación.&lt;/p&gt; &lt;ol&gt; &lt;li&gt;Si existe autorización previa se redirige al acceso de la aplicación con el código de autorización almacenado lo que proporcionará acceso a esta son necesidad de realizar una nueva identificación.&lt;/li&gt; &lt;li&gt; Si no existe se redirige al componente C11 pasando como parámetros la aplicación a autorizar y el id del usuario. &lt;/li&gt; &lt;li&gt; El bus de integración redirige al login de la aplicación solicitada. Esta tras un login correcto realiza nueva llamada al bus adjuntando los parámetros del id de usuario, identificador de aplicación y código de autorización obtenido en el login. &lt;/li&gt; &lt;li&gt; El bus de integración realiza llamada a CRM al método de almacenamiento de identificación federada, donde CRM almacenará la información para posteriores solicitudes de acceso a la aplicación. &lt;/li&gt; &lt;/ol&gt;
 </div>
@@ -300,7 +300,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/revoque</code></pre></div>
     <div class="method-summary">Revoca identificación federada almacenada (<span class="nickname">authFidRevoquePost</span>)</div>
-    <div class="method-notes">Revoca aun identificación federada obtenida previamente.</div>
+    <div class="method-notes">Revoca una identificación federada obtenida previamente estableciéndola como no habilitada.</div>
 
 
     <h3 class="field-label">Consumes</h3>
@@ -344,7 +344,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/store</code></pre></div>
     <div class="method-summary">Almacena identificación federada (<span class="nickname">authFidStorePost</span>)</div>
-    <div class="method-notes">Alamacena una identificación federada asociada a un usuario y una aplicación. Cuando en posteriores ocasiones el usuario intente acceder a la aplicación podrá usar el código de autorización reconocido por la app para el acceso.</div>
+    <div class="method-notes">Almacena una identificación federada asociada a un usuario y una aplicación. Cuando en posteriores ocasiones el usuario intente acceder a la aplicación podrá usar el código de autorización reconocido por la app para el acceso.</div>
 
 
     <h3 class="field-label">Consumes</h3>
@@ -473,7 +473,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/password/change</code></pre></div>
     <div class="method-summary">Cambio de contraseña (<span class="nickname">authPasswordChangePost</span>)</div>
-    <div class="method-notes">Modifica la contraseña del usuario pasado por body. Si el usuario recibido no es el propietario del token, debera tener los permisos necesarios.</div>
+    <div class="method-notes">Modifica la contraseña del usuario pasado por body. Si el usuario recibido no es el propietario del token, deberá tener los permisos necesarios.</div>
 
 
     <h3 class="field-label">Consumes</h3>

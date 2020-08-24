@@ -180,10 +180,9 @@
   <body>
   <h1>Api CRM</h1>
     <div class="app-desc"><p>Especificaciónes de la API pública de CRM.</p>
-<p>Versión 1 parte privada.</p>
-<p>Los métodos estánran protegidos mediante el paso de un token válido.</p>
-<p>Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos poe el paso de una api key.</p>
-<p>Se dispone de una versión pública donde se expondrán los métodos disponibles para aplicaciones de tereceros u otros componenes de la iniciativa</p>
+<p>Versión 1 parte pública.</p>
+<p>Los métodos estaran protegidos mediante el paso de un token válido.</p>
+<p>Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos por el paso de una api key.</p>
 </div>
     <div class="app-desc">More information: <a href="https://cotesa.grupotecopy.es/">https://cotesa.grupotecopy.es/</a></div>
     <div class="app-desc">Contact Info: <a href="juancromero@grupotecopy.es">juancromero@grupotecopy.es</a></div>
@@ -204,6 +203,9 @@
   <div class="method-summary"></div>
   <h4><a href="#Autorizaciones">Autorizaciones</a></h4>
   <ul>
+  <li><a href="#authFidLoginPost"><code><span class="http-method">post</span> /auth/fid/login</code></a></li>
+  <li><a href="#authFidRevoquePost"><code><span class="http-method">post</span> /auth/fid/revoque</code></a></li>
+  <li><a href="#authFidStorePost"><code><span class="http-method">post</span> /auth/fid/store</code></a></li>
   <li><a href="#authLoginPost"><code><span class="http-method">post</span> /auth/login</code></a></li>
   <li><a href="#authLogoutPost"><code><span class="http-method">post</span> /auth/logout</code></a></li>
   <li><a href="#authPasswordChangePost"><code><span class="http-method">post</span> /auth/password/change</code></a></li>
@@ -234,12 +236,159 @@
   </ul>
 
   <h1><a name="Autorizaciones">Autorizaciones</a></h1>
+  <div class="method"><a name="authFidLoginPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/login</code></pre></div>
+    <div class="method-summary">login de usuario (<span class="nickname">authFidLoginPost</span>)</div>
+    <div class="method-notes">&lt;h1&gt;Login Federado&lt;/h1&gt;  Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña en una aplicación de terceros. 
+&lt;p&gt;El proceso identifica el usuario y busca una autorización previa de acceso a la aplicación.&lt;/p&gt; &lt;ol&gt; &lt;li&gt;Si existe autorización previa se redirige al acceso de la aplicación con el código de autorización almacenado lo que proporcionará acceso a esta son necesidad de realizar una nueva identificación.&lt;/li&gt; &lt;li&gt; Si no existe se redirige al componente C11 pasando como parámetros la aplicación a autorizar y el id del usuario. &lt;/li&gt; &lt;li&gt; El bus de integración redirige al login de la aplicación solicitada. Esta tras un login correcto realiza nueva llamada al bus adjuntando los parámetros del id de usuario, identificador de aplicación y código de autorización obtenido en el login. &lt;/li&gt; &lt;li&gt; El bus de integración realiza llamada a CRM al método de almacenamiento de identificación federada, donde CRM almacenará la información para posteriores solicitudes de acceso a la aplicación. &lt;/li&gt; &lt;/ol&gt;
+</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#LoginFid">LoginFid</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para el login en aplicación de terceros, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si se proporciona mas de uno devolverá error 400 en la petición </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#TokenResponse">TokenResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token_type" : "bearer",
+  "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4",
+  "expires_in" : 20,
+  "refresh_token" : "fdb8fdbecf1d03ce5e6125c067733c0d51de209c"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Login ok
+        <a href="#TokenResponse">TokenResponse</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authFidRevoquePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/revoque</code></pre></div>
+    <div class="method-summary">Revoca identificación federada almacenada (<span class="nickname">authFidRevoquePost</span>)</div>
+    <div class="method-notes">Revoca aun identificación federada obtenida previamente.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Fid">Fid</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto con la identificación federada a eliminar. </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="authFidStorePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/fid/store</code></pre></div>
+    <div class="method-summary">Almacena identificación federada (<span class="nickname">authFidStorePost</span>)</div>
+    <div class="method-notes">Alamacena una identificación federada asociada a un usuario y una aplicación. Cuando en posteriores ocasiones el usuario intente acceder a la aplicación podrá usar el código de autorización reconocido por la app para el acceso.</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#Fid">Fid</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto con la identificación federada a almacenar. </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
   <div class="method"><a name="authLoginPost"></a>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/login</code></pre></div>
     <div class="method-summary">login de usuario (<span class="nickname">authLoginPost</span>)</div>
-    <div class="method-notes">&lt;p&gt;Autentica un usuario mediante el uso de un identificador admitido (nombre, emil, id terjate ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su perdiodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt;&lt;/p&gt;&lt;/p&gt;
+    <div class="method-notes">&lt;h2&gt;Login&lt;/h2&gt;.  Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt;&lt;/p&gt;
 </div>
 
 
@@ -253,7 +402,7 @@
     <div class="field-items">
       <div class="param">body <a href="#Login">Login</a> (required)</div>
       
-            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para el login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana los cuales son excluyentes.  Si se proporciona mas de uno devolverá error 400 en la petición </div>
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para el login, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes.  Si se proporciona mas de uno devolverá error 400 en la petición </div>
                 </div>  <!-- field-items -->
 
 
@@ -557,12 +706,13 @@
   "area" : {
     "name" : "name",
     "id" : { },
-    "Identificator" : "CONJUV"
+    "identificator" : "CONJUV"
   },
   "userAgentId" : "userAgentId",
   "service" : {
+    "name" : "name",
     "id" : { },
-    "Identificator" : "Identificator"
+    "identificator" : "CONJUV"
   },
   "typeId" : 0.8008281904610115,
   "id" : "id",
@@ -623,16 +773,65 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "tipoDoc" : "tipoDoc",
-  "documento" : "documento",
-  "segmentation" : [ "segmentation", "segmentation" ],
-  "id" : "id",
-  "personType" : {
-    "description" : "PersSegmentsica",
-    "id" : { },
-    "identificator" : "PE01"
+  "mail" : "mail",
+  "phones" : [ "phones", "phones" ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "id" : "id",
+    "identificator" : "NIE"
   },
-  "nombre" : "nombre"
+  "cadatralAddressRef" : "cadatralAddressRef",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  } ],
+  "avatar" : { },
+  "birthDate" : "2000-01-23",
+  "name" : "name",
+  "genre" : {
+    "description" : "Diverso",
+    "id" : "id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  } ],
+  "id" : "id",
+  "identificationDoc" : "identificationDoc",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "id" : "id",
+    "identificator" : "PEJA"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -721,16 +920,65 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "tipoDoc" : "tipoDoc",
-  "documento" : "documento",
-  "segmentation" : [ "segmentation", "segmentation" ],
-  "id" : "id",
-  "personType" : {
-    "description" : "PersSegmentsica",
-    "id" : { },
-    "identificator" : "PE01"
+  "mail" : "mail",
+  "phones" : [ "phones", "phones" ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "id" : "id",
+    "identificator" : "NIE"
   },
-  "nombre" : "nombre"
+  "cadatralAddressRef" : "cadatralAddressRef",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  } ],
+  "avatar" : { },
+  "birthDate" : "2000-01-23",
+  "name" : "name",
+  "genre" : {
+    "description" : "Diverso",
+    "id" : "id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  } ],
+  "id" : "id",
+  "identificationDoc" : "identificationDoc",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "id" : "id",
+    "identificator" : "PEJA"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -795,16 +1043,65 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "tipoDoc" : "tipoDoc",
-  "documento" : "documento",
-  "segmentation" : [ "segmentation", "segmentation" ],
-  "id" : "id",
-  "personType" : {
-    "description" : "PersSegmentsica",
-    "id" : { },
-    "identificator" : "PE01"
+  "mail" : "mail",
+  "phones" : [ "phones", "phones" ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "id" : "id",
+    "identificator" : "NIE"
   },
-  "nombre" : "nombre"
+  "cadatralAddressRef" : "cadatralAddressRef",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  } ],
+  "avatar" : { },
+  "birthDate" : "2000-01-23",
+  "name" : "name",
+  "genre" : {
+    "description" : "Diverso",
+    "id" : "id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  } ],
+  "id" : "id",
+  "identificationDoc" : "identificationDoc",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "id" : "id",
+    "identificator" : "PEJA"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -867,16 +1164,65 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "tipoDoc" : "tipoDoc",
-  "documento" : "documento",
-  "segmentation" : [ "segmentation", "segmentation" ],
-  "id" : "id",
-  "personType" : {
-    "description" : "PersSegmentsica",
-    "id" : { },
-    "identificator" : "PE01"
+  "mail" : "mail",
+  "phones" : [ "phones", "phones" ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "id" : "id",
+    "identificator" : "NIE"
   },
-  "nombre" : "nombre"
+  "cadatralAddressRef" : "cadatralAddressRef",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "id" : "id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "id" : "id",
+    "state" : "state"
+  } ],
+  "avatar" : { },
+  "birthDate" : "2000-01-23",
+  "name" : "name",
+  "genre" : {
+    "description" : "Diverso",
+    "id" : "id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "id" : "id",
+    "identificator" : "USRTRA"
+  } ],
+  "id" : "id",
+  "identificationDoc" : "identificationDoc",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "id" : "id",
+    "identificator" : "PEJA"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -901,7 +1247,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /user</code></pre></div>
     <div class="method-summary">Alta de usuario (<span class="nickname">userPost</span>)</div>
-    <div class="method-notes">Crea el perfil de la persona asociada en el módulo de indetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado</div>
+    <div class="method-notes">Crea el usuario de la persona asociada que debe de existir en el módulo de idetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado. Si ya existe un usuario creado asociado a la persona recibida retornará un error 400 con la correspondiente descripción del error</div>
 
 
     <h3 class="field-label">Consumes</h3>
@@ -912,9 +1258,9 @@
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">body <a href="#Person">Person</a> (required)</div>
+      <div class="param">body <a href="#UserRequest">UserRequest</a> (required)</div>
       
-            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto persona </div>
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para la solicitud de creación o actualización de Usuario </div>
                 </div>  <!-- field-items -->
 
 
@@ -934,16 +1280,65 @@
   "password" : "password",
   "userStatus" : 0,
   "person" : {
-    "tipoDoc" : "tipoDoc",
-    "documento" : "documento",
-    "segmentation" : [ "segmentation", "segmentation" ],
-    "id" : "id",
-    "personType" : {
-      "description" : "PersSegmentsica",
-      "id" : { },
-      "identificator" : "PE01"
+    "mail" : "mail",
+    "phones" : [ "phones", "phones" ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "id" : "id",
+      "identificator" : "NIE"
     },
-    "nombre" : "nombre"
+    "cadatralAddressRef" : "cadatralAddressRef",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    } ],
+    "avatar" : { },
+    "birthDate" : "2000-01-23",
+    "name" : "name",
+    "genre" : {
+      "description" : "Diverso",
+      "id" : "id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    } ],
+    "id" : "id",
+    "identificationDoc" : "identificationDoc",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "id" : "id",
+      "identificator" : "PEJA"
+    }
   },
   "id" : "id",
   "email" : "email",
@@ -1001,16 +1396,65 @@
   "password" : "password",
   "userStatus" : 0,
   "person" : {
-    "tipoDoc" : "tipoDoc",
-    "documento" : "documento",
-    "segmentation" : [ "segmentation", "segmentation" ],
-    "id" : "id",
-    "personType" : {
-      "description" : "PersSegmentsica",
-      "id" : { },
-      "identificator" : "PE01"
+    "mail" : "mail",
+    "phones" : [ "phones", "phones" ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "id" : "id",
+      "identificator" : "NIE"
     },
-    "nombre" : "nombre"
+    "cadatralAddressRef" : "cadatralAddressRef",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    } ],
+    "avatar" : { },
+    "birthDate" : "2000-01-23",
+    "name" : "name",
+    "genre" : {
+      "description" : "Diverso",
+      "id" : "id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    } ],
+    "id" : "id",
+    "identificationDoc" : "identificationDoc",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "id" : "id",
+      "identificator" : "PEJA"
+    }
   },
   "id" : "id",
   "email" : "email",
@@ -1043,7 +1487,7 @@
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="delete"><code class="huge"><span class="http-method">delete</span> /user/{userId}</code></pre></div>
-    <div class="method-summary">Elimina una persona (<span class="nickname">userUserIdDelete</span>)</div>
+    <div class="method-summary">Elimina un usuario. Realiza la baja en IS y marca como baja el perfil de la persona en CRM sin eliminar el documento. (<span class="nickname">userUserIdDelete</span>)</div>
     <div class="method-notes"></div>
 
     <h3 class="field-label">Path parameters</h3>
@@ -1106,16 +1550,65 @@
   "password" : "password",
   "userStatus" : 0,
   "person" : {
-    "tipoDoc" : "tipoDoc",
-    "documento" : "documento",
-    "segmentation" : [ "segmentation", "segmentation" ],
-    "id" : "id",
-    "personType" : {
-      "description" : "PersSegmentsica",
-      "id" : { },
-      "identificator" : "PE01"
+    "mail" : "mail",
+    "phones" : [ "phones", "phones" ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "id" : "id",
+      "identificator" : "NIE"
     },
-    "nombre" : "nombre"
+    "cadatralAddressRef" : "cadatralAddressRef",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    } ],
+    "avatar" : { },
+    "birthDate" : "2000-01-23",
+    "name" : "name",
+    "genre" : {
+      "description" : "Diverso",
+      "id" : "id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    } ],
+    "id" : "id",
+    "identificationDoc" : "identificationDoc",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "id" : "id",
+      "identificator" : "PEJA"
+    }
   },
   "id" : "id",
   "email" : "email",
@@ -1165,9 +1658,9 @@
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">body <a href="#User">User</a> (required)</div>
+      <div class="param">body <a href="#UserRequest">UserRequest</a> (required)</div>
       
-            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; objeto usuario </div>
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para la solicitud de creación o actualización de Usuario </div>
                 </div>  <!-- field-items -->
 
 
@@ -1231,16 +1724,65 @@
   "password" : "password",
   "userStatus" : 0,
   "person" : {
-    "tipoDoc" : "tipoDoc",
-    "documento" : "documento",
-    "segmentation" : [ "segmentation", "segmentation" ],
-    "id" : "id",
-    "personType" : {
-      "description" : "PersSegmentsica",
-      "id" : { },
-      "identificator" : "PE01"
+    "mail" : "mail",
+    "phones" : [ "phones", "phones" ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "id" : "id",
+      "identificator" : "NIE"
     },
-    "nombre" : "nombre"
+    "cadatralAddressRef" : "cadatralAddressRef",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "id" : "id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "id" : "id",
+      "state" : "state"
+    } ],
+    "avatar" : { },
+    "birthDate" : "2000-01-23",
+    "name" : "name",
+    "genre" : {
+      "description" : "Diverso",
+      "id" : "id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "id" : "id",
+      "identificator" : "USRTRA"
+    } ],
+    "id" : "id",
+    "identificationDoc" : "identificationDoc",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "id" : "id",
+      "identificator" : "PEJA"
+    }
   },
   "id" : "id",
   "email" : "email",
@@ -1272,28 +1814,67 @@
 
   <h3>Table of Contents</h3>
   <ol>
+    <li><a href="#Address"><code>Address</code></a></li>
+    <li><a href="#AddressType"><code>AddressType</code></a></li>
+    <li><a href="#Avatar"><code>Avatar</code></a></li>
     <li><a href="#ChangePasswordRequest"><code>ChangePasswordRequest</code></a></li>
+    <li><a href="#CrmRequest"><code>CrmRequest</code></a></li>
+    <li><a href="#CrmRequestType"><code>CrmRequestType</code></a></li>
+    <li><a href="#Fid"><code>Fid</code></a></li>
     <li><a href="#ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a></li>
+    <li><a href="#GenreType"><code>GenreType</code></a></li>
+    <li><a href="#IdentificationDocType"><code>IdentificationDocType</code></a></li>
     <li><a href="#Interaction"><code>Interaction</code></a></li>
     <li><a href="#InteractionBatch"><code>InteractionBatch</code></a></li>
     <li><a href="#InteractionInteractive"><code>InteractionInteractive</code></a></li>
     <li><a href="#Login"><code>Login</code></a></li>
+    <li><a href="#LoginFid"><code>LoginFid</code></a></li>
     <li><a href="#OrganizationArea"><code>OrganizationArea</code></a></li>
     <li><a href="#OrganizationService"><code>OrganizationService</code></a></li>
     <li><a href="#Person"><code>Person</code></a></li>
     <li><a href="#PersonType"><code>PersonType</code></a></li>
     <li><a href="#RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a></li>
-    <li><a href="#Request"><code>Request</code></a></li>
-    <li><a href="#RequestType"><code>RequestType</code></a></li>
-    <li><a href="#Schema"><code>Schema</code></a></li>
+    <li><a href="#Segment"><code>Segment</code></a></li>
     <li><a href="#ServiceResponseError"><code>ServiceResponseError</code></a></li>
     <li><a href="#TokenResponse"><code>TokenResponse</code></a></li>
     <li><a href="#User"><code>User</code></a></li>
+    <li><a href="#UserRequest"><code>UserRequest</code></a></li>
   </ol>
 
   <div class="model">
-    <h3><a name="ChangePasswordRequest"><code>ChangePasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="Address"><code>Address</code></a> <a class="up" href="#__Models">Up</a></h3>
     
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">addressType (optional)</div><div class="param-desc"><span class="param-type"><a href="#AddressType">AddressType</a></span>  </div>
+<div class="param">addressLine1 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">addressLine2 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">zipCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: postal-code</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="AddressType"><code>AddressType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de dirección (catastal, principal, secundaria,...)</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: SEC</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Dirección secundaria</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Avatar"><code>Avatar</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Imagen de persona</div>
+    <div class="field-items">
+          </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ChangePasswordRequest"><code>ChangePasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la petición de cambio de contraseña</div>
     <div class="field-items">
       <div class="param">userid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">oldPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -1301,16 +1882,72 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="CrmRequest"><code>CrmRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Solicitud realizada en CRM de una persona o componente que precisa de una gestión y/o la intervención de otros sistemas por lo que dispone de un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre.</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">requestType (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequestType">CrmRequestType</a></span>  </div>
+<div class="param">interactionOrigin (optional)</div><div class="param-desc"><span class="param-type"><a href="#Interaction">Interaction</a></span>  </div>
+<div class="param">interactionRelationsIds (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Identificadores de interacciones relacionadas con la solicitud format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CrmRequestType"><code>CrmRequestType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de solicitud crm</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la solicitud </div>
+          <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
+<div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Fid"><code>Fid</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto que contiene la autorización federada en una aplicación de terceros.</div>
+    <div class="field-items">
+      <div class="param">appId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">authCode </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">authUrl </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">authStamp (optional)</div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">expires_in </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">enable (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Objeto para la petición de enlace de contraseña olvidada</div>
     <div class="field-items">
       <div class="param">sgtcId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="GenreType"><code>GenreType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de género</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: DI</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Diverso</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="IdentificationDocType"><code>IdentificationDocType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de identificación</div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: NIE</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Numero de identificación de extranjería</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="Interaction"><code>Interaction</code></a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Esquema básico de Interacción  (Pte de definir completamente)</div>
+    <div class='model-description'>Acción que realiza una persona, componente o sistema relacionado con la iniciativa que no precisa de gestión</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
 <div class="param">subjectId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. format: ObjectId</div>
@@ -1325,18 +1962,18 @@
   </div>
   <div class="model">
     <h3><a name="InteractionBatch"><code>InteractionBatch</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Interaccion que se captura de forma desatendida desde un componente o aplicación de terceros</div>
     <div class="field-items">
       <div class="param">geom (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: GeoJSON</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="InteractionInteractive"><code>InteractionInteractive</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Interaccion que se captura de forma interactiva a traves de CRM</div>
     <div class="field-items">
       <div class="param">resolution (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Solución aportada a la interacción </div>
 <div class="param">resolutionUserAgent (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">User</a></span>  </div>
-<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequest">CrmRequest</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1351,11 +1988,19 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="LoginFid"><code>LoginFid</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login Federado, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana en una aplicación de terceros. Si se proporciona mas de un método de identificación se devolverá error en la petición</div>
+    <div class="field-items">
+      <div class="param">appId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">allOf (optional)</div><div class="param-desc"><span class="param-type"><a href="#Login">Login</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="OrganizationArea"><code>OrganizationArea</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Área de la estructura organizativa</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
-<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del área </div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del área </div>
           <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
 <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
@@ -1365,72 +2010,64 @@
     <div class='model-description'>Servicio de la estructura organizativa</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
-<div class="param">Identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del servic </div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del servicio </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="Person"><code>Person</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Objeto persona que almacena la informaciónd e cada persona física o jurídica</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">identificationType (optional)</div><div class="param-desc"><span class="param-type"><a href="#IdentificationDocType">IdentificationDocType</a></span>  </div>
+<div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Documento de identificación </div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#Avatar">Avatar</a></span>  </div>
 <div class="param">personType (optional)</div><div class="param-desc"><span class="param-type"><a href="#PersonType">PersonType</a></span>  </div>
-<div class="param">nombre (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">tipoDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
-<div class="param">documento (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona format: ObjectId</div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">phones (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: phone</div>
+<div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">cadatralAddressRef (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> referencia catastal de vivienda habitual </div>
+<div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
+<div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
+<div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="PersonType"><code>PersonType</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Tipo de persona</div>
     <div class="field-items">
-      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
 <div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-          <div class="param-desc"><span class="param-type">example: PE01</span></div>
+          <div class="param-desc"><span class="param-type">example: PEJA</span></div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-          <div class="param-desc"><span class="param-type">example: PersSegmentsica</span></div>
+          <div class="param-desc"><span class="param-type">example: Persona Jurídica - Asociación</span></div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Objeto para la restauración de contraseña</div>
     <div class="field-items">
       <div class="param">recoverToken (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">newPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="Request"><code>Request</code></a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Solicitud realizada (Pte de definir completamente)</div>
+    <h3><a name="Segment"><code>Segment</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Segmentos de perfilado de personas. Definirán el perfil de la persona en base a interacciones y servicios utilizados</div>
     <div class="field-items">
-      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
-<div class="param">requestType (optional)</div><div class="param-desc"><span class="param-type"><a href="#RequestType">RequestType</a></span>  </div>
-<div class="param">interactionOrigin (optional)</div><div class="param-desc"><span class="param-type"><a href="#Interaction">Interaction</a></span>  </div>
-<div class="param">interactionRelations (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">array[Object]</a></span> interacciones relacionadas con la solicitud format: ObjectId</div>
-    </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="RequestType"><code>RequestType</code></a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Tipo de solicitud</div>
-    <div class="field-items">
-      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
-<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la solicitud </div>
-          <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
-<div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-    </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="Schema"><code>Schema</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
-    <div class="field-items">
-      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int64io</div>
-<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del segmento </div>
+          <div class="param-desc"><span class="param-type">example: USRTRA</span></div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre del segmento </div>
+          <div class="param-desc"><span class="param-type">example: Usuario de transporte público</span></div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="ServiceResponseError"><code>ServiceResponseError</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Objeto de error retornado por la capa de servicios</div>
     <div class="field-items">
       <div class="param">errorId </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
 <div class="param">errorName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -1440,7 +2077,7 @@
   </div>
   <div class="model">
     <h3><a name="TokenResponse"><code>TokenResponse</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Respuesta a la solicitud de token de acceso o refresco</div>
     <div class="field-items">
       <div class="param">token_type (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">access_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -1450,7 +2087,7 @@
   </div>
   <div class="model">
     <h3><a name="User"><code>User</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
+    <div class='model-description'>Entidad que posibilita a una persona el uso de aplicaciones que componen la iniciativa. Define su método de autenticación y las autorizaciones de uso en el CRM.</div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
 <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -1458,6 +2095,16 @@
 <div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">userStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
 <div class="param">person (optional)</div><div class="param-desc"><span class="param-type"><a href="#Person">Person</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UserRequest"><code>UserRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la creación de un nuevo usuario. Creará el usuario con el nombre de usuario y el mail indicados y establecerá la contraseña. Este usuario quedará vinculado a la persona indicada por personId</div>
+    <div class="field-items">
+      <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">personId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
     </div>  <!-- field-items -->
   </div>
   </body>

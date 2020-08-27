@@ -182,7 +182,7 @@
     <div class="app-desc"><p>Especificaciónes de la API pública de CRM.</p>
 <p>Versión 1 parte pública.</p>
 <p>Los métodos estaran protegidos mediante el paso de un token válido.</p>
-<p>Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos por el paso de una api key.</p>
+<p>Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos por el paso de una api key que tendrá definidos los permisos correspondientes.</p>
 </div>
     <div class="app-desc">More information: <a href="https://cotesa.grupotecopy.es/">https://cotesa.grupotecopy.es/</a></div>
     <div class="app-desc">Contact Info: <a href="juancromero@grupotecopy.es">juancromero@grupotecopy.es</a></div>
@@ -213,17 +213,40 @@
   <li><a href="#authPasswordRecoverPost"><code><span class="http-method">post</span> /auth/password/recover</code></a></li>
   <li><a href="#authRefreshTokenPost"><code><span class="http-method">post</span> /auth/refreshToken</code></a></li>
   </ul>
+  <h4><a href="#CuadrosDeMando">CuadrosDeMando</a></h4>
+  <ul>
+  <li><a href="#controlPanelControlPanelIdGet"><code><span class="http-method">get</span> /controlPanel/{controlPanelId}</code></a></li>
+  <li><a href="#controlPanelGet"><code><span class="http-method">get</span> /controlPanel</code></a></li>
+  </ul>
+  <h4><a href="#EstructuraOrganizativa">EstructuraOrganizativa</a></h4>
+  <ul>
+  <li><a href="#organizationChildsOuIdGet"><code><span class="http-method">get</span> /organization/childs/{ouId}</code></a></li>
+  <li><a href="#organizationGet"><code><span class="http-method">get</span> /organization</code></a></li>
+  <li><a href="#organizationOuIdDelete"><code><span class="http-method">delete</span> /organization/{ouId}</code></a></li>
+  <li><a href="#organizationOuIdGet"><code><span class="http-method">get</span> /organization/{ouId}</code></a></li>
+  <li><a href="#organizationOuIdPut"><code><span class="http-method">put</span> /organization/{ouId}</code></a></li>
+  <li><a href="#organizationPost"><code><span class="http-method">post</span> /organization</code></a></li>
+  </ul>
   <h4><a href="#Interacciones">Interacciones</a></h4>
   <ul>
   <li><a href="#interactionPost"><code><span class="http-method">post</span> /interaction</code></a></li>
+  <li><a href="#interactionTypesGet"><code><span class="http-method">get</span> /interaction/types</code></a></li>
+  <li><a href="#interactionUploadPost"><code><span class="http-method">post</span> /interaction/upload</code></a></li>
   </ul>
   <h4><a href="#Personas">Personas</a></h4>
   <ul>
-  <li><a href="#organizationGet"><code><span class="http-method">get</span> /organization</code></a></li>
   <li><a href="#personCardSgtcIdGet"><code><span class="http-method">get</span> /person/card/{sgtcId}</code></a></li>
   <li><a href="#personPersonIdDelete"><code><span class="http-method">delete</span> /person/{personId}</code></a></li>
   <li><a href="#personPersonIdGet"><code><span class="http-method">get</span> /person/{personId}</code></a></li>
+  <li><a href="#personPersonIdPatch"><code><span class="http-method">patch</span> /person/{personId}</code></a></li>
   <li><a href="#personPersonIdPut"><code><span class="http-method">put</span> /person/{personId}</code></a></li>
+  <li><a href="#personPost"><code><span class="http-method">post</span> /person</code></a></li>
+  </ul>
+  <h4><a href="#TarjetaCiudadana">TarjetaCiudadana</a></h4>
+  <ul>
+  <li><a href="#tcIdSgtcPatch"><code><span class="http-method">patch</span> /tc/{idSgtc}</code></a></li>
+  <li><a href="#tcIdSgtcPut"><code><span class="http-method">put</span> /tc/{idSgtc}</code></a></li>
+  <li><a href="#tcPost"><code><span class="http-method">post</span> /tc</code></a></li>
   </ul>
   <h4><a href="#Usuarios">Usuarios</a></h4>
   <ul>
@@ -389,7 +412,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/login</code></pre></div>
     <div class="method-summary">login de usuario (<span class="nickname">authLoginPost</span>)</div>
-    <div class="method-notes">&lt;h2&gt;Login&lt;/h2&gt;.  Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt;&lt;/p&gt;
+    <div class="method-notes">&lt;h2&gt;Login&lt;/h2&gt; &lt;p&gt; Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt; &lt;/p&gt; &lt;p&gt; El token devuelto en formato JWT contendrá en el payload el id el usuario, el id de la persona y el id de la aplicacion desde la que e hizo login obtenido desde el ApiKey&lt;/p&gt;
 </div>
 
 
@@ -459,14 +482,20 @@
     <!--Todo: process Response Object and its headers, schema, examples -->
 
 
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
 
     <h3 class="field-label">Responses</h3>
     <h4 class="field-label">204</h4>
     No content
         <a href="#"></a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
   <div class="method"><a name="authPasswordChangePost"></a>
@@ -512,8 +541,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
   <div class="method"><a name="authPasswordLostPost"></a>
@@ -660,11 +689,429 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">405</h4>
     Invalid input
         <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="CuadrosDeMando">CuadrosDeMando</a></h1>
+  <div class="method"><a name="controlPanelControlPanelIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /controlPanel/{controlPanelId}</code></pre></div>
+    <div class="method-summary">Obiene cuadro de mando (BORRADOR) (<span class="nickname">controlPanelControlPanelIdGet</span>)</div>
+    <div class="method-notes">Método pendiende de análisis</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">controlPanelId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ControlPanel">ControlPanel</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "_id" : "_id"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    created
+        <a href="#ControlPanel">ControlPanel</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="controlPanelGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /controlPanel</code></pre></div>
+    <div class="method-summary">Obiene todos los cuadros de mando (BORRADOR) (<span class="nickname">controlPanelGet</span>)</div>
+    <div class="method-notes">Método pendiende de análisis</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#ControlPanel">ControlPanel</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "_id" : "_id"
+}, {
+  "_id" : "_id"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    created
+        
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="EstructuraOrganizativa">EstructuraOrganizativa</a></h1>
+  <div class="method"><a name="organizationChildsOuIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /organization/childs/{ouId}</code></pre></div>
+    <div class="method-summary">Obtiene una las estructuras organizativas hijas directas de la indicada. (<span class="nickname">organizationChildsOuIdGet</span>)</div>
+    <div class="method-notes">Obtiene las estructuras organizativas hijas de un nodo</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">ouId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la estrcutura organizativa </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#OrganizationUnit">OrganizationUnit</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "organizationUnitType" : {
+    "description" : "Unidad Orgánica",
+    "_id" : "UNIORG"
+  },
+  "description" : "Concejalía de juventud",
+  "_id" : "CONJUV"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Created
+        <a href="#OrganizationUnit">OrganizationUnit</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="organizationGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /organization</code></pre></div>
+    <div class="method-summary">Obtiene estructura organizativa (<span class="nickname">organizationGet</span>)</div>
+    <div class="method-notes">Obtiene la estructura de la organización completa como unidades organizativas anidadas</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#OrganizationUnit">OrganizationUnit</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "organizationUnitType" : {
+    "description" : "Unidad Orgánica",
+    "_id" : "UNIORG"
+  },
+  "description" : "Concejalía de juventud",
+  "_id" : "CONJUV"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Ok
+        <a href="#OrganizationUnit">OrganizationUnit</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="organizationOuIdDelete"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /organization/{ouId}</code></pre></div>
+    <div class="method-summary">Elimina una estructura organizativa (<span class="nickname">organizationOuIdDelete</span>)</div>
+    <div class="method-notes">Elimina una estructura organizativa si no tiene hijos.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">ouId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la estructura organizativa </div>    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">forceDelete (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Indica si se elimina la estructura y se eliminan las unidades organizativas hijas </div>    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="organizationOuIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /organization/{ouId}</code></pre></div>
+    <div class="method-summary">Obtiene rama de una estructura organizativa (<span class="nickname">organizationOuIdGet</span>)</div>
+    <div class="method-notes">Obtiene una rama de la estructura de la organización desde un nodo y todos sus descendientes.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">ouId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la estructura organizativa </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#OrganizationUnit">OrganizationUnit</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "organizationUnitType" : {
+    "description" : "Unidad Orgánica",
+    "_id" : "UNIORG"
+  },
+  "description" : "Concejalía de juventud",
+  "_id" : "CONJUV"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Ok
+        <a href="#OrganizationUnit">OrganizationUnit</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="organizationOuIdPut"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /organization/{ouId}</code></pre></div>
+    <div class="method-summary">Actualiza una estructura organizativa (<span class="nickname">organizationOuIdPut</span>)</div>
+    <div class="method-notes">Actualiza la estructura organizativa.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">ouId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la estructura organizativa </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#body_1">body_1</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="organizationPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /organization</code></pre></div>
+    <div class="method-summary">Crear una estructura organizativa (<span class="nickname">organizationPost</span>)</div>
+    <div class="method-notes">Crea una estructura de la organización. Si se incluyen estructuras hijas, estas deben de existir en el sistema, si no existen se devolverá un error 400</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#body">body</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#OrganizationUnit">OrganizationUnit</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "organizationUnitType" : {
+    "description" : "Unidad Orgánica",
+    "_id" : "UNIORG"
+  },
+  "description" : "Concejalía de juventud",
+  "_id" : "CONJUV"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Created
+        <a href="#OrganizationUnit">OrganizationUnit</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
   <h1><a name="Interacciones">Interacciones</a></h1>
@@ -672,7 +1119,7 @@
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /interaction</code></pre></div>
-    <div class="method-summary"> (<span class="nickname">interactionPost</span>)</div>
+    <div class="method-summary">Servicio de registro de interacción. (<span class="nickname">interactionPost</span>)</div>
     <div class="method-notes"></div>
 
 
@@ -703,25 +1150,21 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "sourceId" : "sourceId",
-  "OrganizationUnit" : {
-    "organizationUnitType" : {
-      "description" : "Unidad Orgánica",
-      "_id" : "UNIORG"
-    },
-    "description" : "CONJUV",
-    "_id" : "_id"
+  "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
   },
   "userAgent" : {
-    "userStatus" : 0,
-    "_id" : "_id",
-    "email" : "email",
-    "username" : "username"
+    "disabled" : false,
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "email" : "user2548@santander.es",
+    "username" : "user2548"
   },
-  "typeId" : 6.027456183070403,
-  "_id" : "_id",
-  "detail" : "detail",
-  "subjectId" : "subjectId"
+  "_id" : "507f1f77bcf86cd799439011",
+  "detail" : "Llamada telefónica consulta",
+  "subjectId" : "487f1ff7cbcf86cd799439011"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -739,20 +1182,19 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
-  <h1><a name="Personas">Personas</a></h1>
-  <div class="method"><a name="organizationGet"></a>
+  <div class="method"><a name="interactionTypesGet"></a>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /organization</code></pre></div>
-    <div class="method-summary">Alta de persona (<span class="nickname">organizationGet</span>)</div>
-    <div class="method-notes">Crea una nueva persona</div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /interaction/types</code></pre></div>
+    <div class="method-summary">Obtiene tipos de interacciones. (<span class="nickname">interactionTypesGet</span>)</div>
+    <div class="method-notes">Obtiene la relación completa de tipos de interacciones</div>
 
 
 
@@ -762,7 +1204,7 @@
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      <a href="#Person">Person</a>
+      array[<a href="#Interaction">Interaction</a>]
       
     </div>
 
@@ -770,7 +1212,39 @@
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{ }</code></pre>
+    <pre class="example"><code>[ {
+  "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
+  },
+  "userAgent" : {
+    "disabled" : false,
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "email" : "user2548@santander.es",
+    "username" : "user2548"
+  },
+  "_id" : "507f1f77bcf86cd799439011",
+  "detail" : "Llamada telefónica consulta",
+  "subjectId" : "487f1ff7cbcf86cd799439011"
+}, {
+  "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
+  },
+  "userAgent" : {
+    "disabled" : false,
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "email" : "user2548@santander.es",
+    "username" : "user2548"
+  },
+  "_id" : "507f1f77bcf86cd799439011",
+  "detail" : "Llamada telefónica consulta",
+  "subjectId" : "487f1ff7cbcf86cd799439011"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -780,14 +1254,65 @@
     </ul>
 
     <h3 class="field-label">Responses</h3>
-    <h4 class="field-label">201</h4>
-    Created
-        <a href="#Person">Person</a>
+    <h4 class="field-label">200</h4>
+    ok
+        
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
+  <div class="method"><a name="interactionUploadPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /interaction/upload</code></pre></div>
+    <div class="method-summary">Carga por lotes de interacciones. (<span class="nickname">interactionUploadPost</span>)</div>
+    <div class="method-notes">Recibe un archivo Json con array de interacciones y realiza su carga</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/octet-stream</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#object">object</a> (optional)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">202</h4>
+    Accepted
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="Personas">Personas</a></h1>
   <div class="method"><a name="personCardSgtcIdGet"></a>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
@@ -816,7 +1341,75 @@
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{ }</code></pre>
+    <pre class="example"><code>{
+  "mail" : "juanapellido@santander.es",
+  "phones" : [ 695748759, 987458785 ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "_id" : "NIE"
+  },
+  "cadatralAddressRef" : "9872023VH5797S0001WX",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  } ],
+  "avatar" : "",
+  "birthDate" : "1980-07-21T00:00:00.000+0000",
+  "surname1" : "APELLIDO1",
+  "preferedContactMethod" : {
+    "description" : "WhatsApp",
+    "_id" : "507f191e810c19729de860ea"
+  },
+  "surname2" : "APELLIDO2",
+  "citizenCard" : {
+    "_id" : "487f1ff",
+    "state" : "B"
+  },
+  "name" : "JUAN",
+  "genre" : {
+    "description" : "Diverso",
+    "_id" : "_id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  } ],
+  "_id" : "487f1ff7cbcf86cd799439011",
+  "identificationDoc" : "111111111H",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "_id" : "PERJAS"
+  }
+}</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -833,8 +1426,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -845,13 +1438,13 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="delete"><code class="huge"><span class="http-method">delete</span> /person/{personId}</code></pre></div>
     <div class="method-summary">Eliminar persona (<span class="nickname">personPersonIdDelete</span>)</div>
-    <div class="method-notes"></div>
+    <div class="method-notes">Elimina la persona identificada en el path</div>
 
     <h3 class="field-label">Path parameters</h3>
     <div class="field-items">
       <div class="param">personId (required)</div>
       
-            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id de la persona a eliminar </div>    </div>  <!-- field-items -->
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
 
 
 
@@ -862,14 +1455,20 @@
     <!--Todo: process Response Object and its headers, schema, examples -->
 
 
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
 
     <h3 class="field-label">Responses</h3>
     <h4 class="field-label">204</h4>
     No content
         <a href="#"></a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -886,7 +1485,7 @@
     <div class="field-items">
       <div class="param">personId (required)</div>
       
-            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; ID de la persona </div>    </div>  <!-- field-items -->
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
 
 
 
@@ -903,7 +1502,75 @@
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{ }</code></pre>
+    <pre class="example"><code>{
+  "mail" : "juanapellido@santander.es",
+  "phones" : [ 695748759, 987458785 ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "_id" : "NIE"
+  },
+  "cadatralAddressRef" : "9872023VH5797S0001WX",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  } ],
+  "avatar" : "",
+  "birthDate" : "1980-07-21T00:00:00.000+0000",
+  "surname1" : "APELLIDO1",
+  "preferedContactMethod" : {
+    "description" : "WhatsApp",
+    "_id" : "507f191e810c19729de860ea"
+  },
+  "surname2" : "APELLIDO2",
+  "citizenCard" : {
+    "_id" : "487f1ff",
+    "state" : "B"
+  },
+  "name" : "JUAN",
+  "genre" : {
+    "description" : "Diverso",
+    "_id" : "_id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  } ],
+  "_id" : "487f1ff7cbcf86cd799439011",
+  "identificationDoc" : "111111111H",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "_id" : "PERJAS"
+  }
+}</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -920,8 +1587,67 @@
     Invalid Path ID
         <a href="#"></a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
         <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPersonIdPatch"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="patch"><code class="huge"><span class="http-method">patch</span> /person/{personId}</code></pre></div>
+    <div class="method-summary">Actualiza la persona con la operación recibida (<span class="nickname">personPersonIdPatch</span>)</div>
+    <div class="method-notes">Realiza la actualización de una persona. Permite modificar cualquiera de sus propiedades.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">personId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#PatchOperation">PatchOperation</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Operación de actualización parcial sobre persona. </div>
+            <div class="param-desc"><span class="param-type">example: <code>{
+  &quot;op&quot; : &quot;replace&quot;,
+  &quot;path&quot; : &quot;identificationDoc&quot;,
+  &quot;value&quot; : &quot;00000000J&quot;
+}</code></span></div>    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -966,7 +1692,75 @@
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{ }</code></pre>
+    <pre class="example"><code>{
+  "mail" : "juanapellido@santander.es",
+  "phones" : [ 695748759, 987458785 ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "_id" : "NIE"
+  },
+  "cadatralAddressRef" : "9872023VH5797S0001WX",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  } ],
+  "avatar" : "",
+  "birthDate" : "1980-07-21T00:00:00.000+0000",
+  "surname1" : "APELLIDO1",
+  "preferedContactMethod" : {
+    "description" : "WhatsApp",
+    "_id" : "507f191e810c19729de860ea"
+  },
+  "surname2" : "APELLIDO2",
+  "citizenCard" : {
+    "_id" : "487f1ff",
+    "state" : "B"
+  },
+  "name" : "JUAN",
+  "genre" : {
+    "description" : "Diverso",
+    "_id" : "_id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  } ],
+  "_id" : "487f1ff7cbcf86cd799439011",
+  "identificationDoc" : "111111111H",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "_id" : "PERJAS"
+  }
+}</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -991,6 +1785,302 @@
     <h4 class="field-label">405</h4>
     Invalid input
         <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="personPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /person</code></pre></div>
+    <div class="method-summary">Crear persona (<span class="nickname">personPost</span>)</div>
+    <div class="method-notes">Crea una nueva una persona, realizará las comprobaciones necesarias para no crear personas con identificadores duplicados (DNI, NIF, NIE).</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#body_2">body_2</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Person">Person</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "mail" : "juanapellido@santander.es",
+  "phones" : [ 695748759, 987458785 ],
+  "identificationType" : {
+    "description" : "Numero de identificación de extranjería",
+    "_id" : "NIE"
+  },
+  "cadatralAddressRef" : "9872023VH5797S0001WX",
+  "adresses" : [ {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  }, {
+    "country" : "country",
+    "zipCode" : 0,
+    "city" : "city",
+    "addressType" : {
+      "description" : "Dirección secundaria",
+      "_id" : "_id",
+      "identificator" : "SEC"
+    },
+    "addressLine1" : "addressLine1",
+    "addressLine2" : "addressLine2",
+    "_id" : "_id",
+    "state" : "state"
+  } ],
+  "avatar" : "",
+  "birthDate" : "1980-07-21T00:00:00.000+0000",
+  "surname1" : "APELLIDO1",
+  "preferedContactMethod" : {
+    "description" : "WhatsApp",
+    "_id" : "507f191e810c19729de860ea"
+  },
+  "surname2" : "APELLIDO2",
+  "citizenCard" : {
+    "_id" : "487f1ff",
+    "state" : "B"
+  },
+  "name" : "JUAN",
+  "genre" : {
+    "description" : "Diverso",
+    "_id" : "_id",
+    "identificator" : "DI"
+  },
+  "segmentation" : [ {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  }, {
+    "name" : "Usuario de transporte público",
+    "_id" : "_id",
+    "identificator" : "USRTRA"
+  } ],
+  "_id" : "487f1ff7cbcf86cd799439011",
+  "identificationDoc" : "111111111H",
+  "personType" : {
+    "description" : "Persona Jurídica - Asociación",
+    "_id" : "PERJAS"
+  }
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Created
+        <a href="#Person">Person</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="TarjetaCiudadana">TarjetaCiudadana</a></h1>
+  <div class="method"><a name="tcIdSgtcPatch"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="patch"><code class="huge"><span class="http-method">patch</span> /tc/{idSgtc}</code></pre></div>
+    <div class="method-summary">Actualiza tarjeta ciudadana con la operación recibida (<span class="nickname">tcIdSgtcPatch</span>)</div>
+    <div class="method-notes">Realiza la actualización de una tarjeta ciudadana. Permite modificar cualquiera de sus propiedades</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">idSgtc (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#PatchOperation">PatchOperation</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Operacion de actualización parcial de tarjeta ciudadana. </div>
+            <div class="param-desc"><span class="param-type">example: <code>{
+  &quot;op&quot; : &quot;replace&quot;,
+  &quot;path&quot; : &quot;enable&quot;,
+  &quot;value&quot; : &quot;false&quot;
+}</code></span></div>    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="tcIdSgtcPut"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /tc/{idSgtc}</code></pre></div>
+    <div class="method-summary">Actualiza tarjeta ciudadana (<span class="nickname">tcIdSgtcPut</span>)</div>
+    <div class="method-notes">Realiza la actualización de una tarjeta ciudadana.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">idSgtc (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#CitizenCard">CitizenCard</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Tarjeta ciudadana a actualizar </div>
+                </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    No content
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">404</h4>
+    Resource Not found
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="tcPost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /tc</code></pre></div>
+    <div class="method-summary">Alta de tarjeta ciudadana (<span class="nickname">tcPost</span>)</div>
+    <div class="method-notes">Realiza el alta de una tarjeta ciudadana asociada a la persona identificada en la request por su id. Si la persona indicada no existe se devolverá un error</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body  (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para la solicitud de creación o actualización de tarjeta </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#CitizenCard">CitizenCard</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "_id" : "487f1ff",
+  "state" : "B"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Created
+        <a href="#CitizenCard">CitizenCard</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
   <h1><a name="Usuarios">Usuarios</a></h1>
@@ -1029,12 +2119,76 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "password" : "password",
-  "userStatus" : 0,
-  "person" : { },
-  "_id" : "_id",
-  "email" : "email",
-  "username" : "username"
+  "password" : "",
+  "person" : {
+    "mail" : "juanapellido@santander.es",
+    "phones" : [ 695748759, 987458785 ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "_id" : "NIE"
+    },
+    "cadatralAddressRef" : "9872023VH5797S0001WX",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    } ],
+    "avatar" : "",
+    "birthDate" : "1980-07-21T00:00:00.000+0000",
+    "surname1" : "APELLIDO1",
+    "preferedContactMethod" : {
+      "description" : "WhatsApp",
+      "_id" : "507f191e810c19729de860ea"
+    },
+    "surname2" : "APELLIDO2",
+    "citizenCard" : {
+      "_id" : "487f1ff",
+      "state" : "B"
+    },
+    "name" : "JUAN",
+    "genre" : {
+      "description" : "Diverso",
+      "_id" : "_id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    } ],
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "identificationDoc" : "111111111H",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "_id" : "PERJAS"
+    }
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1052,8 +2206,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
   <div class="method"><a name="userTcIdSgtcGet"></a>
@@ -1085,12 +2239,76 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "password" : "password",
-  "userStatus" : 0,
-  "person" : { },
-  "_id" : "_id",
-  "email" : "email",
-  "username" : "username"
+  "password" : "",
+  "person" : {
+    "mail" : "juanapellido@santander.es",
+    "phones" : [ 695748759, 987458785 ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "_id" : "NIE"
+    },
+    "cadatralAddressRef" : "9872023VH5797S0001WX",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    } ],
+    "avatar" : "",
+    "birthDate" : "1980-07-21T00:00:00.000+0000",
+    "surname1" : "APELLIDO1",
+    "preferedContactMethod" : {
+      "description" : "WhatsApp",
+      "_id" : "507f191e810c19729de860ea"
+    },
+    "surname2" : "APELLIDO2",
+    "citizenCard" : {
+      "_id" : "487f1ff",
+      "state" : "B"
+    },
+    "name" : "JUAN",
+    "genre" : {
+      "description" : "Diverso",
+      "_id" : "_id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    } ],
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "identificationDoc" : "111111111H",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "_id" : "PERJAS"
+    }
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1108,8 +2326,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -1137,14 +2355,20 @@
     <!--Todo: process Response Object and its headers, schema, examples -->
 
 
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
 
     <h3 class="field-label">Responses</h3>
     <h4 class="field-label">204</h4>
     No content
         <a href="#"></a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -1179,12 +2403,76 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "password" : "password",
-  "userStatus" : 0,
-  "person" : { },
-  "_id" : "_id",
-  "email" : "email",
-  "username" : "username"
+  "password" : "",
+  "person" : {
+    "mail" : "juanapellido@santander.es",
+    "phones" : [ 695748759, 987458785 ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "_id" : "NIE"
+    },
+    "cadatralAddressRef" : "9872023VH5797S0001WX",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    } ],
+    "avatar" : "",
+    "birthDate" : "1980-07-21T00:00:00.000+0000",
+    "surname1" : "APELLIDO1",
+    "preferedContactMethod" : {
+      "description" : "WhatsApp",
+      "_id" : "507f191e810c19729de860ea"
+    },
+    "surname2" : "APELLIDO2",
+    "citizenCard" : {
+      "_id" : "487f1ff",
+      "state" : "B"
+    },
+    "name" : "JUAN",
+    "genre" : {
+      "description" : "Diverso",
+      "_id" : "_id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    } ],
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "identificationDoc" : "111111111H",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "_id" : "PERJAS"
+    }
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1202,8 +2490,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">404</h4>
     Resource Not found
         <a href="#"></a>
@@ -1257,8 +2545,8 @@
     No content
         <a href="#"></a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">400</h4>
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
@@ -1293,12 +2581,76 @@
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "password" : "password",
-  "userStatus" : 0,
-  "person" : { },
-  "_id" : "_id",
-  "email" : "email",
-  "username" : "username"
+  "password" : "",
+  "person" : {
+    "mail" : "juanapellido@santander.es",
+    "phones" : [ 695748759, 987458785 ],
+    "identificationType" : {
+      "description" : "Numero de identificación de extranjería",
+      "_id" : "NIE"
+    },
+    "cadatralAddressRef" : "9872023VH5797S0001WX",
+    "adresses" : [ {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    }, {
+      "country" : "country",
+      "zipCode" : 0,
+      "city" : "city",
+      "addressType" : {
+        "description" : "Dirección secundaria",
+        "_id" : "_id",
+        "identificator" : "SEC"
+      },
+      "addressLine1" : "addressLine1",
+      "addressLine2" : "addressLine2",
+      "_id" : "_id",
+      "state" : "state"
+    } ],
+    "avatar" : "",
+    "birthDate" : "1980-07-21T00:00:00.000+0000",
+    "surname1" : "APELLIDO1",
+    "preferedContactMethod" : {
+      "description" : "WhatsApp",
+      "_id" : "507f191e810c19729de860ea"
+    },
+    "surname2" : "APELLIDO2",
+    "citizenCard" : {
+      "_id" : "487f1ff",
+      "state" : "B"
+    },
+    "name" : "JUAN",
+    "genre" : {
+      "description" : "Diverso",
+      "_id" : "_id",
+      "identificator" : "DI"
+    },
+    "segmentation" : [ {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    }, {
+      "name" : "Usuario de transporte público",
+      "_id" : "_id",
+      "identificator" : "USRTRA"
+    } ],
+    "_id" : "487f1ff7cbcf86cd799439011",
+    "identificationDoc" : "111111111H",
+    "personType" : {
+      "description" : "Persona Jurídica - Asociación",
+      "_id" : "PERJAS"
+    }
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1316,8 +2668,8 @@
     Invalid request body
         <a href="#ServiceResponseError">ServiceResponseError</a>
     <h4 class="field-label">401</h4>
-    Access token, is missing , invalid or insuficients rights
-        <a href="#"></a>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
 
@@ -1328,9 +2680,11 @@
   <ol>
     <li><a href="#Address"><code>Address</code></a></li>
     <li><a href="#AddressType"><code>AddressType</code></a></li>
-    <li><a href="#Avatar"><code>Avatar</code></a></li>
+    <li><a href="#Avatar"><code>Avatar</code> - Imagen en Base 64</a></li>
     <li><a href="#ChangePasswordRequest"><code>ChangePasswordRequest</code></a></li>
+    <li><a href="#CitizenCard"><code>CitizenCard</code></a></li>
     <li><a href="#ContactMethod"><code>ContactMethod</code></a></li>
+    <li><a href="#ControlPanel"><code>ControlPanel</code></a></li>
     <li><a href="#CrmRequest"><code>CrmRequest</code></a></li>
     <li><a href="#CrmRequestType"><code>CrmRequestType</code></a></li>
     <li><a href="#Fid"><code>Fid</code></a></li>
@@ -1340,10 +2694,12 @@
     <li><a href="#Interaction"><code>Interaction</code></a></li>
     <li><a href="#InteractionBatch"><code>InteractionBatch</code></a></li>
     <li><a href="#InteractionInteractive"><code>InteractionInteractive</code></a></li>
+    <li><a href="#InteractionType"><code>InteractionType</code></a></li>
     <li><a href="#Login"><code>Login</code></a></li>
     <li><a href="#LoginFid"><code>LoginFid</code></a></li>
     <li><a href="#OrganizationUnit"><code>OrganizationUnit</code></a></li>
     <li><a href="#OrganizationUnitType"><code>OrganizationUnitType</code></a></li>
+    <li><a href="#PatchOperation"><code>PatchOperation</code></a></li>
     <li><a href="#Person"><code>Person</code></a></li>
     <li><a href="#PersonType"><code>PersonType</code></a></li>
     <li><a href="#RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a></li>
@@ -1351,8 +2707,11 @@
     <li><a href="#ServiceResponseError"><code>ServiceResponseError</code></a></li>
     <li><a href="#TokenResponse"><code>TokenResponse</code></a></li>
     <li><a href="#User"><code>User</code></a></li>
-    <li><a href="#UserExcerpt"><code>UserExcerpt</code></a></li>
+    <li><a href="#UserBasic"><code>UserBasic</code></a></li>
     <li><a href="#UserRequest"><code>UserRequest</code></a></li>
+    <li><a href="#body"><code>body</code></a></li>
+    <li><a href="#body_1"><code>body_1</code></a></li>
+    <li><a href="#body_2"><code>body_2</code></a></li>
   </ol>
 
   <div class="model">
@@ -1381,7 +2740,7 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="Avatar"><code>Avatar</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="Avatar"><code>Avatar</code> - Imagen en Base 64</a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Imagen de persona</div>
     <div class="field-items">
           </div>  <!-- field-items -->
@@ -1396,6 +2755,16 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="CitizenCard"><code>CitizenCard</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tarjeta Ciudadana (Objeto pte de definir por C1)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador de tarjeta ciudadana </div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff</span></div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Estado de la tarjeta </div>
+          <div class="param-desc"><span class="param-type">example: B</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="ContactMethod"><code>ContactMethod</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Métodos de contacto</div>
     <div class="field-items">
@@ -1403,6 +2772,13 @@
           <div class="param-desc"><span class="param-type">example: 507f191e810c19729de860ea</span></div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: WhatsApp</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ControlPanel"><code>ControlPanel</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Cuadro de mando (Pte de definir)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objetId</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1462,8 +2838,7 @@
     <h3><a name="IdentificationDocType"><code>IdentificationDocType</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Tipo de identificación</div>
     <div class="field-items">
-      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
-<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: NIE</span></div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: Numero de identificación de extranjería</span></div>
@@ -1474,31 +2849,45 @@
     <div class='model-description'>Acción que realiza una persona, componente o sistema relacionado con la iniciativa que no precisa de gestión</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
-<div class="param">userAgent </div><div class="param-desc"><span class="param-type"><a href="#UserExcerpt">UserExcerpt</a></span>  </div>
-<div class="param">subjectId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. format: ObjectId</div>
-<div class="param">sourceId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del componente o aplicación que genera la interacción format: ObjectId</div>
-<div class="param">typeId </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Tipo de interacción. Deberá ser un ID de la tabla de interacciones. </div>
+          <div class="param-desc"><span class="param-type">example: 507f1f77bcf86cd799439011</span></div>
+<div class="param">userAgent </div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
+<div class="param">subjectId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. No es un atributo requerido porque se podrán registrar interacciones anónimas format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">sourceId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del componente o aplicación que genera la interacción format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: e475dff7cbcf86cd799439011</span></div>
+<div class="param">interactionType </div><div class="param-desc"><span class="param-type"><a href="#InteractionType">InteractionType</a></span>  </div>
 <div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Detalle de la interacción </div>
-<div class="param">OrganizationUnit (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnit">OrganizationUnit</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Llamada telefónica consulta</span></div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="InteractionBatch"><code>InteractionBatch</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Interaccion que se captura de forma desatendida desde un componente o aplicación de terceros</div>
     <div class="field-items">
-      <div class="param">externalSourceElementId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador en la aplicacion origen del elemento que genera la interacción </div>
-<div class="param">sourceDescription (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> descripción del elemento que genera la interacción </div>
-<div class="param">geom (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: GeoJSON</div>
+      <div class="param">sourceElementDescription </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> descripción del elemento que genera la interacción </div>
+<div class="param">sourceElementExternalId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador externo del elemento que genera la interacción </div>
+<div class="param">geom </div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: GeoJSON</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="InteractionInteractive"><code>InteractionInteractive</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Interaccion que se captura de forma interactiva a traves de CRM</div>
     <div class="field-items">
-      <div class="param">contactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
+      <div class="param">contactMethod </div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
 <div class="param">resolution (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Solución aportada a la interacción </div>
-<div class="param">resolutionUserAgent (optional)</div><div class="param-desc"><span class="param-type"><a href="#UserExcerpt">UserExcerpt</a></span>  </div>
+<div class="param">resolutionUserAgent </div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
 <div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequest">CrmRequest</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionType"><code>InteractionType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de interacción</div>
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> nombre de la interacción </div>
+          <div class="param-desc"><span class="param-type">example: Registro WiFi</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> descripción del elemento que genera la interacción </div>
+          <div class="param-desc"><span class="param-type">example: Registro en punto acceso wifi</span></div>
+<div class="param">OrganizationUnit </div><div class="param-desc"><span class="param-type"><a href="#"></a></span> Unidad organizativa relacionada con la interacción </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1506,10 +2895,14 @@
     <div class='model-description'>objeto de login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana. Si se proporciona mas de uno devolverá error en la petición</div>
     <div class="field-items">
       <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2547</span></div>
 <div class="param">telephone (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 657487598</span></div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2547@santander.es</span></div>
 <div class="param">tc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff</span></div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#binary">byte[]</a></span>  format: binary</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1525,9 +2918,10 @@
     <div class='model-description'>Unidad organizativa</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la unidad </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
 <div class="param">organizationUnitType (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnitType">OrganizationUnitType</a></span>  </div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Descripción de unidad organizativa </div>
-          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+          <div class="param-desc"><span class="param-type">example: Concejalía de juventud</span></div>
 <div class="param">parent (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnit">OrganizationUnit</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
@@ -1542,20 +2936,46 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="PatchOperation"><code>PatchOperation</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto que define la operación a realizar en un objeto mediante el método patch. Siguiendo las indicaciones de rfc6902</div>
+    <div class="field-items">
+      <div class="param">op (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">add</div><div class="param-enum">remove</div><div class="param-enum">replace</div><div class="param-enum">move</div><div class="param-enum">copy</div><div class="param-enum">test</div>
+          <div class="param-desc"><span class="param-type">example: replace</span></div>
+<div class="param">path (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: address/zipCode</span></div>
+<div class="param">value (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 10200</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="Person"><code>Person</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Objeto persona que almacena la informaciónd e cada persona física o jurídica</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
 <div class="param">identificationType (optional)</div><div class="param-desc"><span class="param-type"><a href="#IdentificationDocType">IdentificationDocType</a></span>  </div>
 <div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Documento de identificación </div>
+          <div class="param-desc"><span class="param-type">example: 111111111H</span></div>
 <div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#Avatar">Avatar</a></span>  </div>
 <div class="param">personType (optional)</div><div class="param-desc"><span class="param-type"><a href="#PersonType">PersonType</a></span>  </div>
+<div class="param">citizenCard (optional)</div><div class="param-desc"><span class="param-type"><a href="#CitizenCard">CitizenCard</a></span>  </div>
 <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+          <div class="param-desc"><span class="param-type">example: JUAN</span></div>
+<div class="param">surname1 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO1</span></div>
+<div class="param">surname2 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO2</span></div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha completa según RFC 3339, section 5.6 format: date</div>
+          <div class="param-desc"><span class="param-type">example: Mon Jul 21 00:00:00 GMT 1980</span></div>
 <div class="param">phones (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: phone</div>
+          <div class="param-desc"><span class="param-type">example: [695748759,987458785]</span></div>
 <div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: juanapellido@santander.es</span></div>
 <div class="param">preferedContactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
 <div class="param">cadatralAddressRef (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> referencia catastal de vivienda habitual </div>
+          <div class="param-desc"><span class="param-type">example: 9872023VH5797S0001WX</span></div>
 <div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
 <div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
 <div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
@@ -1565,9 +2985,8 @@
     <h3><a name="PersonType"><code>PersonType</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Tipo de persona</div>
     <div class="field-items">
-      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
-<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-          <div class="param-desc"><span class="param-type">example: PEJA</span></div>
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: PERJAS</span></div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: Persona Jurídica - Asociación</span></div>
     </div>  <!-- field-items -->
@@ -1607,7 +3026,8 @@
     <div class='model-description'>Respuesta a la solicitud de token de acceso o refresco</div>
     <div class="field-items">
       <div class="param">token_type (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">access_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">access_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: JWT</div>
+<div class="param">appId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">expires_in (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
 <div class="param">refresh_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
@@ -1617,21 +3037,29 @@
     <div class='model-description'>Entidad que posibilita a una persona el uso de aplicaciones que componen la iniciativa. Define su método de autenticación y las autorizaciones de uso en el CRM.</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
 <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548</span></div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">userStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
+          <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#ByteArray">byte[]</a></span> Contraseña en Base64 format: byte</div>
 <div class="param">person (optional)</div><div class="param-desc"><span class="param-type"><a href="#Person">Person</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="UserExcerpt"><code>UserExcerpt</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="UserBasic"><code>UserBasic</code></a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'>Extracto de usuario con las propiedades reducidas, omite persona y contraseña.</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
 <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548</span></div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">userStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: int32</div>
+          <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1642,6 +3070,62 @@
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">personId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="body"><code>body</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la unidad </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+<div class="param">organizationUnitType (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnitType">OrganizationUnitType</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Descripción de unidad organizativa </div>
+          <div class="param-desc"><span class="param-type">example: Concejalía de juventud</span></div>
+<div class="param">parent (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnit">OrganizationUnit</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="body_1"><code>body_1</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la unidad </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+<div class="param">organizationUnitType (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnitType">OrganizationUnitType</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Descripción de unidad organizativa </div>
+          <div class="param-desc"><span class="param-type">example: Concejalía de juventud</span></div>
+<div class="param">parent (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnit">OrganizationUnit</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="body_2"><code>body_2</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">identificationType (optional)</div><div class="param-desc"><span class="param-type"><a href="#IdentificationDocType">IdentificationDocType</a></span>  </div>
+<div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Documento de identificación </div>
+          <div class="param-desc"><span class="param-type">example: 111111111H</span></div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#Avatar">Avatar</a></span>  </div>
+<div class="param">personType (optional)</div><div class="param-desc"><span class="param-type"><a href="#PersonType">PersonType</a></span>  </div>
+<div class="param">citizenCard (optional)</div><div class="param-desc"><span class="param-type"><a href="#CitizenCard">CitizenCard</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: JUAN</span></div>
+<div class="param">surname1 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO1</span></div>
+<div class="param">surname2 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO2</span></div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha completa según RFC 3339, section 5.6 format: date</div>
+          <div class="param-desc"><span class="param-type">example: Mon Jul 21 00:00:00 GMT 1980</span></div>
+<div class="param">phones (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: phone</div>
+          <div class="param-desc"><span class="param-type">example: [695748759,987458785]</span></div>
+<div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: juanapellido@santander.es</span></div>
+<div class="param">preferedContactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
+<div class="param">cadatralAddressRef (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> referencia catastal de vivienda habitual </div>
+          <div class="param-desc"><span class="param-type">example: 9872023VH5797S0001WX</span></div>
+<div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
+<div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
+<div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
     </div>  <!-- field-items -->
   </div>
   </body>

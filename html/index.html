@@ -203,6 +203,7 @@
   <div class="method-summary"></div>
   <h4><a href="#Autorizaciones">Autorizaciones</a></h4>
   <ul>
+  <li><a href="#authAuthorizePost"><code><span class="http-method">post</span> /auth/authorize</code></a></li>
   <li><a href="#authFidLoginPost"><code><span class="http-method">post</span> /auth/fid/login</code></a></li>
   <li><a href="#authFidRevoquePost"><code><span class="http-method">post</span> /auth/fid/revoque</code></a></li>
   <li><a href="#authFidStorePost"><code><span class="http-method">post</span> /auth/fid/store</code></a></li>
@@ -226,6 +227,12 @@
   <li><a href="#organizationOuIdGet"><code><span class="http-method">get</span> /organization/{ouId}</code></a></li>
   <li><a href="#organizationOuIdPut"><code><span class="http-method">put</span> /organization/{ouId}</code></a></li>
   <li><a href="#organizationPost"><code><span class="http-method">post</span> /organization</code></a></li>
+  </ul>
+  <h4><a href="#FuentesDeDatos">FuentesDeDatos</a></h4>
+  <ul>
+  <li><a href="#datasourceDataSourceIdDataGet"><code><span class="http-method">get</span> /datasource/{dataSourceId}/data</code></a></li>
+  <li><a href="#datasourceDataSourceIdGet"><code><span class="http-method">get</span> /datasource/{dataSourceId}</code></a></li>
+  <li><a href="#datasourceGet"><code><span class="http-method">get</span> /datasource</code></a></li>
   </ul>
   <h4><a href="#Interacciones">Interacciones</a></h4>
   <ul>
@@ -259,6 +266,69 @@
   </ul>
 
   <h1><a name="Autorizaciones">Autorizaciones</a></h1>
+  <div class="method"><a name="authAuthorizePost"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/authorize</code></pre></div>
+    <div class="method-summary">Autoriza usuario autenticado por proveedor de confianza (<span class="nickname">authAuthorizePost</span>)</div>
+    <div class="method-notes">&lt;p&gt;Autoriza en CRM un usuario que ya ha sido autenticado por alguno de los métodos en los que se confía como certificado, dni electrónico y LDAP&lt;/p&gt; &lt;ol&gt;
+ &lt;li&gt;El proceso autentica el usuario de forma segura a traves del bus de integración y el bus solicita la autorización del usuario mediante los datos identificados sin necesidad de contraseña.
+ &lt;/li&gt;
+&lt;li&gt;Si no existe se crea el usuario y la persona asociada. &lt;/li&gt; &lt;li&gt;
+  Se genera el token del usuario y se retorna
+&lt;/li&gt; &lt;/ol&gt;
+</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#LoginTrusted">LoginTrusted</a> (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; Objeto para el login en aplicación de terceros, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si se proporciona mas de uno devolverá error 400 en la petición </div>
+                </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#TokenResponse">TokenResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "token_type" : "bearer",
+  "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4",
+  "expires_in" : 20,
+  "refresh_token" : "fdb8fdbecf1d03ce5e6125c067733c0d51de209c"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Login ok
+        <a href="#TokenResponse">TokenResponse</a>
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
   <div class="method"><a name="authFidLoginPost"></a>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
@@ -412,7 +482,7 @@
     <a class="up" href="#__Methods">Up</a>
     <pre class="post"><code class="huge"><span class="http-method">post</span> /auth/login</code></pre></div>
     <div class="method-summary">login de usuario (<span class="nickname">authLoginPost</span>)</div>
-    <div class="method-notes">&lt;h2&gt;Login&lt;/h2&gt; &lt;p&gt; Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt; &lt;/p&gt; &lt;p&gt; El token devuelto en formato JWT contendrá en el payload el id el usuario, el id de la persona y el id de la aplicacion desde la que e hizo login obtenido desde el ApiKey&lt;/p&gt;
+    <div class="method-notes">&lt;h2&gt;Login&lt;/h2&gt; &lt;p&gt; Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.&lt;p&gt; Las aplicaciones cliente deberán &lt;strong&gt;almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout&lt;/strong&gt; &lt;/p&gt; &lt;p&gt; El token devuelto en formato JWT contendrá en el payload el id el usuario, el id de la persona, id de la tarjeta ciudadana si se dispone de ella y el id de la aplicacion desde la que e hizo login obtenido desde el ApiKey&lt;/p&gt;
 </div>
 
 
@@ -752,7 +822,7 @@
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
     <pre class="get"><code class="huge"><span class="http-method">get</span> /controlPanel</code></pre></div>
-    <div class="method-summary">Obiene todos los cuadros de mando (BORRADOR) (<span class="nickname">controlPanelGet</span>)</div>
+    <div class="method-summary">Obtiene todos los cuadros de mando (BORRADOR) (<span class="nickname">controlPanelGet</span>)</div>
     <div class="method-notes">Método pendiende de análisis</div>
 
 
@@ -1114,6 +1184,156 @@
         <a href="#ServiceResponseError">ServiceResponseError</a>
   </div> <!-- method -->
   <hr/>
+  <h1><a name="FuentesDeDatos">FuentesDeDatos</a></h1>
+  <div class="method"><a name="datasourceDataSourceIdDataGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /datasource/{dataSourceId}/data</code></pre></div>
+    <div class="method-summary">Obtiene los datos resultado de una fuente de datos (<span class="nickname">datasourceDataSourceIdDataGet</span>)</div>
+    <div class="method-notes">Retorna la configuracion</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">dataSourceId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>""</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Ok
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="datasourceDataSourceIdGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /datasource/{dataSourceId}</code></pre></div>
+    <div class="method-summary">Obiene fuente de datos identificada (<span class="nickname">datasourceDataSourceIdGet</span>)</div>
+    <div class="method-notes">Retorna la configuracion</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">dataSourceId (required)</div>
+      
+            <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  </div>    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#DataSource">DataSource</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "query" : "query",
+  "name" : "name",
+  "stages" : [ "stages", "stages" ],
+  "_id" : "_id",
+  "collection" : "collection"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    ok
+        <a href="#DataSource">DataSource</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="datasourceGet"></a>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /datasource</code></pre></div>
+    <div class="method-summary">Obiene todas las fuentes de datos publicadas (BORRADOR) (<span class="nickname">datasourceGet</span>)</div>
+    <div class="method-notes">En CRM se podrá definir una fuente de datos que permita seleccionar datos de una colección y definir un metodo de agregación</div>
+
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#DataSource">DataSource</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "query" : "query",
+  "name" : "name",
+  "stages" : [ "stages", "stages" ],
+  "_id" : "_id",
+  "collection" : "collection"
+}, {
+  "query" : "query",
+  "name" : "name",
+  "stages" : [ "stages", "stages" ],
+  "_id" : "_id",
+  "collection" : "collection"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    created
+        
+    <h4 class="field-label">400</h4>
+    Invalid request body
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+    <h4 class="field-label">401</h4>
+    ApiKey is missing , invalid or insuficients rights
+        <a href="#ServiceResponseError">ServiceResponseError</a>
+  </div> <!-- method -->
+  <hr/>
   <h1><a name="Interacciones">Interacciones</a></h1>
   <div class="method"><a name="interactionPost"></a>
     <div class="method-path">
@@ -1151,6 +1371,7 @@
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionDirection" : "inbound",
   "interactionType" : {
     "OrganizationUnit" : "",
     "name" : "Registro WiFi",
@@ -1159,6 +1380,7 @@
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
+    "profileProvider" : "LDAP",
     "email" : "user2548@santander.es",
     "username" : "user2548"
   },
@@ -1214,6 +1436,7 @@
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>[ {
   "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionDirection" : "inbound",
   "interactionType" : {
     "OrganizationUnit" : "",
     "name" : "Registro WiFi",
@@ -1222,6 +1445,7 @@
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
+    "profileProvider" : "LDAP",
     "email" : "user2548@santander.es",
     "username" : "user2548"
   },
@@ -1230,6 +1454,7 @@
   "subjectId" : "487f1ff7cbcf86cd799439011"
 }, {
   "sourceId" : "e475dff7cbcf86cd799439011",
+  "interactionDirection" : "inbound",
   "interactionType" : {
     "OrganizationUnit" : "",
     "name" : "Registro WiFi",
@@ -1238,6 +1463,7 @@
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
+    "profileProvider" : "LDAP",
     "email" : "user2548@santander.es",
     "username" : "user2548"
   },
@@ -1348,10 +1574,9 @@
     "description" : "Numero de identificación de extranjería",
     "_id" : "NIE"
   },
-  "cadatralAddressRef" : "9872023VH5797S0001WX",
   "adresses" : [ {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1364,7 +1589,7 @@
     "state" : "state"
   }, {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1408,6 +1633,32 @@
   "personType" : {
     "description" : "Persona Jurídica - Asociación",
     "_id" : "PERJAS"
+  },
+  "censusData" : {
+    "degreeCode" : "degreeCode",
+    "country" : "country",
+    "zipCode" : 2,
+    "entryDate" : "2000-01-23",
+    "city" : "city",
+    "numberOfInhabitants" : "numberOfInhabitants",
+    "sex" : "sex",
+    "nationalityName" : "nationalityName",
+    "sectionLetter" : "sectionLetter",
+    "section" : 1.4658129805029452,
+    "degreeName" : "degreeName",
+    "inHabitantCode" : 0.8008281904610115,
+    "birthDate" : "2000-01-23",
+    "lastOperationDate" : "2000-01-23",
+    "lastChangeCause" : "lastChangeCause",
+    "censusStateText" : "censusStateText",
+    "nationalityCode" : "nationalityCode",
+    "district" : 6.027456183070403,
+    "registrationDate" : "2000-01-23",
+    "censusState" : 5.962133916683182,
+    "state" : "state",
+    "family" : 5.637376656633329,
+    "europeanCommunity" : true,
+    "permanentResidenceCard" : true
   }
 }</code></pre>
 
@@ -1509,10 +1760,9 @@
     "description" : "Numero de identificación de extranjería",
     "_id" : "NIE"
   },
-  "cadatralAddressRef" : "9872023VH5797S0001WX",
   "adresses" : [ {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1525,7 +1775,7 @@
     "state" : "state"
   }, {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1569,6 +1819,32 @@
   "personType" : {
     "description" : "Persona Jurídica - Asociación",
     "_id" : "PERJAS"
+  },
+  "censusData" : {
+    "degreeCode" : "degreeCode",
+    "country" : "country",
+    "zipCode" : 2,
+    "entryDate" : "2000-01-23",
+    "city" : "city",
+    "numberOfInhabitants" : "numberOfInhabitants",
+    "sex" : "sex",
+    "nationalityName" : "nationalityName",
+    "sectionLetter" : "sectionLetter",
+    "section" : 1.4658129805029452,
+    "degreeName" : "degreeName",
+    "inHabitantCode" : 0.8008281904610115,
+    "birthDate" : "2000-01-23",
+    "lastOperationDate" : "2000-01-23",
+    "lastChangeCause" : "lastChangeCause",
+    "censusStateText" : "censusStateText",
+    "nationalityCode" : "nationalityCode",
+    "district" : 6.027456183070403,
+    "registrationDate" : "2000-01-23",
+    "censusState" : 5.962133916683182,
+    "state" : "state",
+    "family" : 5.637376656633329,
+    "europeanCommunity" : true,
+    "permanentResidenceCard" : true
   }
 }</code></pre>
 
@@ -1699,10 +1975,9 @@
     "description" : "Numero de identificación de extranjería",
     "_id" : "NIE"
   },
-  "cadatralAddressRef" : "9872023VH5797S0001WX",
   "adresses" : [ {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1715,7 +1990,7 @@
     "state" : "state"
   }, {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1759,6 +2034,32 @@
   "personType" : {
     "description" : "Persona Jurídica - Asociación",
     "_id" : "PERJAS"
+  },
+  "censusData" : {
+    "degreeCode" : "degreeCode",
+    "country" : "country",
+    "zipCode" : 2,
+    "entryDate" : "2000-01-23",
+    "city" : "city",
+    "numberOfInhabitants" : "numberOfInhabitants",
+    "sex" : "sex",
+    "nationalityName" : "nationalityName",
+    "sectionLetter" : "sectionLetter",
+    "section" : 1.4658129805029452,
+    "degreeName" : "degreeName",
+    "inHabitantCode" : 0.8008281904610115,
+    "birthDate" : "2000-01-23",
+    "lastOperationDate" : "2000-01-23",
+    "lastChangeCause" : "lastChangeCause",
+    "censusStateText" : "censusStateText",
+    "nationalityCode" : "nationalityCode",
+    "district" : 6.027456183070403,
+    "registrationDate" : "2000-01-23",
+    "censusState" : 5.962133916683182,
+    "state" : "state",
+    "family" : 5.637376656633329,
+    "europeanCommunity" : true,
+    "permanentResidenceCard" : true
   }
 }</code></pre>
 
@@ -1828,10 +2129,9 @@
     "description" : "Numero de identificación de extranjería",
     "_id" : "NIE"
   },
-  "cadatralAddressRef" : "9872023VH5797S0001WX",
   "adresses" : [ {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1844,7 +2144,7 @@
     "state" : "state"
   }, {
     "country" : "country",
-    "zipCode" : 0,
+    "zipCode" : 7,
     "city" : "city",
     "addressType" : {
       "description" : "Dirección secundaria",
@@ -1888,6 +2188,32 @@
   "personType" : {
     "description" : "Persona Jurídica - Asociación",
     "_id" : "PERJAS"
+  },
+  "censusData" : {
+    "degreeCode" : "degreeCode",
+    "country" : "country",
+    "zipCode" : 2,
+    "entryDate" : "2000-01-23",
+    "city" : "city",
+    "numberOfInhabitants" : "numberOfInhabitants",
+    "sex" : "sex",
+    "nationalityName" : "nationalityName",
+    "sectionLetter" : "sectionLetter",
+    "section" : 1.4658129805029452,
+    "degreeName" : "degreeName",
+    "inHabitantCode" : 0.8008281904610115,
+    "birthDate" : "2000-01-23",
+    "lastOperationDate" : "2000-01-23",
+    "lastChangeCause" : "lastChangeCause",
+    "censusStateText" : "censusStateText",
+    "nationalityCode" : "nationalityCode",
+    "district" : 6.027456183070403,
+    "registrationDate" : "2000-01-23",
+    "censusState" : 5.962133916683182,
+    "state" : "state",
+    "family" : 5.637376656633329,
+    "europeanCommunity" : true,
+    "permanentResidenceCard" : true
   }
 }</code></pre>
 
@@ -2127,10 +2453,9 @@
       "description" : "Numero de identificación de extranjería",
       "_id" : "NIE"
     },
-    "cadatralAddressRef" : "9872023VH5797S0001WX",
     "adresses" : [ {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2143,7 +2468,7 @@
       "state" : "state"
     }, {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2187,6 +2512,32 @@
     "personType" : {
       "description" : "Persona Jurídica - Asociación",
       "_id" : "PERJAS"
+    },
+    "censusData" : {
+      "degreeCode" : "degreeCode",
+      "country" : "country",
+      "zipCode" : 2,
+      "entryDate" : "2000-01-23",
+      "city" : "city",
+      "numberOfInhabitants" : "numberOfInhabitants",
+      "sex" : "sex",
+      "nationalityName" : "nationalityName",
+      "sectionLetter" : "sectionLetter",
+      "section" : 1.4658129805029452,
+      "degreeName" : "degreeName",
+      "inHabitantCode" : 0.8008281904610115,
+      "birthDate" : "2000-01-23",
+      "lastOperationDate" : "2000-01-23",
+      "lastChangeCause" : "lastChangeCause",
+      "censusStateText" : "censusStateText",
+      "nationalityCode" : "nationalityCode",
+      "district" : 6.027456183070403,
+      "registrationDate" : "2000-01-23",
+      "censusState" : 5.962133916683182,
+      "state" : "state",
+      "family" : 5.637376656633329,
+      "europeanCommunity" : true,
+      "permanentResidenceCard" : true
     }
   }
 }</code></pre>
@@ -2247,10 +2598,9 @@
       "description" : "Numero de identificación de extranjería",
       "_id" : "NIE"
     },
-    "cadatralAddressRef" : "9872023VH5797S0001WX",
     "adresses" : [ {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2263,7 +2613,7 @@
       "state" : "state"
     }, {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2307,6 +2657,32 @@
     "personType" : {
       "description" : "Persona Jurídica - Asociación",
       "_id" : "PERJAS"
+    },
+    "censusData" : {
+      "degreeCode" : "degreeCode",
+      "country" : "country",
+      "zipCode" : 2,
+      "entryDate" : "2000-01-23",
+      "city" : "city",
+      "numberOfInhabitants" : "numberOfInhabitants",
+      "sex" : "sex",
+      "nationalityName" : "nationalityName",
+      "sectionLetter" : "sectionLetter",
+      "section" : 1.4658129805029452,
+      "degreeName" : "degreeName",
+      "inHabitantCode" : 0.8008281904610115,
+      "birthDate" : "2000-01-23",
+      "lastOperationDate" : "2000-01-23",
+      "lastChangeCause" : "lastChangeCause",
+      "censusStateText" : "censusStateText",
+      "nationalityCode" : "nationalityCode",
+      "district" : 6.027456183070403,
+      "registrationDate" : "2000-01-23",
+      "censusState" : 5.962133916683182,
+      "state" : "state",
+      "family" : 5.637376656633329,
+      "europeanCommunity" : true,
+      "permanentResidenceCard" : true
     }
   }
 }</code></pre>
@@ -2411,10 +2787,9 @@
       "description" : "Numero de identificación de extranjería",
       "_id" : "NIE"
     },
-    "cadatralAddressRef" : "9872023VH5797S0001WX",
     "adresses" : [ {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2427,7 +2802,7 @@
       "state" : "state"
     }, {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2471,6 +2846,32 @@
     "personType" : {
       "description" : "Persona Jurídica - Asociación",
       "_id" : "PERJAS"
+    },
+    "censusData" : {
+      "degreeCode" : "degreeCode",
+      "country" : "country",
+      "zipCode" : 2,
+      "entryDate" : "2000-01-23",
+      "city" : "city",
+      "numberOfInhabitants" : "numberOfInhabitants",
+      "sex" : "sex",
+      "nationalityName" : "nationalityName",
+      "sectionLetter" : "sectionLetter",
+      "section" : 1.4658129805029452,
+      "degreeName" : "degreeName",
+      "inHabitantCode" : 0.8008281904610115,
+      "birthDate" : "2000-01-23",
+      "lastOperationDate" : "2000-01-23",
+      "lastChangeCause" : "lastChangeCause",
+      "censusStateText" : "censusStateText",
+      "nationalityCode" : "nationalityCode",
+      "district" : 6.027456183070403,
+      "registrationDate" : "2000-01-23",
+      "censusState" : 5.962133916683182,
+      "state" : "state",
+      "family" : 5.637376656633329,
+      "europeanCommunity" : true,
+      "permanentResidenceCard" : true
     }
   }
 }</code></pre>
@@ -2589,10 +2990,9 @@
       "description" : "Numero de identificación de extranjería",
       "_id" : "NIE"
     },
-    "cadatralAddressRef" : "9872023VH5797S0001WX",
     "adresses" : [ {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2605,7 +3005,7 @@
       "state" : "state"
     }, {
       "country" : "country",
-      "zipCode" : 0,
+      "zipCode" : 7,
       "city" : "city",
       "addressType" : {
         "description" : "Dirección secundaria",
@@ -2649,6 +3049,32 @@
     "personType" : {
       "description" : "Persona Jurídica - Asociación",
       "_id" : "PERJAS"
+    },
+    "censusData" : {
+      "degreeCode" : "degreeCode",
+      "country" : "country",
+      "zipCode" : 2,
+      "entryDate" : "2000-01-23",
+      "city" : "city",
+      "numberOfInhabitants" : "numberOfInhabitants",
+      "sex" : "sex",
+      "nationalityName" : "nationalityName",
+      "sectionLetter" : "sectionLetter",
+      "section" : 1.4658129805029452,
+      "degreeName" : "degreeName",
+      "inHabitantCode" : 0.8008281904610115,
+      "birthDate" : "2000-01-23",
+      "lastOperationDate" : "2000-01-23",
+      "lastChangeCause" : "lastChangeCause",
+      "censusStateText" : "censusStateText",
+      "nationalityCode" : "nationalityCode",
+      "district" : 6.027456183070403,
+      "registrationDate" : "2000-01-23",
+      "censusState" : 5.962133916683182,
+      "state" : "state",
+      "family" : 5.637376656633329,
+      "europeanCommunity" : true,
+      "permanentResidenceCard" : true
     }
   }
 }</code></pre>
@@ -2680,13 +3106,16 @@
   <ol>
     <li><a href="#Address"><code>Address</code></a></li>
     <li><a href="#AddressType"><code>AddressType</code></a></li>
-    <li><a href="#Avatar"><code>Avatar</code> - Imagen en Base 64</a></li>
+    <li><a href="#Avatar"><code>Avatar</code></a></li>
+    <li><a href="#BpsInstance"><code>BpsInstance</code></a></li>
+    <li><a href="#CensusData"><code>CensusData</code></a></li>
     <li><a href="#ChangePasswordRequest"><code>ChangePasswordRequest</code></a></li>
     <li><a href="#CitizenCard"><code>CitizenCard</code></a></li>
     <li><a href="#ContactMethod"><code>ContactMethod</code></a></li>
     <li><a href="#ControlPanel"><code>ControlPanel</code></a></li>
     <li><a href="#CrmRequest"><code>CrmRequest</code></a></li>
     <li><a href="#CrmRequestType"><code>CrmRequestType</code></a></li>
+    <li><a href="#DataSource"><code>DataSource</code></a></li>
     <li><a href="#Fid"><code>Fid</code></a></li>
     <li><a href="#ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a></li>
     <li><a href="#GenreType"><code>GenreType</code></a></li>
@@ -2697,6 +3126,7 @@
     <li><a href="#InteractionType"><code>InteractionType</code></a></li>
     <li><a href="#Login"><code>Login</code></a></li>
     <li><a href="#LoginFid"><code>LoginFid</code></a></li>
+    <li><a href="#LoginTrusted"><code>LoginTrusted</code></a></li>
     <li><a href="#OrganizationUnit"><code>OrganizationUnit</code></a></li>
     <li><a href="#OrganizationUnitType"><code>OrganizationUnitType</code></a></li>
     <li><a href="#PatchOperation"><code>PatchOperation</code></a></li>
@@ -2716,7 +3146,7 @@
 
   <div class="model">
     <h3><a name="Address"><code>Address</code></a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Esquema de dirección</div>
+    <div class='model-description'>Esquema de dirección (Borrador, ver cómo alinear con censo)</div>
     <div class="field-items">
       <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
 <div class="param">addressType (optional)</div><div class="param-desc"><span class="param-type"><a href="#AddressType">AddressType</a></span>  </div>
@@ -2740,10 +3170,61 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="Avatar"><code>Avatar</code> - Imagen en Base 64</a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Imagen de persona</div>
+    <h3><a name="Avatar"><code>Avatar</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Imagen de persona en base64</div>
     <div class="field-items">
           </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="BpsInstance"><code>BpsInstance</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 27504</span></div>
+<div class="param">suspended (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">ended (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">activityId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: waitState</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CensusData"><code>CensusData</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>(BORRADOR) Información censal del padrón actualizable desde procesos, no de forma interactiva</div>
+    <div class="field-items">
+      <div class="param">inHabitantCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Código de habitante (codigoHabitante) </div>
+<div class="param">sex (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Sexo V-varón M-Mujer (sexo) </div>
+<div class="param">district (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Distrito (distrito) </div>
+<div class="param">section (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Sección (seccion) </div>
+<div class="param">sectionLetter (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Letra de sección (letraSeccion) </div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">entryDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de alta  (fechaAlta) format: date</div>
+<div class="param">registrationDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de empadronamieto (fechaEmpadronamiento) format: date</div>
+<div class="param">lastOperationDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de última operación (fechaUltimaOperacion) format: date</div>
+<div class="param">censusState (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Estado. Posibles valores:
+0 -ESTADO_NO_LOCALIZADO
+1 -ESTADO_SIN_INCIDENCIAS
+2 -ESTADO_NO_ACTIVO
+3 -ESTADO_DOS_REGISTROS
+4 -ESTADO_PROPUESTA_BAJA_CADUCIDAD
+5 -ESTADO_PROPUESTA_BAJA_OTRA_CAUSA
+6 -ESTADO_PROPUESTA_BAJA_OFICIO </div>
+<div class="param">censusStateText (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Estado de inscripción en censo (textoEstado) </div>
+<div class="param">numberOfInhabitants (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Número de Habitantes encontrados (numeroHabitantes). </div>
+<div class="param">family (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Modo Familia 0-No, 1-Nivel Hoja, 2-Nivel Habitante (familia) </div>
+<div class="param">degreeCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Código de titulación (codigoTitulacion) </div>
+<div class="param">degreeName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre de titulación (nombreTitulacion) </div>
+<div class="param">nationalityCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Código de nacionalidad (codigoNacionalidad) </div>
+<div class="param">nationalityName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre de nacionalidad (nombreNacionalidad) </div>
+<div class="param">lastChangeCause (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Causa de última variación (causaUltimaVariacion) </div>
+<div class="param">europeanCommunity (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Nacionalidad Comunitaria (comunitario) </div>
+<div class="param">permanentResidenceCard (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Tarjeta de residencia permanente (tarjetaResidenciaPermanente) </div>
+<div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">zipCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: postal-code</div>
+    </div>  <!-- field-items -->
   </div>
   <div class="model">
     <h3><a name="ChangePasswordRequest"><code>ChangePasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
@@ -2789,6 +3270,8 @@
 <div class="param">requestType (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequestType">CrmRequestType</a></span>  </div>
 <div class="param">interactionOrigin (optional)</div><div class="param-desc"><span class="param-type"><a href="#Interaction">Interaction</a></span>  </div>
 <div class="param">interactionRelationsIds (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Identificadores de interacciones relacionadas con la solicitud format: ObjectId</div>
+<div class="param">bpsProcessInstancesId (optional)</div><div class="param-desc"><span class="param-type"><a href="#BpsInstance">array[BpsInstance]</a></span>  </div>
+<div class="param">variables (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -2799,7 +3282,22 @@
 <div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la solicitud </div>
           <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
 <div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Inscripción a evento</span></div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Inscripción a eventos gratuíto</span></div>
+<div class="param">bpsProcessDefinitionsId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: [&quot;sampleJavaServiceTask:1:27503&quot;,&quot;sample2JavaServiceTask:1:27587&quot;]</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DataSource"><code>DataSource</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto que almacena la descripción de una fuente de datos</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objetId</div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">collection (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">query (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">stages (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -2856,6 +3354,8 @@
 <div class="param">sourceId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del componente o aplicación que genera la interacción format: ObjectId</div>
           <div class="param-desc"><span class="param-type">example: e475dff7cbcf86cd799439011</span></div>
 <div class="param">interactionType </div><div class="param-desc"><span class="param-type"><a href="#InteractionType">InteractionType</a></span>  </div>
+<div class="param">interactionDirection (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Dirección de la interacción persona-&amp;gt;sistema o viceversa format: enum - inbound - outbound</div>
+          <div class="param-desc"><span class="param-type">example: inbound</span></div>
 <div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Detalle de la interacción </div>
           <div class="param-desc"><span class="param-type">example: Llamada telefónica consulta</span></div>
     </div>  <!-- field-items -->
@@ -2874,6 +3374,8 @@
     <div class='model-description'>Interaccion que se captura de forma interactiva a traves de CRM</div>
     <div class="field-items">
       <div class="param">contactMethod </div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
+<div class="param">telephoneCallId (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Identificador de la llamada asociada en componente C7 </div>
+          <div class="param-desc"><span class="param-type">example: 55148</span></div>
 <div class="param">resolution (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Solución aportada a la interacción </div>
 <div class="param">resolutionUserAgent </div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
 <div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequest">CrmRequest</a></span>  </div>
@@ -2902,6 +3404,10 @@
           <div class="param-desc"><span class="param-type">example: user2547@santander.es</span></div>
 <div class="param">tc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: 487f1ff</span></div>
+<div class="param">docTypeId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: DNI</span></div>
+<div class="param">docId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 06898575</span></div>
 <div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#binary">byte[]</a></span>  format: binary</div>
     </div>  <!-- field-items -->
   </div>
@@ -2911,6 +3417,15 @@
     <div class="field-items">
       <div class="param">appId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">allOf (optional)</div><div class="param-desc"><span class="param-type"><a href="#Login">Login</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="LoginTrusted"><code>LoginTrusted</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login de confianza, permitirá hacer login a un usuario autenticado por otros métodos (BORRADOR)</div>
+    <div class="field-items">
+      <div class="param">provicerId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -2974,8 +3489,7 @@
 <div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: juanapellido@santander.es</span></div>
 <div class="param">preferedContactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
-<div class="param">cadatralAddressRef (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> referencia catastal de vivienda habitual </div>
-          <div class="param-desc"><span class="param-type">example: 9872023VH5797S0001WX</span></div>
+<div class="param">censusData (optional)</div><div class="param-desc"><span class="param-type"><a href="#CensusData">CensusData</a></span>  </div>
 <div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
 <div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
 <div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
@@ -3042,6 +3556,8 @@
           <div class="param-desc"><span class="param-type">example: user2548</span></div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">profileProvider (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Servicio proveedor origen del perfil </div>
+          <div class="param-desc"><span class="param-type">example: LDAP</span></div>
 <div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: false</span></div>
 <div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#ByteArray">byte[]</a></span> Contraseña en Base64 format: byte</div>
@@ -3058,6 +3574,8 @@
           <div class="param-desc"><span class="param-type">example: user2548</span></div>
 <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">profileProvider (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Servicio proveedor origen del perfil </div>
+          <div class="param-desc"><span class="param-type">example: LDAP</span></div>
 <div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: false</span></div>
     </div>  <!-- field-items -->
@@ -3121,8 +3639,7 @@
 <div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: juanapellido@santander.es</span></div>
 <div class="param">preferedContactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
-<div class="param">cadatralAddressRef (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> referencia catastal de vivienda habitual </div>
-          <div class="param-desc"><span class="param-type">example: 9872023VH5797S0001WX</span></div>
+<div class="param">censusData (optional)</div><div class="param-desc"><span class="param-type"><a href="#CensusData">CensusData</a></span>  </div>
 <div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
 <div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
 <div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>

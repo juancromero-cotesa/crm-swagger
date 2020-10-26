@@ -1,0 +1,723 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Api CRM</title>
+    <style type="text/css">
+      body {
+      	font-family: Trebuchet MS, sans-serif;
+      	font-size: 15px;
+      	color: #444;
+      	margin-right: 24px;
+      }
+      
+      h1	{
+      	font-size: 25px;
+      }
+      h2	{
+      	font-size: 20px;
+      }
+      h3	{
+      	font-size: 16px;
+      	font-weight: bold;
+      }
+      hr	{
+      	height: 1px;
+      	border: 0;
+      	color: #ddd;
+      	background-color: #ddd;
+      }
+      
+      .app-desc {
+        clear: both;
+        margin-left: 20px;
+      }
+      .param-name {
+        width: 100%;
+      }
+      .license-info {
+        margin-left: 20px;
+      }
+      
+      .license-url {
+        margin-left: 20px;
+      }
+      
+      .model {
+        margin: 0 0 0px 20px;
+      }
+      
+      .method {
+        margin-left: 20px;
+      }
+      
+      .method-notes	{
+      	margin: 10px 0 20px 0;
+      	font-size: 90%;
+      	color: #555;
+      }
+      
+      pre {
+        padding: 10px;
+        margin-bottom: 2px;
+      }
+      
+      .http-method {
+       text-transform: uppercase;
+      }
+      
+      pre.get {
+        background-color: #0f6ab4;
+      }
+      
+      pre.post {
+        background-color: #10a54a;
+      }
+      
+      pre.put {
+        background-color: #c5862b;
+      }
+      
+      pre.delete {
+        background-color: #a41e22;
+      }
+      
+      .huge	{
+      	color: #fff;
+      }
+      
+      pre.example {
+        background-color: #f3f3f3;
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+      
+      code {
+        white-space: pre;
+      }
+      
+      .nickname {
+        font-weight: bold;
+      }
+      
+      .method-path {
+        font-size: 1.5em;
+        background-color: #0f6ab4;
+      }
+      
+      .up {
+        float:right;
+      }
+      
+      .parameter {
+        width: 500px;
+      }
+      
+      .param {
+        width: 500px;
+        padding: 10px 0 0 20px;
+        font-weight: bold;
+      }
+      
+      .param-desc {
+        width: 700px;
+        padding: 0 0 0 20px;
+        color: #777;
+      }
+      
+      .param-type {
+        font-style: italic;
+      }
+      
+      .param-enum-header {
+      width: 700px;
+      padding: 0 0 0 60px;
+      color: #777;
+      font-weight: bold;
+      }
+      
+      .param-enum {
+      width: 700px;
+      padding: 0 0 0 80px;
+      color: #777;
+      font-style: italic;
+      }
+      
+      .field-label {
+        padding: 0;
+        margin: 0;
+        clear: both;
+      }
+      
+      .field-items	{
+      	padding: 0 0 15px 0;
+      	margin-bottom: 15px;
+      }
+      
+      .return-type {
+        clear: both;
+        padding-bottom: 10px;
+      }
+      
+      .param-header {
+        font-weight: bold;
+      }
+      
+      .method-tags {
+        text-align: right;
+      }
+      
+      .method-tag {
+        background: none repeat scroll 0% 0% #24A600;
+        border-radius: 3px;
+        padding: 2px 10px;
+        margin: 2px;
+        color: #FFF;
+        display: inline-block;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>Api CRM</h1>
+    <div class="app-desc">Modelos de la aplicación</div>
+    <div class="app-desc">More information: <a href="https://cotesa.grupotecopy.es/">https://cotesa.grupotecopy.es/</a></div>
+    <div class="app-desc">Contact Info: <a href="juancromero@grupotecopy.es">juancromero@grupotecopy.es</a></div>
+    <div class="app-desc">Version: 0.2.0-MODELS</div>
+    
+    <div class="license-info">Apache 2.0</div>
+    <div class="license-url">http://www.apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#Address"><code>Address</code></a></li>
+    <li><a href="#AddressType"><code>AddressType</code></a></li>
+    <li><a href="#ApiKeysStore"><code>ApiKeysStore</code></a></li>
+    <li><a href="#Avatar"><code>Avatar</code></a></li>
+    <li><a href="#BpsInstance"><code>BpsInstance</code></a></li>
+    <li><a href="#CensusData"><code>CensusData</code></a></li>
+    <li><a href="#ChangePasswordRequest"><code>ChangePasswordRequest</code></a></li>
+    <li><a href="#CitizenCard"><code>CitizenCard</code></a></li>
+    <li><a href="#ContactMethod"><code>ContactMethod</code></a></li>
+    <li><a href="#ControlPanel"><code>ControlPanel</code></a></li>
+    <li><a href="#CrmRequest"><code>CrmRequest</code></a></li>
+    <li><a href="#CrmRequestType"><code>CrmRequestType</code></a></li>
+    <li><a href="#DataSource"><code>DataSource</code></a></li>
+    <li><a href="#ExternalAplications"><code>ExternalAplications</code></a></li>
+    <li><a href="#Fid"><code>Fid</code></a></li>
+    <li><a href="#ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a></li>
+    <li><a href="#GenreType"><code>GenreType</code></a></li>
+    <li><a href="#IdentificationDocType"><code>IdentificationDocType</code></a></li>
+    <li><a href="#Interaction"><code>Interaction</code></a></li>
+    <li><a href="#InteractionBatch"><code>InteractionBatch</code></a></li>
+    <li><a href="#InteractionInteractive"><code>InteractionInteractive</code></a></li>
+    <li><a href="#InteractionType"><code>InteractionType</code></a></li>
+    <li><a href="#Login"><code>Login</code></a></li>
+    <li><a href="#LoginFid"><code>LoginFid</code></a></li>
+    <li><a href="#LoginTrusted"><code>LoginTrusted</code></a></li>
+    <li><a href="#OrganizationUnit"><code>OrganizationUnit</code></a></li>
+    <li><a href="#OrganizationUnitType"><code>OrganizationUnitType</code></a></li>
+    <li><a href="#PatchOperation"><code>PatchOperation</code></a></li>
+    <li><a href="#Person"><code>Person</code></a></li>
+    <li><a href="#PersonType"><code>PersonType</code></a></li>
+    <li><a href="#RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a></li>
+    <li><a href="#Segment"><code>Segment</code></a></li>
+    <li><a href="#ServiceResponseError"><code>ServiceResponseError</code></a></li>
+    <li><a href="#TokenResponse"><code>TokenResponse</code></a></li>
+    <li><a href="#User"><code>User</code></a></li>
+    <li><a href="#UserBasic"><code>UserBasic</code></a></li>
+    <li><a href="#UserRequest"><code>UserRequest</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="Address"><code>Address</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Esquema de dirección (Borrador, ver cómo alinear con censo)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">addressType (optional)</div><div class="param-desc"><span class="param-type"><a href="#AddressType">AddressType</a></span>  </div>
+<div class="param">addressLine1 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">addressLine2 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">zipCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: postal-code</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="AddressType"><code>AddressType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de dirección (catastal, principal, secundaria,...)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: SEC</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Dirección secundaria</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ApiKeysStore"><code>ApiKeysStore</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Almacén de APIKeys</div>
+    <div class="field-items">
+      <div class="param">apiKey </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 8a42adee-caa1-413a-aed6-6b65db8eb3ce</span></div>
+<div class="param">ExternalAplicationId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Id de la aplicacion a la que pertenece la Key </div>
+<div class="param">allowedOrigins (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Urls de origen dede la que se permite el uso de la key </div>
+<div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">permissions (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Permisos de la key </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Avatar"><code>Avatar</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Imagen de persona en base64</div>
+    <div class="field-items">
+          </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="BpsInstance"><code>BpsInstance</code></a> <a class="up" href="#__Models">Up</a></h3>
+    
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 27504</span></div>
+<div class="param">sourceId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Id de la definición BPS origen de la instancia format: ObjectId</div>
+<div class="param">suspended (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">ended (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">activityId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: waitState</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CensusData"><code>CensusData</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>(BORRADOR) Información censal del padrón actualizable desde procesos, no de forma interactiva</div>
+    <div class="field-items">
+      <div class="param">inHabitantCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Código de habitante (codigoHabitante) </div>
+<div class="param">sex (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Sexo V-varón M-Mujer (sexo) </div>
+<div class="param">district (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Distrito (distrito) </div>
+<div class="param">section (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Sección (seccion) </div>
+<div class="param">sectionLetter (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Letra de sección (letraSeccion) </div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">entryDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de alta  (fechaAlta) format: date</div>
+<div class="param">registrationDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de empadronamieto (fechaEmpadronamiento) format: date</div>
+<div class="param">lastOperationDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha de última operación (fechaUltimaOperacion) format: date</div>
+<div class="param">censusState (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Estado. Posibles valores:
+0 -ESTADO_NO_LOCALIZADO
+1 -ESTADO_SIN_INCIDENCIAS
+2 -ESTADO_NO_ACTIVO
+3 -ESTADO_DOS_REGISTROS
+4 -ESTADO_PROPUESTA_BAJA_CADUCIDAD
+5 -ESTADO_PROPUESTA_BAJA_OTRA_CAUSA
+6 -ESTADO_PROPUESTA_BAJA_OFICIO </div>
+<div class="param">censusStateText (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Estado de inscripción en censo (textoEstado) </div>
+<div class="param">numberOfInhabitants (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Número de Habitantes encontrados (numeroHabitantes). </div>
+<div class="param">family (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Modo Familia 0-No, 1-Nivel Hoja, 2-Nivel Habitante (familia) </div>
+<div class="param">degreeCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Código de titulación (codigoTitulacion) </div>
+<div class="param">degreeName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre de titulación (nombreTitulacion) </div>
+<div class="param">nationalityCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Código de nacionalidad (codigoNacionalidad) </div>
+<div class="param">nationalityName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre de nacionalidad (nombreNacionalidad) </div>
+<div class="param">lastChangeCause (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Causa de última variación (causaUltimaVariacion) </div>
+<div class="param">europeanCommunity (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Nacionalidad Comunitaria (comunitario) </div>
+<div class="param">permanentResidenceCard (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Tarjeta de residencia permanente (tarjetaResidenciaPermanente) </div>
+<div class="param">city (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">country (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">zipCode (optional)</div><div class="param-desc"><span class="param-type"><a href="#integer">Integer</a></span>  format: postal-code</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ChangePasswordRequest"><code>ChangePasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la petición de cambio de contraseña</div>
+    <div class="field-items">
+      <div class="param">userid (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">oldPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">newPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CitizenCard"><code>CitizenCard</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tarjeta Ciudadana (Objeto pte de definir por C1)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador de tarjeta ciudadana </div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff</span></div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Estado de la tarjeta </div>
+          <div class="param-desc"><span class="param-type">example: B</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ContactMethod"><code>ContactMethod</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Métodos de contacto</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 507f191e810c19729de860ea</span></div>
+<div class="param">icon (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: WhatsApp</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: WhatsApp</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ControlPanel"><code>ControlPanel</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Cuadro de mando (Pte de definir)</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objetId</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CrmRequest"><code>CrmRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Solicitud realizada en CRM de una persona o componente que precisa de una gestión y/o la intervención de otros sistemas por lo que dispone de un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre. Podrá disponer de un proceso de negocio asociado o un usuario asignado para la realiazción de la solicitud de forma manual</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">userAgent (optional)</div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
+<div class="param">userOwner (optional)</div><div class="param-desc"><span class="param-type"><a href="#"></a></span>  </div>
+<div class="param">requestType (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequestType">CrmRequestType</a></span>  </div>
+<div class="param">interactionOrigin (optional)</div><div class="param-desc"><span class="param-type"><a href="#Interaction">Interaction</a></span>  </div>
+<div class="param">interactionRelationsIds (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Identificadores de interacciones relacionadas con la solicitud format: ObjectId</div>
+<div class="param">bpsProcessInstances (optional)</div><div class="param-desc"><span class="param-type"><a href="#BpsInstance">array[BpsInstance]</a></span>  </div>
+<div class="param">variables (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="CrmRequestType"><code>CrmRequestType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de solicitud crm</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la solicitud </div>
+          <div class="param-desc"><span class="param-type">example: INSEVN</span></div>
+<div class="param">summary (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Inscripción a evento</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Inscripción a eventos gratuíto</span></div>
+<div class="param">bpsProcessDefinitionsId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: [&quot;sampleJavaServiceTask:1:27503&quot;,&quot;sample2JavaServiceTask:1:27587&quot;]</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DataSource"><code>DataSource</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto que almacena la descripción de una fuente de datos</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objetId</div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">collection (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">query (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">stages (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ExternalAplications"><code>ExternalAplications</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Registro de aplicaciones externas que se integran con CRM</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: SSCC07</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Santader Smart Citicen Componente 7</span></div>
+<div class="param">provider (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Telefónica</span></div>
+<div class="param">contact (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: ssc@telefonica.es</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Fid"><code>Fid</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto que contiene la autorización federada en una aplicación de terceros.</div>
+    <div class="field-items">
+      <div class="param">appId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">authCode </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">authUrl </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">authStamp (optional)</div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">expires_in </div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">enable (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ForgotPasswordRequest"><code>ForgotPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la petición de enlace de contraseña olvidada</div>
+    <div class="field-items">
+      <div class="param">sgtcId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="GenreType"><code>GenreType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de género</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: DI</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Diverso</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="IdentificationDocType"><code>IdentificationDocType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de identificación</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: NIE</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Numero de identificación de extranjería</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Interaction"><code>Interaction</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Acción que realiza una persona, componente o sistema relacionado con la iniciativa que no precisa de gestión</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 507f1f77bcf86cd799439011</span></div>
+<div class="param">userAgent </div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
+<div class="param">subjectId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. No es un atributo requerido porque se podrán registrar interacciones anónimas format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">sourceExternalAplicationId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del componente o aplicación que genera la interacción format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: e475dff7cbcf86cd799439011</span></div>
+<div class="param">interactionType </div><div class="param-desc"><span class="param-type"><a href="#InteractionType">InteractionType</a></span>  </div>
+<div class="param">interactionDirection (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Dirección de la interacción persona-&amp;gt;sistema o viceversa format: enum - inbound - outbound</div>
+          <div class="param-desc"><span class="param-type">example: inbound</span></div>
+<div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Detalle de la interacción </div>
+          <div class="param-desc"><span class="param-type">example: Llamada telefónica consulta</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionBatch"><code>InteractionBatch</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Interaccion que se captura de forma desatendida desde un componente o aplicación de terceros</div>
+    <div class="field-items">
+      <div class="param">sourceElementDescription </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> descripción del elemento que genera la interacción </div>
+<div class="param">sourceElementExternalId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador externo del elemento que genera la interacción </div>
+<div class="param">geom </div><div class="param-desc"><span class="param-type"><a href="#object">Object</a></span>  format: GeoJSON</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionInteractive"><code>InteractionInteractive</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Interaccion que se captura de forma interactiva a traves de CRM</div>
+    <div class="field-items">
+      <div class="param">contactMethod </div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
+<div class="param">telephoneCallId (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span> Identificador de la llamada asociada en componente C7 </div>
+          <div class="param-desc"><span class="param-type">example: 55148</span></div>
+<div class="param">resolution (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Solución aportada a la interacción </div>
+<div class="param">resolutionUserAgent </div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
+<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#CrmRequest">CrmRequest</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="InteractionType"><code>InteractionType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de interacción</div>
+    <div class="field-items">
+      <div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> nombre de la interacción </div>
+          <div class="param-desc"><span class="param-type">example: Registro WiFi</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> descripción del elemento que genera la interacción </div>
+          <div class="param-desc"><span class="param-type">example: Registro en punto acceso wifi</span></div>
+<div class="param">batchInteraction (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span> Indica si el tipo de interaccion es batch u online (interactiva) </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">OrganizationUnit </div><div class="param-desc"><span class="param-type"><a href="#"></a></span> Unidad organizativa relacionada con la interacción </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Login"><code>Login</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana. Si se proporciona mas de uno devolverá error en la petición</div>
+    <div class="field-items">
+      <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2547</span></div>
+<div class="param">telephone (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 657487598</span></div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2547@santander.es</span></div>
+<div class="param">tc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff</span></div>
+<div class="param">docTypeId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: DNI</span></div>
+<div class="param">docId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 06898575</span></div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#binary">byte[]</a></span>  format: binary</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="LoginFid"><code>LoginFid</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login Federado, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana en una aplicación de terceros. Si se proporciona mas de un método de identificación se devolverá error en la petición</div>
+    <div class="field-items">
+      <div class="param">appId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">allOf (optional)</div><div class="param-desc"><span class="param-type"><a href="#Login">Login</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="LoginTrusted"><code>LoginTrusted</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto de login de confianza, permitirá hacer login a un usuario autenticado por otros métodos (BORRADOR)</div>
+    <div class="field-items">
+      <div class="param">provicerId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="OrganizationUnit"><code>OrganizationUnit</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Unidad organizativa</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la unidad </div>
+          <div class="param-desc"><span class="param-type">example: CONJUV</span></div>
+<div class="param">organizationUnitType (optional)</div><div class="param-desc"><span class="param-type"><a href="#OrganizationUnitType">OrganizationUnitType</a></span>  </div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Descripción de unidad organizativa </div>
+          <div class="param-desc"><span class="param-type">example: Concejalía de juventud</span></div>
+<div class="param">parentOrganizationUnitId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto de la unidad </div>
+          <div class="param-desc"><span class="param-type">example: JUV</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="OrganizationUnitType"><code>OrganizationUnitType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Unidad organizativa</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del tipo de unidad organizativa </div>
+          <div class="param-desc"><span class="param-type">example: UNIORG</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Descripción de unidad organizativa </div>
+          <div class="param-desc"><span class="param-type">example: Unidad Orgánica</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PatchOperation"><code>PatchOperation</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>objeto que define la operación a realizar en un objeto mediante el método patch. Siguiendo las indicaciones de rfc6902</div>
+    <div class="field-items">
+      <div class="param">op (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">add</div><div class="param-enum">remove</div><div class="param-enum">replace</div><div class="param-enum">move</div><div class="param-enum">copy</div><div class="param-enum">test</div>
+          <div class="param-desc"><span class="param-type">example: replace</span></div>
+<div class="param">path (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: address/zipCode</span></div>
+<div class="param">value (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: 10200</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Person"><code>Person</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto persona que almacena la informaciónd e cada persona física o jurídica</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">identificationType (optional)</div><div class="param-desc"><span class="param-type"><a href="#IdentificationDocType">IdentificationDocType</a></span>  </div>
+<div class="param">identificationDoc (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Documento de identificación </div>
+          <div class="param-desc"><span class="param-type">example: 111111111H</span></div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#Avatar">Avatar</a></span>  </div>
+<div class="param">personType (optional)</div><div class="param-desc"><span class="param-type"><a href="#PersonType">PersonType</a></span>  </div>
+<div class="param">citizenCard (optional)</div><div class="param-desc"><span class="param-type"><a href="#CitizenCard">CitizenCard</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: JUAN</span></div>
+<div class="param">surname1 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO1</span></div>
+<div class="param">surname2 (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: APELLIDO2</span></div>
+<div class="param">birthDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span> Fecha completa según RFC 3339, section 5.6 format: date</div>
+          <div class="param-desc"><span class="param-type">example: Mon Jul 21 00:00:00 GMT 1980</span></div>
+<div class="param">phones (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: phone</div>
+          <div class="param-desc"><span class="param-type">example: [695748759,987458785]</span></div>
+<div class="param">mail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: juanapellido@santander.es</span></div>
+<div class="param">preferedContactMethod (optional)</div><div class="param-desc"><span class="param-type"><a href="#ContactMethod">ContactMethod</a></span>  </div>
+<div class="param">censusData (optional)</div><div class="param-desc"><span class="param-type"><a href="#CensusData">CensusData</a></span>  </div>
+<div class="param">adresses (optional)</div><div class="param-desc"><span class="param-type"><a href="#Address">array[Address]</a></span>  </div>
+<div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
+<div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PersonType"><code>PersonType</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Tipo de persona</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: PERJAS</span></div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Persona Jurídica - Asociación</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RecoverPasswordRequest"><code>RecoverPasswordRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la restauración de contraseña</div>
+    <div class="field-items">
+      <div class="param">recoverToken (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">newPassword (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Segment"><code>Segment</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Segmentos de perfilado de personas. Definirán el perfil de la persona en base a interacciones y servicios utilizados</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: objectId</div>
+<div class="param">identificator (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> identificador corto del segmento </div>
+          <div class="param-desc"><span class="param-type">example: USRTRA</span></div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Nombre del segmento </div>
+          <div class="param-desc"><span class="param-type">example: Usuario de transporte público</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ServiceResponseError"><code>ServiceResponseError</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto de error retornado por la capa de servicios</div>
+    <div class="field-items">
+      <div class="param">errorId </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">errorName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">errorDescription </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">aditionalErrors (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="TokenResponse"><code>TokenResponse</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Respuesta a la solicitud de token de acceso o refresco</div>
+    <div class="field-items">
+      <div class="param">token_type (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">access_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: JWT</div>
+<div class="param">appId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">expires_in (optional)</div><div class="param-desc"><span class="param-type"><a href="#BigDecimal">BigDecimal</a></span>  </div>
+<div class="param">refresh_token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="User"><code>User</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Entidad que posibilita a una persona el uso de aplicaciones que componen la iniciativa. Define su método de autenticación y las autorizaciones de uso en el CRM.</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548</span></div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">profileProvider (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Servicio proveedor origen del perfil </div>
+          <div class="param-desc"><span class="param-type">example: LDAP</span></div>
+<div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#ByteArray">byte[]</a></span> Contraseña en Base64 format: byte</div>
+<div class="param">person (optional)</div><div class="param-desc"><span class="param-type"><a href="#Person">Person</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UserBasic"><code>UserBasic</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Extracto de usuario con las propiedades reducidas, omite persona y contraseña.</div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+          <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548</span></div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: user2548@santander.es</span></div>
+<div class="param">profileProvider (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Servicio proveedor origen del perfil </div>
+          <div class="param-desc"><span class="param-type">example: LDAP</span></div>
+<div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: false</span></div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UserRequest"><code>UserRequest</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Objeto para la creación de un nuevo usuario. Creará el usuario con el nombre de usuario y el mail indicados y establecerá la contraseña. Este usuario quedará vinculado a la persona indicada por personId</div>
+    <div class="field-items">
+      <div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">personId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: ObjectId</div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>

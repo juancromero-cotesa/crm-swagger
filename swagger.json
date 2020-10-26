@@ -1,8 +1,8 @@
 {
   "openapi" : "3.0.0",
   "info" : {
-    "description" : "Especificaciónes de la API privada de CRM",
-    "version" : "0.1.0-private",
+    "description" : "Especificaciónes de la API pública de CRM.\n\nVersión 2 parte pública. \n\nLos métodos estaran protegidos mediante el paso de un token válido.\n\nLos métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos por el paso de una api key que tendrá definidos los permisos correspondientes.",
+    "version" : "0.2.0-PUBLIC",
     "title" : "Api CRM",
     "contact" : {
       "url" : "https://cotesa.grupotecopy.es/",
@@ -16,10 +16,10 @@
   },
   "tags" : [ {
     "name" : "Personas",
-    "description" : "Gestión de personas en CRM. Identificación única de personas físicas y personas jurídicas"
+    "description" : "Gestión de personas en el módulo de indentificación única. Identificación única de personas físicas y personas jurídicas"
   }, {
     "name" : "Usuarios",
-    "description" : "Gestión de usuarios de CRM."
+    "description" : "Gestión de usuarios en el módulo de indentificación única."
   }, {
     "name" : "Autorizaciones",
     "description" : "Procesos de autorización."
@@ -29,18 +29,400 @@
   }, {
     "name" : "Solicitudes",
     "description" : "Métodos para la incorporación de solicitudes."
+  }, {
+    "name" : "Estructura organizativa",
+    "description" : "EStructura organizativa del ayuntamiento."
+  }, {
+    "name" : "Tarjeta Ciudadana",
+    "description" : "Métodos para la integración de la tarjeta ciudadana."
+  }, {
+    "name" : "Fuentes de datos",
+    "description" : "Fuentes de datos para la realización de consultas sobre los datos de CRM"
   } ],
   "paths" : {
-    "/person" : {
+    "/organization" : {
+      "get" : {
+        "tags" : [ "Estructura organizativa" ],
+        "summary" : "Obtiene estructura organizativa",
+        "description" : "Obtiene la estructura de la organización completa como unidades organizativas anidadas",
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "Estructura organizativa" ],
+        "summary" : "Crear una estructura organizativa",
+        "description" : "Crea una estructura de la organización. Si se incluyen estructuras hijas, estas deben de existir en el sistema, si no existen se devolverá un error 400",
+        "security" : [ {
+          "BearerToken" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                } ]
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/organization/{ouId}" : {
       "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
+        "name" : "ouId",
+        "in" : "path",
+        "description" : "ID de la estructura organizativa",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
       } ],
+      "get" : {
+        "tags" : [ "Estructura organizativa" ],
+        "summary" : "Obtiene rama de una estructura organizativa",
+        "description" : "Obtiene una rama de la estructura de la organización desde un nodo y todos sus descendientes.",
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "Estructura organizativa" ],
+        "summary" : "Actualiza una estructura organizativa",
+        "description" : "Actualiza la estructura organizativa.",
+        "security" : [ {
+          "BearerToken" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                } ]
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "Estructura organizativa" ],
+        "summary" : "Elimina una estructura organizativa",
+        "description" : "Elimina una estructura organizativa si no tiene hijos.",
+        "security" : [ {
+          "BearerToken" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "forceDelete",
+          "in" : "query",
+          "description" : "Indica si se elimina la estructura y se eliminan las unidades organizativas hijas",
+          "required" : false,
+          "schema" : {
+            "type" : "boolean"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/organization/childs/{ouId}" : {
+      "get" : {
+        "tags" : [ "Estructura organizativa" ],
+        "description" : "Obtiene las estructuras organizativas hijas de un nodo",
+        "summary" : "Obtiene una las estructuras organizativas hijas directas de la indicada.",
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "ouId",
+          "in" : "path",
+          "description" : "ID de la estrcutura organizativa",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganizationUnit"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/controlPanel" : {
+      "get" : {
+        "tags" : [ "Cuadros de Mando" ],
+        "summary" : "Obtiene todos los cuadros de mando (BORRADOR)",
+        "description" : "Método pendiende de análisis",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ControlPanel"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/controlPanel/{controlPanelId}" : {
+      "get" : {
+        "tags" : [ "Cuadros de Mando" ],
+        "summary" : "Obiene cuadro de mando (BORRADOR)",
+        "description" : "Método pendiende de análisis",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "controlPanelId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ControlPanel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/datasource" : {
+      "get" : {
+        "tags" : [ "Fuentes de datos" ],
+        "summary" : "Obiene todas las fuentes de datos publicadas (BORRADOR)",
+        "description" : "En CRM se podrá definir una fuente de datos que permita seleccionar datos de una colección y definir un metodo de agregación",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "responses" : {
+          "201" : {
+            "description" : "created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/DataSource"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/datasource/{dataSourceId}" : {
+      "get" : {
+        "tags" : [ "Fuentes de datos" ],
+        "summary" : "Obiene fuente de datos identificada",
+        "description" : "Retorna la configuracion ",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "dataSourceId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DataSource"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/datasource/{dataSourceId}/data" : {
+      "get" : {
+        "tags" : [ "Fuentes de datos" ],
+        "summary" : "Obtiene los datos resultado de una fuente de datos",
+        "description" : "Retorna la configuracion ",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "parameters" : [ {
+          "name" : "dataSourceId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "description" : "JSON con datos obtenidos"
+                }
+              }
+            }
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/person" : {
       "post" : {
         "tags" : [ "Personas" ],
-        "summary" : "Alta de persona",
-        "description" : "Crea una nueva persona",
+        "summary" : "Crear persona",
+        "description" : "Crea una nueva una persona, realizará las comprobaciones necesarias para no crear personas con identificadores duplicados (DNI, NIF, NIE).",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "allOf" : [ {
+                  "$ref" : "#/components/schemas/Person"
+                } ]
+              }
+            }
+          },
+          "required" : true
+        },
         "responses" : {
           "201" : {
             "description" : "Created",
@@ -52,38 +434,32 @@
               }
             }
           },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
           "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Person"
-        },
-        "security" : [ {
-          "BearerToken" : [ ]
-        }, {
-          "ApiKey" : [ ]
-        } ]
+        }
       }
     },
     "/person/{personId}" : {
       "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
+        "name" : "personId",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
       } ],
       "get" : {
         "tags" : [ "Personas" ],
         "summary" : "Obtener persona",
         "description" : "Retorna una única persona por su id",
-        "parameters" : [ {
-          "name" : "personId",
-          "in" : "path",
-          "description" : "ID de la persona",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
         "responses" : {
           "200" : {
@@ -111,14 +487,14 @@
         "tags" : [ "Personas" ],
         "summary" : "Modificación de persona (Creación si no existe)",
         "description" : "Actualiza la persona por su id con la persona recibida en body, si no existe el recurso",
-        "parameters" : [ {
-          "name" : "personId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/PersonRequest"
+        },
         "responses" : {
           "204" : {
             "description" : "No content, upadate OK"
@@ -142,23 +518,16 @@
           "405" : {
             "description" : "Invalid input"
           }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Person"
         }
       },
       "delete" : {
         "tags" : [ "Personas" ],
         "summary" : "Eliminar persona",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "personId",
-          "in" : "path",
-          "description" : "id de la persona a eliminar",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+        "description" : "Elimina la persona identificada en el path",
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
         "responses" : {
           "204" : {
@@ -171,14 +540,47 @@
             "$ref" : "#/components/responses/NotFound"
           }
         }
+      },
+      "patch" : {
+        "summary" : "Actualiza la persona con la operación recibida",
+        "description" : "Realiza la actualización de una persona. Permite modificar cualquiera de sus propiedades.",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PatchOperation"
+              },
+              "example" : {
+                "op" : "replace",
+                "path" : "identificationDoc",
+                "value" : "00000000J"
+              }
+            }
+          },
+          "description" : "Operación de actualización parcial sobre persona.",
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "tags" : [ "Personas" ]
       }
     },
     "/person/card/{sgtcId}" : {
-      "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
-      } ],
       "get" : {
         "tags" : [ "Personas" ],
         "summary" : "Obtiene una persona por su tarjeta ciudadana",
@@ -191,6 +593,11 @@
           "schema" : {
             "type" : "string"
           }
+        } ],
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
         "responses" : {
           "200" : {
@@ -216,15 +623,18 @@
       }
     },
     "/user" : {
-      "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
-      } ],
       "post" : {
         "tags" : [ "Usuarios" ],
         "summary" : "Alta de usuario",
-        "description" : "Crea el perfil de la persona asociada en el módulo de indetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado",
+        "description" : "Crea el usuario de la persona asociada que debe de existir en el módulo de idetificación única y realiza el alta de un nuevo usuario a traves de Bus de integración en IS. Retorna el usuario creado. Si ya existe un usuario creado asociado a la persona recibida retornará un error 400 con la correspondiente descripción del error",
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserRequest"
+        },
         "responses" : {
           "201" : {
             "description" : "created",
@@ -242,18 +652,10 @@
           "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           }
-        },
-        "requestBody" : {
-          "$ref" : "#/components/requestBodies/Person"
         }
       }
     },
     "/user/{userId}" : {
-      "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
-      } ],
       "get" : {
         "tags" : [ "Usuarios" ],
         "summary" : "Obtiene un usuario por su ID",
@@ -266,6 +668,11 @@
           "schema" : {
             "type" : "string"
           }
+        } ],
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
         "responses" : {
           "200" : {
@@ -301,6 +708,14 @@
             "type" : "string"
           }
         } ],
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/UserRequest"
+        },
         "responses" : {
           "201" : {
             "$ref" : "#/components/responses/Created"
@@ -314,22 +729,11 @@
           "400" : {
             "$ref" : "#/components/responses/InvalidRequestBody"
           }
-        },
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/User"
-              }
-            }
-          },
-          "description" : "objeto usuario",
-          "required" : true
         }
       },
       "delete" : {
         "tags" : [ "Usuarios" ],
-        "summary" : "Elimina una persona",
+        "summary" : "Elimina un usuario. Realiza la baja en IS y marca como baja el perfil de la persona en CRM sin eliminar el documento.",
         "description" : "",
         "parameters" : [ {
           "name" : "userId",
@@ -339,6 +743,11 @@
           "schema" : {
             "type" : "string"
           }
+        } ],
+        "security" : [ {
+          "BearerToken" : [ ]
+        }, {
+          "ApiKey" : [ ]
         } ],
         "responses" : {
           "204" : {
@@ -353,108 +762,176 @@
         }
       }
     },
-    "/auth/token" : {
-      "post" : {
-        "tags" : [ "Autorizaciones" ],
-        "summary" : "Obtiene un token de acceso proporcionando un código de autorización o un token de refresco",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "authType",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+    "/user/userName/{userName}" : {
+      "parameters" : [ {
+        "name" : "userName",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Obtener usuario por nombre de usuario",
+        "description" : "Obtiene el usuario pasado por parámetro en el path de la url.",
+        "security" : [ {
+          "BearerToken" : [ ]
         }, {
-          "name" : "authCode",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "refreshToken",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+          "ApiKey" : [ ]
         } ],
         "responses" : {
-          "401" : {
-            "description" : ""
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
           },
-          "405" : {
-            "description" : "Invalid input"
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
           }
         }
       }
     },
-    "/auth/token/tc" : {
-      "post" : {
-        "tags" : [ "Autorizaciones" ],
-        "summary" : "Obtiene un token de acceso proporcionando el id de la tarjeta ciudadana",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "authType",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+    "/user/tc/{idSgtc}" : {
+      "parameters" : [ {
+        "name" : "idSgtc",
+        "in" : "path",
+        "required" : true,
+        "schema" : {
+          "type" : "string"
+        }
+      } ],
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Obtener usuario por id de tarjeta ciudadana",
+        "description" : "Obtiene el usuario a partir de su identificador de tarjeta ciudadana.",
+        "security" : [ {
+          "BearerToken" : [ ]
         }, {
-          "name" : "authCode",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "refreshToken",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+          "ApiKey" : [ ]
         } ],
         "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
           "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           },
-          "405" : {
-            "description" : "Invalid input"
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        }
+      }
+    },
+    "/auth/login" : {
+      "parameters" : [ ],
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "login de usuario",
+        "description" : "<h2>Login</h2> <p> Autentica un usuario mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta proporciona un objeto con un token de acceso, su periodo de vigencia y un token de refresco que permitirá obtener un nuevo token cuando este haya caducado.<p> Las aplicaciones cliente deberán <strong>almacenar los tokens de forma segura y eliminar tanto el token de acceso como el de refresco cuando el usaurio realice el logout</strong> </p> <p> El token devuelto en formato JWT contendrá en el payload el id el usuario, el id de la persona, id de la tarjeta ciudadana si se dispone de ella y el id de la aplicacion desde la que e hizo login obtenido desde el ApiKey</p>",
+        "externalDocs" : {
+          "url" : "https://auth0.com/docs/tokens/access-tokens"
+        },
+        "security" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Login"
+              }
+            }
+          },
+          "required" : true,
+          "description" : "Objeto para el login, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes.  Si se proporciona mas de uno devolverá error 400 en la petición"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Login ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
           }
         }
       }
     },
     "/auth/logout" : {
+      "description" : "Realiza en el servicio las operaciones necesarias en la desconexión de un usuario <p>Las aplicaciones cliente deberán <strong>eliminar tanto el token de acceso como el de refresco cuando el usuario realice el logout</strong></p>",
       "post" : {
         "tags" : [ "Autorizaciones" ],
         "summary" : "Realiza el logout de un usuario invalidando su token de acceso",
         "description" : "",
-        "parameters" : [ {
-          "name" : "authType",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "authCode",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "refreshToken",
-          "in" : "header",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+        "security" : [ {
+          "BearerToken" : [ ]
         } ],
         "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/auth/refreshToken" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Refresca el token de autorización",
+        "description" : "Obtiene un nuevo token de acceso a partir del token válido actual y el token de refresco",
+        "externalDocs" : {
+          "url" : "https://auth0.com/docs/tokens/access-tokens/refresh-tokens",
+          "description" : "Info sobre método de refresco de token"
+        },
+        "security" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/TokenResponse"
+              }
+            }
+          }
+        },
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Refresh ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
           "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           },
@@ -464,162 +941,233 @@
         }
       }
     },
-    "/auth/changeMePassword" : {
+    "/auth/authorize" : {
+      "parameters" : [ ],
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "modifica la contarseña del usuario autorizado por el token",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "token",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "newPassword",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+        "summary" : "Autoriza usuario autenticado por proveedor de confianza",
+        "description" : "<p>Autoriza en CRM un usuario que ya ha sido autenticado por alguno de los métodos en los que se confía como certificado, dni electrónico y LDAP</p> <ol>\n <li>El proceso autentica el usuario de forma segura a traves del bus de integración y el bus solicita la autorización del usuario mediante los datos identificados sin necesidad de contraseña.\n </li>\n<li>Si no existe se crea el usuario y la persona asociada. </li> <li>\n  Se genera el token del usuario y se retorna\n</li> </ol>",
+        "security" : [ {
+          "ApiKey" : [ ]
         } ],
-        "responses" : {
-          "401" : {
-            "$ref" : "#/components/responses/UnauthorizedError"
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginTrusted"
+              }
+            }
           },
-          "405" : {
-            "description" : "Invalid input"
+          "required" : true,
+          "description" : "Objeto para el login en aplicación de terceros, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si se proporciona mas de uno devolverá error 400 en la petición"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Login ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
           }
         }
       }
     },
-    "/auth/changeUserPassword" : {
+    "/auth/fid/login" : {
+      "parameters" : [ ],
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "modifica la contraseña del usuario pasado por parámetro",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "token",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "userId",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "newPassword",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "401" : {
-            "$ref" : "#/components/responses/UnauthorizedError"
+        "summary" : "login federado",
+        "description" : "<h1>Login Federado</h1>  <p>Autentica un usuario para el acceso a una aplicación de terceros mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña CRM. El proceso identifica el usuario en CRM y busca una autorización previa de acceso a la aplicación de terceros..</p> <ol>\n <li>El proceso identifica el usuario mediante sus credenciales CRM y busca una autorización previa de acceso a la aplicación.</li>\n<li>Si existe autorización previa se redirige al acceso de la aplicación con el código de autorización almacenado lo que proporcionará acceso a esta son necesidad de realizar una nueva identificación.</li> <li> Si no existe se redirige al componente C11 pasando como parámetros la aplicación a autorizar y el id del usuario. </li> <li> El bus de integración redirige al login de la aplicación solicitada. Esta tras un login correcto realiza nueva llamada al bus adjuntando los parámetros del id de usuario, identificador de aplicación y código de autorización obtenido en el login. </li> <li> El bus de integración realiza llamada a CRM al método de almacenamiento de identificación federada, donde CRM almacenará la información para posteriores solicitudes de acceso a la aplicación. </li> </ol>",
+        "externalDocs" : {
+          "url" : "https://en.wikipedia.org/wiki/Federated_identity"
+        },
+        "security" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginFid"
+              }
+            }
           },
-          "405" : {
-            "description" : "Invalid input"
+          "required" : true,
+          "description" : "Objeto para el login en aplicación de terceros, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si se proporciona mas de uno devolverá error 400 en la petición"
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Login ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TokenResponse"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
           }
         }
       }
     },
-    "/auth/lostPassword" : {
+    "/auth/fid/store" : {
+      "parameters" : [ ],
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "Envía notificación al usuario para la recuperación de la contraseña mediante el paso del email o el id de su tarjeta ciudadana",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "token",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "type",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "email",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "idSGTC",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string"
-          }
+        "summary" : "Almacena identificación federada",
+        "description" : "Almacena una identificación federada asociada a un usuario y una aplicación. Cuando en posteriores ocasiones el usuario intente acceder a la aplicación podrá usar el código de autorización reconocido por la app para el acceso.",
+        "security" : [ {
+          "ApiKey" : [ ]
         } ],
-        "responses" : {
-          "401" : {
-            "$ref" : "#/components/responses/UnauthorizedError"
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Fid"
+              }
+            }
           },
-          "405" : {
-            "description" : "Invalid input"
+          "required" : true,
+          "description" : "Objeto con la identificación federada a almacenar."
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
           }
         }
       }
     },
-    "/auth/recoverPassword" : {
+    "/auth/fid/revoque" : {
+      "parameters" : [ ],
       "post" : {
         "tags" : [ "Autorizaciones" ],
-        "summary" : "Restaura la contraseña de un usuario mediante un código de autorización y la neuva password",
-        "description" : "",
-        "parameters" : [ {
-          "name" : "token",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "confirmationKey",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "newPassword",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
+        "summary" : "Revoca identificación federada almacenada",
+        "description" : "Revoca una identificación federada obtenida previamente estableciéndola como no habilitada.",
+        "security" : [ {
+          "ApiKey" : [ ]
         } ],
-        "responses" : {
-          "401" : {
-            "description" : "Invalid input"
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Fid"
+              }
+            }
           },
-          "405" : {
-            "description" : "Invalid input"
+          "required" : true,
+          "description" : "Objeto con la identificación federada a eliminar."
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          }
+        }
+      }
+    },
+    "/auth/password/change" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Cambio de contraseña",
+        "description" : "Modifica la contraseña del usuario pasado por body. Si el usuario recibido no es el propietario del token, deberá tener los permisos necesarios.",
+        "security" : [ {
+          "BearerToken" : [ ]
+        } ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ChangePasswordRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/auth/password/lost" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Contraseña olvidada",
+        "description" : "Envía notificación al usuario para la recuperación de la contraseña mediante el paso del email o el id de su tarjeta ciudadana. Si se pasa el email se envía el enlace de recuperación sin realizar mas comprobaciones. Si no se recibe email y se recibe el id de tarjeta, se obtendrá el email asociado al propietario. Si no se encuentra email asociado o no se localiza el usuario con la tarjeta se retorna error 400",
+        "security" : [ ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          }
+        }
+      }
+    },
+    "/auth/password/recover" : {
+      "post" : {
+        "tags" : [ "Autorizaciones" ],
+        "summary" : "Establece la nueva contraseña para el usuario asociado al token de recuperación",
+        "description" : "Tras una solicitud de restauración de contraseña, se ha enviado al usuario un enlace con un token de recuperación asociado. Mediante el uso de este token se podrá enviar una nueva contraseña que se establecerá como contraseña del usuario asociado al token de recuperación.",
+        "security" : [ ],
+        "parameters" : [ ],
+        "requestBody" : {
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RecoverPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
           }
         }
       }
     },
     "/interaction" : {
-      "parameters" : [ {
-        "$ref" : "#/components/parameters/bearerToken"
-      }, {
-        "$ref" : "#/components/parameters/apiKey"
-      } ],
       "post" : {
+        "summary" : "Servicio de registro de interacción.",
         "parameters" : [ ],
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
         "requestBody" : {
           "required" : true,
           "content" : {
@@ -632,25 +1180,214 @@
         },
         "responses" : {
           "201" : {
-            "$ref" : "#/components/responses/Created"
+            "description" : "Interacción creada",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Interaction"
+                }
+              }
+            }
           },
           "400" : {
             "$ref" : "#/components/responses/InvalidRequestBody"
           },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
           "404" : {
             "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "tags" : [ "Interacciones" ]
+      }
+    },
+    "/interaction/upload" : {
+      "post" : {
+        "summary" : "Carga por lotes de interacciones.",
+        "description" : "Recibe un archivo Json con array de interacciones y realiza su carga",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/octet-stream" : {
+              "schema" : {
+                "type" : "object",
+                "format" : "binary"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "202" : {
+            "description" : "Accepted"
           },
-          "405" : {
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
             "$ref" : "#/components/responses/UnauthorizedError"
           }
         },
         "tags" : [ "Interacciones" ]
       }
+    },
+    "/interaction/types" : {
+      "get" : {
+        "summary" : "Obtiene tipos de interacciones.",
+        "description" : "Obtiene la relación completa de tipos de interacciones",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "ok",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Interaction"
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        },
+        "tags" : [ "Interacciones" ]
+      }
+    },
+    "/tc" : {
+      "post" : {
+        "summary" : "Alta de tarjeta ciudadana",
+        "description" : "Realiza el alta de una tarjeta ciudadana asociada a la persona identificada en la request por su id. Si la persona indicada no existe se devolverá un error",
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/CitizenCardRequest"
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Created",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CitizenCard"
+                }
+              }
+            }
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          }
+        },
+        "tags" : [ "Tarjeta Ciudadana" ]
+      }
+    },
+    "/tc/{idSgtc}" : {
+      "put" : {
+        "summary" : "Actualiza tarjeta ciudadana",
+        "description" : "Realiza la actualización de una tarjeta ciudadana.",
+        "parameters" : [ {
+          "name" : "idSgtc",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CitizenCard"
+              }
+            }
+          },
+          "description" : "Tarjeta ciudadana a actualizar",
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "tags" : [ "Tarjeta Ciudadana" ]
+      },
+      "patch" : {
+        "summary" : "Actualiza tarjeta ciudadana con la operación recibida",
+        "description" : "Realiza la actualización de una tarjeta ciudadana. Permite modificar cualquiera de sus propiedades",
+        "parameters" : [ {
+          "name" : "idSgtc",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "ApiKey" : [ ]
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PatchOperation"
+              },
+              "example" : {
+                "op" : "replace",
+                "path" : "enable",
+                "value" : "false"
+              }
+            }
+          },
+          "description" : "Operacion de actualización parcial de tarjeta ciudadana.",
+          "required" : true
+        },
+        "responses" : {
+          "204" : {
+            "$ref" : "#/components/responses/NoContent"
+          },
+          "400" : {
+            "$ref" : "#/components/responses/InvalidRequestBody"
+          },
+          "401" : {
+            "$ref" : "#/components/responses/UnauthorizedError"
+          },
+          "404" : {
+            "$ref" : "#/components/responses/NotFound"
+          }
+        },
+        "tags" : [ "Tarjeta Ciudadana" ]
+      }
     }
   },
   "components" : {
     "requestBodies" : {
-      "Person" : {
+      "PersonRequest" : {
         "content" : {
           "application/json" : {
             "schema" : {
@@ -661,56 +1398,598 @@
         "description" : "objeto persona",
         "required" : true
       },
-      "User" : {
+      "CitizenCardRequest" : {
         "content" : {
           "application/json" : {
             "schema" : {
-              "$ref" : "#/components/schemas/User"
+              "allOf" : [ {
+                "$ref" : "#/components/schemas/CitizenCard"
+              }, {
+                "type" : "object",
+                "required" : [ "personId" ],
+                "properties" : {
+                  "personId" : {
+                    "type" : "string"
+                  }
+                }
+              } ],
+              "additionalProperties" : false
             }
           }
         },
-        "description" : "objeto Usuario",
+        "description" : "Objeto para la solicitud de creación o actualización de tarjeta",
+        "required" : true
+      },
+      "UserRequest" : {
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/UserRequest"
+            }
+          }
+        },
+        "description" : "Objeto para la solicitud de creación o actualización de Usuario",
         "required" : true
       }
     },
     "schemas" : {
-      "Person" : {
+      "CensusData" : {
+        "description" : "(BORRADOR) Información censal del padrón actualizable desde procesos, no de forma interactiva",
         "type" : "object",
         "properties" : {
-          "id" : {
-            "type" : "string",
-            "format" : "ObjectId"
+          "inHabitantCode" : {
+            "type" : "number",
+            "description" : "Código de habitante (codigoHabitante)"
           },
-          "tipoPersonal" : {
+          "sex" : {
             "type" : "string",
-            "format" : "ObjectId"
+            "maxLength" : 1,
+            "description" : "Sexo V-varón M-Mujer (sexo)"
           },
-          "nombre" : {
+          "district" : {
+            "type" : "number",
+            "description" : "Distrito (distrito)"
+          },
+          "section" : {
+            "type" : "number",
+            "description" : "Sección (seccion)"
+          },
+          "sectionLetter" : {
+            "type" : "string",
+            "description" : "Letra de sección (letraSeccion)"
+          },
+          "birthDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "entryDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Fecha de alta  (fechaAlta)"
+          },
+          "registrationDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Fecha de empadronamieto (fechaEmpadronamiento)"
+          },
+          "lastOperationDate" : {
+            "type" : "string",
+            "format" : "date",
+            "description" : "Fecha de última operación (fechaUltimaOperacion)"
+          },
+          "censusState" : {
+            "type" : "number",
+            "description" : "Estado. Posibles valores:\n  0 -ESTADO_NO_LOCALIZADO\n  1 -ESTADO_SIN_INCIDENCIAS\n  2 -ESTADO_NO_ACTIVO\n  3 -ESTADO_DOS_REGISTROS\n  4 -ESTADO_PROPUESTA_BAJA_CADUCIDAD\n  5 -ESTADO_PROPUESTA_BAJA_OTRA_CAUSA\n  6 -ESTADO_PROPUESTA_BAJA_OFICIO"
+          },
+          "censusStateText" : {
+            "type" : "string",
+            "description" : "Estado de inscripción en censo (textoEstado)"
+          },
+          "numberOfInhabitants" : {
+            "type" : "string",
+            "description" : "Número de Habitantes encontrados (numeroHabitantes)."
+          },
+          "family" : {
+            "type" : "number",
+            "description" : "Modo Familia 0-No, 1-Nivel Hoja, 2-Nivel Habitante (familia)"
+          },
+          "degreeCode" : {
+            "type" : "string",
+            "description" : "Código de titulación (codigoTitulacion)"
+          },
+          "degreeName" : {
+            "type" : "string",
+            "description" : "Nombre de titulación (nombreTitulacion)"
+          },
+          "nationalityCode" : {
+            "type" : "string",
+            "description" : "Código de nacionalidad (codigoNacionalidad) "
+          },
+          "nationalityName" : {
+            "type" : "string",
+            "description" : "Nombre de nacionalidad (nombreNacionalidad)"
+          },
+          "lastChangeCause" : {
+            "type" : "string",
+            "description" : "Causa de última variación (causaUltimaVariacion)"
+          },
+          "europeanCommunity" : {
+            "type" : "boolean",
+            "description" : "Nacionalidad Comunitaria (comunitario)"
+          },
+          "permanentResidenceCard" : {
+            "type" : "boolean",
+            "description" : "Tarjeta de residencia permanente (tarjetaResidenciaPermanente)"
+          },
+          "city" : {
             "type" : "string"
           },
-          "tipoDoc" : {
-            "type" : "string",
-            "format" : "ObjectId"
-          },
-          "documento" : {
+          "country" : {
             "type" : "string"
           },
-          "segmentos" : {
+          "state" : {
+            "type" : "string"
+          },
+          "zipCode" : {
+            "type" : "integer",
+            "format" : "postal-code"
+          }
+        }
+      },
+      "Address" : {
+        "description" : "Esquema de dirección (Borrador, ver cómo alinear con censo)",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "objectId"
+          },
+          "addressType" : {
+            "$ref" : "#/components/schemas/AddressType"
+          },
+          "addressLine1" : {
+            "type" : "string"
+          },
+          "addressLine2" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "country" : {
+            "type" : "string"
+          },
+          "state" : {
+            "type" : "string"
+          },
+          "zipCode" : {
+            "type" : "integer",
+            "format" : "postal-code"
+          }
+        }
+      },
+      "AddressType" : {
+        "description" : "Tipo de dirección (catastal, principal, secundaria,...)",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "objectId"
+          },
+          "identificator" : {
+            "type" : "string",
+            "maxLength" : 4,
+            "title" : "identificador del tipo de dirección",
+            "example" : "SEC"
+          },
+          "description" : {
+            "type" : "string",
+            "title" : "Descripción del tipo de dirección",
+            "example" : "Dirección secundaria"
+          }
+        }
+      },
+      "TokenResponse" : {
+        "description" : "Respuesta a la solicitud de token de acceso o refresco",
+        "type" : "object",
+        "properties" : {
+          "token_type" : {
+            "type" : "string"
+          },
+          "access_token" : {
+            "type" : "string",
+            "format" : "JWT"
+          },
+          "appId" : {
+            "type" : "string"
+          },
+          "expires_in" : {
+            "type" : "number"
+          },
+          "refresh_token" : {
+            "type" : "string"
+          }
+        },
+        "example" : {
+          "token_type" : "bearer",
+          "access_token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4",
+          "expires_in" : 20,
+          "refresh_token" : "fdb8fdbecf1d03ce5e6125c067733c0d51de209c"
+        }
+      },
+      "DataSource" : {
+        "description" : "Objeto que almacena la descripción de una fuente de datos",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "objetId"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "collection" : {
+            "type" : "string"
+          },
+          "query" : {
+            "type" : "string"
+          },
+          "stages" : {
             "type" : "array",
             "items" : {
-              "type" : "string",
-              "format" : "ObjectId"
+              "type" : "string"
             }
           }
         }
       },
-      "User" : {
+      "ControlPanel" : {
+        "description" : "Cuadro de mando (Pte de definir)",
         "type" : "object",
         "properties" : {
-          "id" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "objetId"
+          }
+        }
+      },
+      "ChangePasswordRequest" : {
+        "description" : "Objeto para la petición de cambio de contraseña",
+        "type" : "object",
+        "properties" : {
+          "userid" : {
+            "type" : "string"
+          },
+          "oldPassword" : {
+            "type" : "string"
+          },
+          "newPassword" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ForgotPasswordRequest" : {
+        "description" : "Objeto para la petición de enlace de contraseña olvidada",
+        "type" : "object",
+        "properties" : {
+          "sgtcId" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          }
+        }
+      },
+      "RecoverPasswordRequest" : {
+        "description" : "Objeto para la restauración de contraseña",
+        "type" : "object",
+        "properties" : {
+          "recoverToken" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "newPassword" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Person" : {
+        "description" : "Objeto persona que almacena la informaciónd e cada persona física o jurídica",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "487f1ff7cbcf86cd799439011"
+          },
+          "identificationType" : {
+            "$ref" : "#/components/schemas/IdentificationDocType"
+          },
+          "identificationDoc" : {
+            "type" : "string",
+            "description" : "Documento de identificación",
+            "example" : "111111111H"
+          },
+          "avatar" : {
+            "$ref" : "#/components/schemas/Avatar"
+          },
+          "personType" : {
+            "$ref" : "#/components/schemas/PersonType"
+          },
+          "citizenCard" : {
+            "$ref" : "#/components/schemas/CitizenCard"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "JUAN"
+          },
+          "surname1" : {
+            "type" : "string",
+            "example" : "APELLIDO1"
+          },
+          "surname2" : {
+            "type" : "string",
+            "example" : "APELLIDO2"
+          },
+          "birthDate" : {
+            "type" : "string",
+            "format" : "date",
+            "example" : "1980-07-21",
+            "description" : "Fecha completa según RFC 3339, section 5.6"
+          },
+          "phones" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "phone"
+            },
+            "example" : [ 695748759, 987458785 ]
+          },
+          "mail" : {
+            "type" : "string",
+            "example" : "juanapellido@santander.es"
+          },
+          "preferedContactMethod" : {
+            "$ref" : "#/components/schemas/ContactMethod"
+          },
+          "censusData" : {
+            "$ref" : "#/components/schemas/CensusData"
+          },
+          "adresses" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Address"
+            }
+          },
+          "genre" : {
+            "$ref" : "#/components/schemas/GenreType"
+          },
+          "segmentation" : {
+            "description" : "Lista de los segmentos de perfilado a los que pertenece la persona",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Segment"
+            }
+          }
+        }
+      },
+      "PersonType" : {
+        "description" : "Tipo de persona",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "maxLength" : 6,
+            "title" : "identificador corto de tipo de persona",
+            "example" : "PERJAS"
+          },
+          "description" : {
+            "type" : "string",
+            "title" : "Descripción del tipo de persona",
+            "example" : "Persona Jurídica - Asociación"
+          }
+        }
+      },
+      "GenreType" : {
+        "description" : "Tipo de género",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
             "type" : "string",
             "format" : "ObjectId"
           },
+          "identificator" : {
+            "type" : "string",
+            "maxLength" : 2,
+            "title" : "identificador corto de género de la persona",
+            "example" : "DI"
+          },
+          "description" : {
+            "type" : "string",
+            "title" : "Descripción del género de pesona",
+            "example" : "Diverso"
+          }
+        }
+      },
+      "CitizenCard" : {
+        "description" : "Tarjeta Ciudadana (Objeto pte de definir por C1)",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "description" : "identificador de tarjeta ciudadana",
+            "type" : "string",
+            "example" : "487f1ff"
+          },
+          "state" : {
+            "type" : "string",
+            "description" : "Estado de la tarjeta",
+            "example" : "B"
+          }
+        }
+      },
+      "PatchOperation" : {
+        "description" : "objeto que define la operación a realizar en un objeto mediante el método patch. Siguiendo las indicaciones de rfc6902",
+        "type" : "object",
+        "properties" : {
+          "op" : {
+            "type" : "string",
+            "enum" : [ "add", "remove", "replace", "move", "copy", "test" ],
+            "example" : "replace"
+          },
+          "path" : {
+            "type" : "string",
+            "example" : "address/zipCode"
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "10200"
+          }
+        },
+        "additionalProperties" : false
+      },
+      "Login" : {
+        "description" : "objeto de login, permitirá hacer login mediante usuario, telefono,email o tarjeta ciudadana. Si se proporciona mas de uno devolverá error en la petición",
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "example" : "user2547"
+          },
+          "telephone" : {
+            "type" : "string",
+            "example" : "657487598"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "user2547@santander.es"
+          },
+          "tc" : {
+            "type" : "string",
+            "example" : "487f1ff"
+          },
+          "docTypeId" : {
+            "type" : "string",
+            "example" : "DNI"
+          },
+          "docId" : {
+            "type" : "string",
+            "example" : "06898575"
+          },
+          "password" : {
+            "type" : "string",
+            "format" : "binary",
+            "example" : "U3dhZ2dlciByb2Nrcw=="
+          }
+        }
+      },
+      "LoginTrusted" : {
+        "description" : "objeto de login de confianza, permitirá hacer login a un usuario autenticado por otros métodos (BORRADOR)",
+        "type" : "object",
+        "properties" : {
+          "provicerId" : {
+            "type" : "string"
+          },
+          "identificationDoc" : {
+            "type" : "string"
+          },
+          "userName" : {
+            "type" : "string"
+          }
+        }
+      },
+      "LoginFid" : {
+        "description" : "objeto de login Federado, permitirá hacer login mediante usuario, teléfono, email o tarjeta ciudadana en una aplicación de terceros. Si se proporciona mas de un método de identificación se devolverá error en la petición",
+        "type" : "object",
+        "properties" : {
+          "appId" : {
+            "type" : "string"
+          },
+          "allOf" : {
+            "$ref" : "#/components/schemas/Login"
+          }
+        }
+      },
+      "Fid" : {
+        "description" : "objeto que contiene la autorización federada en una aplicación de terceros.",
+        "type" : "object",
+        "required" : [ "appId", "userId", "authCode", "authUrl", "expires_in" ],
+        "properties" : {
+          "appId" : {
+            "type" : "string"
+          },
+          "userId" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "authCode" : {
+            "type" : "string"
+          },
+          "authUrl" : {
+            "type" : "string"
+          },
+          "authStamp" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "expires_in" : {
+            "type" : "number"
+          },
+          "enable" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "User" : {
+        "description" : "Entidad que posibilita a una persona el uso de aplicaciones que componen la iniciativa. Define su método de autenticación y las autorizaciones de uso en el CRM.",
+        "type" : "object",
+        "properties" : {
+          "password" : {
+            "type" : "string",
+            "format" : "byte",
+            "description" : "Contraseña en Base64",
+            "example" : "U3dhZ2dlciByb2Nrcw=="
+          },
+          "person" : {
+            "$ref" : "#/components/schemas/Person"
+          }
+        },
+        "allOf" : [ {
+          "$ref" : "#/components/schemas/UserBasic"
+        } ]
+      },
+      "UserBasic" : {
+        "description" : "Extracto de usuario con las propiedades reducidas, omite persona y contraseña.",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "487f1ff7cbcf86cd799439011"
+          },
+          "username" : {
+            "type" : "string",
+            "example" : "user2548"
+          },
+          "email" : {
+            "type" : "string",
+            "example" : "user2548@santander.es"
+          },
+          "profileProvider" : {
+            "type" : "string",
+            "example" : "LDAP",
+            "description" : "Servicio proveedor origen del perfil"
+          },
+          "disabled" : {
+            "type" : "boolean",
+            "example" : false
+          }
+        }
+      },
+      "UserRequest" : {
+        "description" : "Objeto para la creación de un nuevo usuario. Creará el usuario con el nombre de usuario y el mail indicados y establecerá la contraseña. Este usuario quedará vinculado a la persona indicada por personId",
+        "type" : "object",
+        "properties" : {
           "username" : {
             "type" : "string"
           },
@@ -720,47 +1999,335 @@
           "password" : {
             "type" : "string"
           },
-          "userStatus" : {
-            "type" : "integer",
-            "format" : "int32"
+          "personId" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          }
+        }
+      },
+      "IdentificationDocType" : {
+        "description" : "Tipo de identificación",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "maxLength" : 6,
+            "title" : "identificador del tipo de documento de identificación",
+            "example" : "NIE"
           },
-          "person" : {
-            "$ref" : "#/components/schemas/Person"
+          "description" : {
+            "type" : "string",
+            "title" : "Descripción del tipo de documento",
+            "example" : "Numero de identificación de extranjería"
           }
         }
       },
       "Interaction" : {
+        "description" : "Acción que realiza una persona, componente o sistema relacionado con la iniciativa que no precisa de gestión",
         "type" : "object",
+        "required" : [ "userAgent", "sourceId", "interactionType" ],
         "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "507f1f77bcf86cd799439011"
+          },
+          "userAgent" : {
+            "$ref" : "#/components/schemas/UserBasic"
+          },
           "subjectId" : {
             "type" : "string",
-            "format" : "ObjectId"
+            "format" : "ObjectId",
+            "description" : "Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. No es un atributo requerido porque se podrán registrar interacciones anónimas",
+            "example" : "487f1ff7cbcf86cd799439011"
           },
-          "source" : {
+          "sourceExternalAplicationId" : {
             "type" : "string",
-            "format" : "ObjectId"
+            "format" : "ObjectId",
+            "description" : "ID del componente o aplicación que genera la interacción",
+            "example" : "e475dff7cbcf86cd799439011"
           },
-          "userAgentId" : {
-            "type" : "string"
+          "interactionType" : {
+            "$ref" : "#/components/schemas/InteractionType"
           },
-          "typeId" : {
-            "type" : "number"
+          "interactionDirection" : {
+            "type" : "string",
+            "format" : "enum - inbound - outbound",
+            "description" : "Dirección de la interacción persona->sistema o viceversa",
+            "example" : "inbound"
           },
           "detail" : {
-            "type" : "string"
+            "type" : "string",
+            "description" : "Detalle de la interacción",
+            "example" : "Llamada telefónica consulta"
+          }
+        },
+        "anyOf" : [ {
+          "$ref" : "#/components/schemas/InteractionInteractive"
+        }, {
+          "$ref" : "#/components/schemas/InteractionBatch"
+        } ]
+      },
+      "InteractionInteractive" : {
+        "description" : "Interaccion que se captura de forma interactiva a traves de CRM",
+        "type" : "object",
+        "required" : [ "contactMethod", "resolutionUserAgent" ],
+        "properties" : {
+          "contactMethod" : {
+            "$ref" : "#/components/schemas/ContactMethod"
           },
-          "areaId" : {
-            "type" : "string"
+          "telephoneCallId" : {
+            "type" : "number",
+            "example" : 55148,
+            "description" : "Identificador de la llamada asociada en componente C7"
           },
-          "serviceId" : {
-            "type" : "string"
+          "resolution" : {
+            "type" : "string",
+            "description" : "Solución aportada a la interacción"
           },
-          "timestamp" : {
-            "type" : "number"
+          "resolutionUserAgent" : {
+            "$ref" : "#/components/schemas/UserBasic"
+          },
+          "request" : {
+            "$ref" : "#/components/schemas/CrmRequest"
           }
         }
       },
-      "RequestError" : {
+      "InteractionBatch" : {
+        "description" : "Interaccion que se captura de forma desatendida desde un componente o aplicación de terceros",
+        "type" : "object",
+        "required" : [ "geom", "sourceElementDescription" ],
+        "properties" : {
+          "sourceElementDescription" : {
+            "type" : "string",
+            "description" : "descripción del elemento que genera la interacción"
+          },
+          "sourceElementExternalId" : {
+            "type" : "string",
+            "description" : "identificador externo del elemento que genera la interacción"
+          },
+          "geom" : {
+            "type" : "object",
+            "format" : "GeoJSON"
+          }
+        }
+      },
+      "InteractionType" : {
+        "description" : "Tipo de interacción",
+        "type" : "object",
+        "required" : [ "name", "OrganizationUnit" ],
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "nombre de la interacción",
+            "example" : "Registro WiFi"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "descripción del elemento que genera la interacción",
+            "example" : "Registro en punto acceso wifi"
+          },
+          "OrganizationUnit" : {
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/OrganizationUnit"
+            } ],
+            "description" : "Unidad organizativa relacionada con la interacción"
+          }
+        }
+      },
+      "CrmRequest" : {
+        "description" : "Solicitud realizada en CRM de una persona o componente que precisa de una gestión y/o la intervención de otros sistemas por lo que dispone de un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre. Podrá disponer de un proceso de negocio asociado o un usuario asignado para la realiazción de la solicitud de forma manual ",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "ObjectId"
+          },
+          "userAgent" : {
+            "$ref" : "#/components/schemas/UserBasic"
+          },
+          "userOwner" : {
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/UserBasic"
+            }, {
+              "description" : "usuario propietario de la solicitud, es el usuario encargado de realizarla, se podrán realizar reasignaciones de uno a otro"
+            } ]
+          },
+          "requestType" : {
+            "$ref" : "#/components/schemas/CrmRequestType"
+          },
+          "interactionOrigin" : {
+            "$ref" : "#/components/schemas/Interaction"
+          },
+          "interactionRelationsIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "ObjectId"
+            },
+            "description" : "Identificadores de interacciones relacionadas con la solicitud"
+          },
+          "bpsProcessInstances" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/BpsInstance"
+            },
+            "title" : "Ids de procesos bps lanzados por la solicitud"
+          },
+          "variables" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Variables requeridas por los procesos BPS para el cumplimiento de la solicitud"
+          }
+        }
+      },
+      "CrmRequestType" : {
+        "description" : "Tipo de solicitud crm",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "object",
+            "format" : "ObjectId"
+          },
+          "identificator" : {
+            "type" : "string",
+            "maxLength" : 8,
+            "description" : "identificador corto de la solicitud",
+            "example" : "INSEVN"
+          },
+          "summary" : {
+            "title" : "Nombre del tipo de solicitud",
+            "type" : "string",
+            "example" : "Inscripción a evento"
+          },
+          "description" : {
+            "title" : "Descripción extendida de la solicitud",
+            "type" : "string",
+            "example" : "Inscripción a eventos gratuíto"
+          },
+          "bpsProcessDefinitionsId" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "title" : "Lista de procesos BPS que desencadena la solicitud",
+            "example" : [ "sampleJavaServiceTask:1:27503", "sample2JavaServiceTask:1:27587" ]
+          }
+        }
+      },
+      "BpsInstance" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "number",
+            "example" : 27504
+          },
+          "suspended" : {
+            "type" : "boolean",
+            "example" : false
+          },
+          "ended" : {
+            "type" : "boolean",
+            "example" : false
+          },
+          "activityId" : {
+            "type" : "string",
+            "example" : "waitState"
+          }
+        }
+      },
+      "Avatar" : {
+        "description" : "Imagen de persona en base64",
+        "type" : "string",
+        "format" : "byte",
+        "example" : "iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAB3RJTUUH4QkWER0nLiwYhQAADYdJREFUaEPNWQlUVNcZfkmbxMb0pOakp1lOljZpmzY9aZPUVFNjNHG3MYoruxsyMMgyw74KIojihrihQpRFcUcUNaIwA8juGm3cN9wwcU1EBebr/9/3BgZ4wIBZes/5zrx57937f9/9l3vvjPRDN9NBqaupRBpq2ifNNhVKBlOBdNVklOoJdXR9ie7n0v1YU7nU33RCekrp9v/TTGXSn0mANxHdTkQvEukHKJSAAoLRAvxduU/v3Kd3z1GfLaZiyY36/14Z7udpRGYkEdlJhGpxmEgeIJQohC0FFBPKCPzMfJ/f4e/ch/rSGDU01mbCYGX4n6bRrNoQkQocVMgUEcwkzeB7LIDEVGc9g8PLX8ShZS+hNv/xlh4zv8/j7SdhxZKRJmqAYu7Hadgt/YHCIUsYrVRIqIFE1Ox5AvsSXscKjx6YMa4/osf2x/nMboKsEFmqgK/NXjOL5Ami8clWKrZJLyjmf7hmypfsTKXSDRFObNSgGOZPs2c4dIjg4ZUvImHSR4iwGSRETBs1EEXzX8ft3C44mPQS9sa9iW3T/oqs8L9hZ/RbKFn4GqrWP4t6w2PyGDwm2zhCgkqlKrI9RKHx6I1cHiO8wTNpFmEWQjN6Pasrqrc8I663R/0F00YOEt6Y5fBJA5a59RSfkSRs2siB4tOMsBGDETJsCFJ1/8SNnKcbJ4fHLydUiIKhV+h0vlFJXYmjNKB5xsxCGPsk3NrRRZD4bteT2BTyDsJHDEKcfaMIM2Jt+2Gm3act79O9RJdeKFv0Kr7PfVIuFpYFhG2SHeElgxSn0Op4axCilrB8jwxn+L6HRURma8TbiCCPNCfbHlhkiucHyIt/E+WLXhF5ZTJSuHEUWNpjgV8RDNJMhZ71jeI0plUhDDJ2YtVvRT6wJ5qHVUcQQ4Lk8BuE6WMGIEnbE/uXvYxaY7PKx4LYQ3slL4Vm+41eHotDSmdLAZYgr6STV6JGD1Al+CgIGz4Ya/3eRU3eL1ty4JCjPDLlSn0Vuq03molXqc7faZHszQa8sfVp4ZGZ9i3zYKZtH0SP+jciR/TAtOE96LMnomx6Nnzn65ixval/3xZ9o8f0R5r+fZk0F4LmHPg7F4RCqQp50m8U2urNlCfliPLbmhAGrQsHaQHkEGtCZLQsYI5zf6wKskdOgg7F6dNxeOs8HM1JwIEt8TCkhGFjrAaLtZ8rgnsizq5RFI/JCywTVrXNYG6UP8R1pUK7ZaPy95kIr9byxAwSw+sDxzkTmGnXR5BK8bfFgaw5uHU8C/jGCNwtAb4j3C0G7hDM32/vw8Oq3ThbmIys+KmIHdebJqIXZjl+Ksbcv+RleSFVs20Ghx+Hm0H6QKHf2BAhPU4PjoiVvS2vMChf1vq/K5KVZzVm7EcoWRMNfFtAZEvpk4RcywOu7m0d1flCFL9/sSwNSxRPRY0eKBbTFtWsOZgjrX1UqHIVCY2NhHwuFka1jpZgrxG4nPLqzvFvSA4FHlTKBK/sUSffFr4vxa3/bsa8SYPIM58geeq/eJFsP0L4OXsnT+qhyJAbKdwj9kRqnSxBA5BwLKfyGT22H4XIx7h+MBO4VaRO1BrwBNwrR+7SAIQP+1BshWp2q1Sy5mDv8I47X0pTZJCQQukNU5FU17CNaAsNYnoIMdMpNM4VrJRz4ooKUWvAYsg7BasiSEwPxDv1xa3tXeSKpsbBEhTyxOcOHSGek8UYJR9ejFRfbg52Lc3YKu/ucpiN/BAboqeg3po8aQ3Uz/SNAanBDjReL0XMr6wTw6CiRRrGmcXstCrEzKANJe/DuPLwWsGV7FplBnCzUJ1se6BCcDovSXg5xvZTzJ/Y27owM0MWkyKZdtGZ3ShdFucJtRfVQGWzMrEbbT/kMEvxG4eai7uA61QA1Mi2ByrZZWtnIPyz7oga1R/pures9wqD+FCoHeLEH0Jiaq2eBQaF2oOSj5CoGYZ45wH47mS27JXOVDIGrUl3aYxEzX/E9ujMpj7yYU3Nthoo10nDdS7JczskJF9Cfel7VIa/xLY5GmyMcaPkLet88jNENStDzgId1kc509g7UF/WXdhS5dAcXJSMUg2LKeyomLoDI4hALg6sD0Pp2hh5ZVcj2RHQGEWpUSjPCKKCkEs2RlkvhsDRxWKq1R62CjJgKn4Ddec34/K+RJynLUmnE98SVNor1sfh1O7ZMF3civqSP3ZMjEEycSWrV3vYJshI7SFH1JzZjtoLO2kmO5n4lqg24PaxDfiecqfu8PgOCTGDxdSpPWgTvPISag/aof7idhJDezI1glaDcobGMFWRkEMODeOr2m4DLOaKWAhVHrYJNraX3Fv+D0VMJxdMAVpwq7fRtv810BmlU0I4wlhMXocKgCXYKE/ExflEhnbLqkStwM1inC5djstZT8g/aHROTK1EHWd2SgwbpLXg+LrnsTGVKhoRUiVqDW4aMSNuPjSeWlTv7CYLUrPZGrg0G6R77JlP6eJhhwXRCn1tx3Nw99HDwT0CV45tFaRUybYGXptuF+Drkg1wdveFnVsUIsMno9b4C9njanbVQFxIwzXJlCM9RRcXO7Ti8kwUPoaZkU6wd5sOB1c9Fi6cQ8cAyp1rzQi3heo8PKRNZlTMDDi5+UHjHYSxrjOwY3nP9g9nluAzjVGqlDeaBmmrVQczM0j4gbV/opmcDlciMIVg7+qLoi9Tab3gbY0KcTXQu8acZNi66MU4jAlTw+Eb4In7eZQ/1nqHzzRGaaksxii5iR8x1F5UA4lJih8uvGImMWlqgPisOkLn/xtWlGraj9VeyMK6lBlw1Pg3jMNw1EbiyLo3rM8decc/XBZjkF6hY+oDaw9njCiK7fEeEU1JaPxQmJ2A2ks5tIPm/FEp13zmoWd3T23GldKF2LQqlkJMnggz2OPZy3pZF2ry4exbOmD+WojhRrvnbPHLjFoHS3C+UCULDdGIkLAk4ewegP25i3Hz4FJ8eywTJibPoq4bGj7rLu3G9SPpOGWchytlC7Hui1g4NhPDHs9M7Gfdjxryb9DLFBlyI5L9xH8nap2agypfbKQznLVNPWPv6oe8rIUwXUjHmcIFOLtvMb75Kh23T2zAra/X49qh1ThH+7mThrk4XbCAxCRiwZxpcKJJsBzHVhONXSt6tC+GKzCFPKXJO4qMxkbeKRHx19aixaFYScfmeUNh7x7VhATH/qKEWODyWtw/kYpLZYtxPG+OwIn8uULEKeN8IeQsiT1pXAAf/2DKt8CGMSZ7hsBd54/bX3ZtO2eYo/xjxhaFftNG3ukjvNNaFaGZupX7DNYk9oeXrx4uXiFNxLh4yqSqKlbSrmANHp5Ox51jKbhSsRTnixNxtmihwIXiRSQ2Gdsz58GhWfLzmO66ACrPH6KO15vWBPGBrFiqp1x/W6HfspHSDPHjhtk7/Km4szDt70IEhwHPoKt344yawd6Jnx1NoZaB+rPpQlDtmXQ8OJWGmhOrBdhzF8qT4aZr6hUzXLyChY1pYS44l/1Cy3BjTkdFrsQrtNUbbfSeNxVJV8U/VtyJZuCB4QksnW0jqsyEqWFksCkBjU9wk++cO18kxQnvmM5l4P7JNCGmjkThaibOlK6ET0CoKBiWY0zxajquo3ukmLTCtHfEZDYI4T9xC6SvcVbqotBuvZn2SAPED9fk4rqCxzEn2o5W5hixOFoaY0ye6o/xGh3NcmPIyYuoHxIXxODucfLEpTVAFQk7n4HczQlipWch/Mnvu+lD4OTqjYm0pWk6MYGYSJPHuVma/rYsiBO+RHpIEfSuQrf9Ri/rcFyiev8xxpCQRgNNwcZtJ2hhN9ED7r6h4ruzmw6TPPxEPviFhKEydwmOGpMwIyZK3HNw1WGilrYv9C734b5jnDTNhDSClwA3nwDczn3W/GeTvULT+nZ523Nx4VHBmOzFodXSiBlMwsZ2MkbZTxGeWpqchmmx84SgCdoAgYkeAbQ4+tO1LxYsWYm4+UvouT9GO7jCxm5yq0JkBMJBG4MtK4bT+ekR/qh18Qya5RM8ncIoVAyqZoyJuPmECEF9B49GSWkFVmWsx3itXg4/Jsrv0DV7rai4DBmZm/DJkDEY6+Qm7rcqhvLIXR8Gz8AoyqkAP4VW55tW56/z8A+Hh19EiyS1hLs+FDb2LtibX4BZcxdh8AgHOLp4YYKbXoCvB9s4Inv7LqSsXovRFFrcR20sAbI1NSASWt/QB1q9v7NC59Gbxks3kAY97x0c3WZIcBiVlFUiYckKDPzcDkOJ/BASxRg2ejyGjnLGzt17sX5zNiW9j+oYDA15y4dsaf1Cj2p8fJr+ZfFDtCk63fNa3+AVHn7hwu0ifJqR4DDaV1KO5aszhDDLKsfX49312EOey9yYBccp3k36MniivIKms8fqydZcvd6hq2L+x2le+oDeNGO7OPTYsJtFqJjFJH2RDidNy5l3pBKcm2dsIYbzgsfS+oZROIds8tTr31fM/TTNK4BE6UNS3XUhN7yCoohMlDjXlJbvx/JVGa2KYc9s2LKNPOcnBHgGRtIWJviaVh+c5KkP7K4M//M0zyDP33n6Btl5+AYnT9DqDpSUVVQnpaTdIzG1VAFNjWIC60lM7e49+fc2bM6+6uzqXeHhG7TM0zdgZGBgYDdluE42Sfof0jy+H7crtEsAAAAASUVORK5CYII="
+      },
+      "ContactMethod" : {
+        "description" : "Métodos de contacto",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "ObjectId",
+            "example" : "507f191e810c19729de860ea"
+          },
+          "icon" : {
+            "type" : "string",
+            "title" : "icono representativo del medio de contacto",
+            "example" : "WhatsApp"
+          },
+          "description" : {
+            "type" : "string",
+            "title" : "Nombre del método de contacto",
+            "example" : "WhatsApp"
+          }
+        }
+      },
+      "OrganizationUnit" : {
+        "description" : "Unidad organizativa",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "maxLength" : 6,
+            "description" : "identificador corto de la unidad",
+            "example" : "CONJUV"
+          },
+          "organizationUnitType" : {
+            "$ref" : "#/components/schemas/OrganizationUnitType"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripción de unidad organizativa",
+            "example" : "Concejalía de juventud"
+          },
+          "parent" : {
+            "$ref" : "#/components/schemas/OrganizationUnit"
+          }
+        }
+      },
+      "OrganizationUnitType" : {
+        "type" : "object",
+        "description" : "Unidad organizativa",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "description" : "identificador corto del tipo de unidad organizativa",
+            "maxLength" : 6,
+            "example" : "UNIORG"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Descripción de unidad organizativa",
+            "example" : "Unidad Orgánica"
+          }
+        }
+      },
+      "Segment" : {
+        "description" : "Segmentos de perfilado de personas. Definirán el perfil de la persona en base a interacciones y servicios utilizados",
+        "type" : "object",
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "format" : "objectId"
+          },
+          "identificator" : {
+            "type" : "string",
+            "maxLength" : 6,
+            "description" : "identificador corto del segmento",
+            "example" : "USRTRA"
+          },
+          "name" : {
+            "description" : "Nombre del segmento",
+            "type" : "string",
+            "example" : "Usuario de transporte público"
+          }
+        }
+      },
+      "ServiceResponseError" : {
+        "description" : "Objeto de error retornado por la capa de servicios",
         "type" : "object",
         "required" : [ "errorId", "errorName", "errorDescription" ],
         "properties" : {
@@ -787,11 +2354,80 @@
           "errorDescription" : "ERROR EN EL ID DE AREA, NO ENCONTRADO",
           "aditionalErrors" : [ "Id de área 50 no existe", "No se ha podido obtener área relacionada" ]
         }
+      },
+      "ApiKeysStore" : {
+        "description" : "Almacén de APIKeys",
+        "type" : "object",
+        "required" : [ "apiKey", "ExternalAplicationId" ],
+        "properties" : {
+          "apiKey" : {
+            "type" : "string",
+            "example" : "8a42adee-caa1-413a-aed6-6b65db8eb3ce"
+          },
+          "ExternalAplicationId" : {
+            "type" : "string",
+            "description" : "Id de la aplicacion a la que pertenece la Key"
+          },
+          "allowedOrigins" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Urls de origen dede la que se permite el uso de la key"
+          },
+          "disabled" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "permissions" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "description" : "Permisos de la key"
+          }
+        },
+        "example" : {
+          "errorId" : 524,
+          "errorName" : "AREA_ERROR",
+          "errorDescription" : "ERROR EN EL ID DE AREA, NO ENCONTRADO",
+          "aditionalErrors" : [ "Id de área 50 no existe", "No se ha podido obtener área relacionada" ]
+        }
+      },
+      "ExternalAplications" : {
+        "description" : "Registro de aplicaciones externas que se integran con CRM",
+        "type" : "object",
+        "required" : [ "aplicationId", "errorName", "errorDescription" ],
+        "properties" : {
+          "_id" : {
+            "type" : "string",
+            "maxLength" : 6,
+            "example" : "SSCC07"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Santader Smart Citicen Componente 7"
+          },
+          "provider" : {
+            "type" : "string",
+            "example" : "Telefónica"
+          },
+          "contact" : {
+            "type" : "string",
+            "example" : "ssc@telefonica.es"
+          }
+        },
+        "example" : {
+          "errorId" : 524,
+          "errorName" : "AREA_ERROR",
+          "errorDescription" : "ERROR EN EL ID DE AREA, NO ENCONTRADO",
+          "aditionalErrors" : [ "Id de área 50 no existe", "No se ha podido obtener área relacionada" ]
+        }
       }
     },
     "responses" : {
       "Ok" : {
-        "description" : "success"
+        "description" : "Success"
       },
       "NoContent" : {
         "description" : "No content"
@@ -807,43 +2443,43 @@
         "content" : {
           "application/json" : {
             "schema" : {
-              "$ref" : "#/components/schemas/RequestError"
+              "$ref" : "#/components/schemas/ServiceResponseError"
             }
           }
         }
       },
       "NotFound" : {
-        "description" : "Not found"
+        "description" : "Resource Not found"
       },
       "UnauthorizedError" : {
-        "description" : "Access token is missing or invalid"
+        "description" : "ApiKey is missing , invalid or insuficients rights",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/ServiceResponseError"
+            }
+          }
+        }
       }
     },
     "securitySchemes" : {
       "BearerToken" : {
         "type" : "http",
         "scheme" : "bearer",
-        "bearerFormat" : "JWT"
+        "bearerFormat" : "JWT",
+        "description" : "Token obtenido en el proceso de login"
       },
       "ApiKey" : {
         "type" : "apiKey",
         "in" : "header",
-        "name" : "X-API-Key"
+        "name" : "X-API-Key",
+        "description" : "ApiKey de aplicación de terceros"
       }
     },
     "parameters" : {
-      "bearerToken" : {
-        "name" : "bearerToken",
-        "description" : "Token obtenido en el proceso de login  (Obligatorio si no se dispone de ApiKey)",
-        "in" : "header",
-        "required" : false,
-        "schema" : {
-          "type" : "string"
-        }
-      },
       "apiKey" : {
         "name" : "apiKey",
-        "description" : "ApiKey de aplicación de terceros (Obligatoria si no se dispone de token)",
+        "description" : "(Obligatoria si no se dispone de token)",
         "in" : "header",
         "required" : false,
         "schema" : {
@@ -857,20 +2493,20 @@
     "url" : "https://restfulapi.net/http-status-codes/"
   },
   "servers" : [ {
-    "url" : "{servidor}/private/{version}",
+    "url" : "{servidor}/public/{version}",
     "description" : "Servidor CRM",
     "variables" : {
       "servidor" : {
-        "enum" : [ "https://desacrm.grupotecopy.es", "http://localhost:8080" ],
+        "enum" : [ "https://desacrm.grupotecopy.es", "https://precrm.grupotecopy.es" ],
         "default" : "http://localhost:8080"
       },
       "version" : {
-        "enum" : [ "v0", "v1" ],
-        "default" : "v0",
+        "enum" : [ "v1", "v1.1" ],
+        "default" : "v1",
         "description" : "Versión de la api"
       }
     }
   }, {
-    "url" : "http://localhost:8080/private"
+    "url" : "http://localhost:8080"
   } ]
 }

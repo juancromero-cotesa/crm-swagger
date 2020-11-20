@@ -2355,12 +2355,12 @@
           "aditionalErrors" : [ "Id de área 50 no existe", "No se ha podido obtener área relacionada" ]
         }
       },
-      "ApiKeysStore" : {
-        "description" : "Almacén de APIKeys",
+      "ApiKey" : {
+        "description" : "APIKey",
         "type" : "object",
-        "required" : [ "apiKey", "ExternalAplicationId" ],
+        "required" : [ "key", "ExternalAplicationId" ],
         "properties" : {
-          "apiKey" : {
+          "key" : {
             "type" : "string",
             "example" : "8a42adee-caa1-413a-aed6-6b65db8eb3ce"
           },
@@ -2374,6 +2374,20 @@
               "type" : "string"
             },
             "description" : "Urls de origen dede la que se permite el uso de la key"
+          },
+          "created" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "createdBy" : {
+            "$ref" : "#/components/schemas/UserBasic"
+          },
+          "modified" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "modifiedBy" : {
+            "$ref" : "#/components/schemas/UserBasic"
           },
           "disabled" : {
             "type" : "boolean",

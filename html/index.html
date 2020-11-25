@@ -1372,7 +1372,11 @@
     <pre class="example"><code>{
   "sourceExternalAplicationId" : "e475dff7cbcf86cd799439011",
   "interactionDirection" : "inbound",
-  "interactionType" : { },
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
+  },
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
@@ -1433,7 +1437,11 @@
     <pre class="example"><code>[ {
   "sourceExternalAplicationId" : "e475dff7cbcf86cd799439011",
   "interactionDirection" : "inbound",
-  "interactionType" : { },
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
+  },
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
@@ -1447,7 +1455,11 @@
 }, {
   "sourceExternalAplicationId" : "e475dff7cbcf86cd799439011",
   "interactionDirection" : "inbound",
-  "interactionType" : { },
+  "interactionType" : {
+    "OrganizationUnit" : "",
+    "name" : "Registro WiFi",
+    "description" : "Registro en punto acceso wifi"
+  },
   "userAgent" : {
     "disabled" : false,
     "_id" : "487f1ff7cbcf86cd799439011",
@@ -3102,7 +3114,7 @@
   <ol>
     <li><a href="#Address"><code>Address</code></a></li>
     <li><a href="#AddressType"><code>AddressType</code></a></li>
-    <li><a href="#ApiKeysStore"><code>ApiKeysStore</code></a></li>
+    <li><a href="#ApiKey"><code>ApiKey</code></a></li>
     <li><a href="#Avatar"><code>Avatar</code></a></li>
     <li><a href="#BpsInstance"><code>BpsInstance</code></a></li>
     <li><a href="#CensusData"><code>CensusData</code></a></li>
@@ -3140,7 +3152,6 @@
     <li><a href="#body"><code>body</code></a></li>
     <li><a href="#body_1"><code>body_1</code></a></li>
     <li><a href="#body_2"><code>body_2</code></a></li>
-    <li><a href="#swagger"><code>swagger</code></a></li>
   </ol>
 
   <div class="model">
@@ -3169,13 +3180,19 @@
     </div>  <!-- field-items -->
   </div>
   <div class="model">
-    <h3><a name="ApiKeysStore"><code>ApiKeysStore</code></a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Almacén de APIKeys</div>
+    <h3><a name="ApiKey"><code>ApiKey</code></a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>APIKey</div>
     <div class="field-items">
-      <div class="param">apiKey </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+      <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+          <div class="param-desc"><span class="param-type">example: Apikey para consutlta personas desde c3</span></div>
+<div class="param">key </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
           <div class="param-desc"><span class="param-type">example: 8a42adee-caa1-413a-aed6-6b65db8eb3ce</span></div>
 <div class="param">ExternalAplicationId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Id de la aplicacion a la que pertenece la Key </div>
 <div class="param">allowedOrigins (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Urls de origen dede la que se permite el uso de la key </div>
+<div class="param">created (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">createdBy (optional)</div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
+<div class="param">modified (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">modifiedBy (optional)</div><div class="param-desc"><span class="param-type"><a href="#UserBasic">UserBasic</a></span>  </div>
 <div class="param">disabled (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
 <div class="param">permissions (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span> Permisos de la key </div>
     </div>  <!-- field-items -->
@@ -3382,7 +3399,7 @@
           <div class="param-desc"><span class="param-type">example: 487f1ff7cbcf86cd799439011</span></div>
 <div class="param">sourceExternalAplicationId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> ID del componente o aplicación que genera la interacción format: ObjectId</div>
           <div class="param-desc"><span class="param-type">example: e475dff7cbcf86cd799439011</span></div>
-<div class="param">interactionType </div><div class="param-desc"><span class="param-type"><a href="#swagger">swagger</a></span>  </div>
+<div class="param">interactionType </div><div class="param-desc"><span class="param-type"><a href="#InteractionType">InteractionType</a></span>  </div>
 <div class="param">interactionDirection (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Dirección de la interacción persona-&amp;gt;sistema o viceversa format: enum - inbound - outbound</div>
           <div class="param-desc"><span class="param-type">example: inbound</span></div>
 <div class="param">detail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span> Detalle de la interacción </div>
@@ -3673,12 +3690,6 @@
 <div class="param">genre (optional)</div><div class="param-desc"><span class="param-type"><a href="#GenreType">GenreType</a></span>  </div>
 <div class="param">segmentation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Segment">array[Segment]</a></span> Lista de los segmentos de perfilado a los que pertenece la persona </div>
     </div>  <!-- field-items -->
-  </div>
-  <div class="model">
-    <h3><a name="swagger"><code>swagger</code></a> <a class="up" href="#__Models">Up</a></h3>
-    
-    <div class="field-items">
-          </div>  <!-- field-items -->
   </div>
   </body>
 </html>

@@ -1,0 +1,3933 @@
+openapi: 3.0.0
+info:
+  title: Api CRM
+  description: "Especificaciónes de la API pública de CRM.\n\nVersión 2 parte pública.\
+    \ \n\nLos métodos estaran protegidos mediante el paso de un token válido.\n\n\
+    Los métodos que puedan ser accedidos por aplicaciones de terceros estarán protegidos\
+    \ por el paso de una api key que tendrá definidos los permisos correspondientes.\n\
+    \n## 0.2.2\n- Incluye enpoints de grupos\n## 0.2.3\n- Incluye método para la obtenció\
+    n de literales\n## 0.2.4\n- Añade métodos de búsqueda de personas\n- Añade esquemas\
+    \ de filtros para su uso con personas pero que serán de uso global en cualquier\
+    \ fitrado paginado\n- Añade permisos a apikeys\n- Añade métodos de interacciones\n\
+    ## 0.2.5\n- Renombra Permissions como CrmPermissions por entrar en conflicto con\
+    \ interfaz Permissions de Typescript\n- Renombra FeaturePermissions como CrmFeaturePermissions\
+    \ \n- Elimina estructura AllOf cuando se usa para añadir descripción \n- Establece\
+    \ elementos obligatorios en el esquema de ApiKey\n- Añade endpoint para la obtenció\
+    n de parámetros de la aplicación\n- Añade interactionsStatistic en el esquema\
+    \ de persona para almacenar estadisticas de interacciones\n- Añade esquema interactionStatistic\
+    \ como elementos del array de interactionsStatistic\n- Se elimina UserRequest\
+    \ y se envía un usuario en post\n- Modifica request de búsqueda de personas\n\
+    - Añade métodos de parametrización\n- Establece los métodos de contacto como pará\
+    metros \n- Establece los tipos de documentos como parámetros \n- Establece los\
+    \ tipos de personas como parámetros\n- Establece los tipos de direcciones como\
+    \ parámetros \n- Establece los géneros de personas como parámetros \n## 0.2.6\n\
+    - Añade método de obtención de persona por email\n- Añade ejemplo de esquema de\
+    \ filtro  \n- Añade requeridos en persona personType y name \n- Renombra esquema\
+    \ Roles a Role\n- Elimina de unidad organizativa el padre y lo referencia mediante\
+    \ su ID\n## 0.2.7\n- Añade flag de borrado lógico a personas\n- añade fecha de\
+    \ borrado lógico a personas\n- Modifica la respuesta de retorno de la eliminació\
+    n lógica de persona\n- Redefine el modelo OrganizationUnit\n- Incorpora el mé\
+    todo ya desarrollado /organization/parents\n- Define nueva estructura de resultados\
+    \ de búsquedas paginadas\n- Define el método search de búsqueda de interacciones\
+    \ paginadas\n- Define la respuesta del filtro de auditoría como SearchResponse\n\
+    - Define el modelo de auditoría\n- Añade organizationUnit a Role"
+  contact:
+    name: Cotesa
+    url: https://cotesa.grupotecopy.es/
+    email: juancromero@grupotecopy.es
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 0.2.7-PRIVATE
+externalDocs:
+  description: Especificación Api rest
+  url: https://restfulapi.net/http-status-codes/
+servers:
+- url: '{servidor}/public/{version}'
+  description: Servidor CRM
+  variables:
+    servidor:
+      default: http://localhost:8080
+      enum:
+      - https://desacrm.grupotecopy.es
+      - https://precrm.grupotecopy.es
+    version:
+      description: Versión de la api
+      default: v1
+      enum:
+      - v1
+      - v1.1
+- url: http://localhost:8080
+tags:
+- name: Aplicaciones externas
+  description: Aplicaciones externas con acceso a los servicios públicos mediante
+    Apikey
+- name: Auditoría
+  description: sistema de auditoría
+- name: Parametrización
+  description: Datos de parámetos de la aplicación a modo de datos maestros (tipo
+    documento, tipos de personas,...)
+- name: Personas
+  description: Gestión de personas en el módulo de indentificación única. Identificación
+    única de personas físicas y personas jurídicas
+- name: Grupos
+  description: Gestión de grupos de usuarios
+- name: Usuarios
+  description: Gestión de usuarios en el módulo de indentificación única.
+- name: Autorizaciones
+  description: Procesos de autorización.
+- name: Interacciones
+  description: Métodos para la incorporación de interacciones.
+- name: Solicitudes
+  description: Métodos para la incorporación de solicitudes.
+- name: Estructura organizativa
+  description: EStructura organizativa del ayuntamiento.
+- name: Tarjeta Ciudadana
+  description: Métodos para la integración de la tarjeta ciudadana.
+- name: Fuentes de datos
+  description: Fuentes de datos para la realización de consultas sobre los datos de
+    CRM
+- name: Idiomas
+  description: Gestión de personas en el módulo de indentificación única. Identificación
+    única de personas físicas y personas jurídicas
+- name: Apikeys
+  description: Gestión de Apikeys
+- name: CustomForm
+  description: Formularios Customizados.
+paths:
+  /apikey:
+    get:
+      tags:
+      - Apikeys
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiKey'
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Apikeys
+      summary: update
+      operationId: updateUsingPUT
+      requestBody:
+        description: apiKey
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        "201":
+          description: Created
+          content: {}
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Apikeys
+      summary: save
+      operationId: saveUsingPOST
+      requestBody:
+        description: apiKey
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKey'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        "201":
+          description: Created
+          content: {}
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - BearerToken: []
+  /apikey/{id}:
+    get:
+      tags:
+      - Apikeys
+      summary: findApiKeyById
+      operationId: findApiKeyByIdUsingGET
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+        "404":
+          description: Not Found
+          content: {}
+      deprecated: false
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Apikeys
+      summary: delete
+      operationId: deleteUsingDELETE
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content: {}
+        "204":
+          description: No Content
+          content: {}
+        "401":
+          description: Unauthorized
+          content: {}
+        "403":
+          description: Forbidden
+          content: {}
+      deprecated: false
+      security:
+      - BearerToken: []
+  /audit/filter:
+    post:
+      tags:
+      - Auditoría
+      summary: Filtro sobre los registros de auditoría
+      requestBody:
+        description: filterAuditRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterAuditRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      security:
+      - BearerToken: []
+  /organization:
+    get:
+      tags:
+      - Estructura organizativa
+      summary: Obtiene estructura organizativa
+      description: Obtiene la estructura de la organización completa como unidades
+        organizativas anidadas
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUnit'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    post:
+      tags:
+      - Estructura organizativa
+      summary: Crear una estructura organizativa
+      description: Crea una estructura de la organización. Si se incluyen estructuras
+        hijas, estas deben de existir en el sistema, si no existen se devolverá un
+        error 400
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUnit'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUnit'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /organization/{ouId}:
+    get:
+      tags:
+      - Estructura organizativa
+      summary: Obtiene rama de una estructura organizativa
+      description: Obtiene una rama de la estructura de la organización desde un nodo
+        y todos sus descendientes.
+      parameters:
+      - name: ouId
+        in: path
+        description: ID de la estructura organizativa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUnit'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    put:
+      tags:
+      - Estructura organizativa
+      summary: Actualiza una estructura organizativa
+      description: Actualiza la estructura organizativa.
+      parameters:
+      - name: ouId
+        in: path
+        description: ID de la estructura organizativa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationUnit'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Estructura organizativa
+      summary: Elimina una estructura organizativa
+      description: Elimina una estructura organizativa si no tiene hijos.
+      parameters:
+      - name: ouId
+        in: path
+        description: ID de la estructura organizativa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: forceDelete
+        in: query
+        description: Indica si se elimina la estructura y se eliminan las unidades
+          organizativas hijas
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /organization/childs/{ouId}:
+    get:
+      tags:
+      - Estructura organizativa
+      summary: Obtiene una las estructuras organizativas hijas directas de la indicada.
+      description: Obtiene las estructuras organizativas hijas de un nodo
+      parameters:
+      - name: ouId
+        in: path
+        description: ID de la estrcutura organizativa
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationUnit'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /organization/parents:
+    get:
+      tags:
+      - organization-unit-controller
+      summary: getOrganizationUnitParents
+      operationId: getOrganizationUnitParentsUsingGET
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganizationUnit'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /controlPanel:
+    get:
+      tags:
+      - Cuadros de Mando
+      summary: Obtiene todos los cuadros de mando (BORRADOR)
+      description: Método pendiende de análisis
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ControlPanel'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /controlPanels/{controlPanelId}:
+    get:
+      tags:
+      - Cuadros de Mando
+      summary: Obiene cuadro de mando (BORRADOR)
+      description: Método pendiende de análisis
+      parameters:
+      - name: controlPanelId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ControlPanel'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /datasources:
+    get:
+      tags:
+      - Fuentes de datos
+      summary: Obiene todas las fuentes de datos publicadas (BORRADOR)
+      description: En CRM se podrá definir una fuente de datos que permita seleccionar
+        datos de una colección y definir un metodo de agregación
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataSource'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /datasources/{dataSourceId}:
+    get:
+      tags:
+      - Fuentes de datos
+      summary: Obiene fuente de datos identificada
+      description: 'Retorna la configuracion '
+      parameters:
+      - name: dataSourceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /datasources/{dataSourceId}/data:
+    get:
+      tags:
+      - Fuentes de datos
+      summary: Obtiene los datos resultado de una fuente de datos
+      description: 'Retorna la configuracion '
+      parameters:
+      - name: dataSourceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                description: JSON con datos obtenidos
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /persons:
+    post:
+      tags:
+      - Personas
+      summary: Crear persona
+      description: Crea una nueva una persona, realizará las comprobaciones necesarias
+        para no crear personas con identificadores duplicados (DNI, NIF, NIE).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /persons/{personId}:
+    get:
+      tags:
+      - Personas
+      summary: Obtener persona
+      description: Retorna una única persona por su id
+      parameters:
+      - name: personId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "400":
+          description: Invalid Path ID
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    put:
+      tags:
+      - Personas
+      summary: Modificación de persona (Creación si no existe)
+      description: Actualiza la persona por su id con la persona recibida en body,
+        si no existe el recurso
+      parameters:
+      - name: personId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PersonRequest'
+      responses:
+        "204":
+          description: No content, upadate OK
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "401":
+          description: Invalid Path ID
+        "404":
+          description: Resource Not found
+        "405":
+          description: Invalid input
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    delete:
+      tags:
+      - Personas
+      summary: Eliminar persona
+      description: Elimina la persona identificada en el path
+      parameters:
+      - name: personId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Marca la persona como eliminada y retorna la persona modificada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    patch:
+      tags:
+      - Personas
+      summary: Actualiza la persona con la operación recibida
+      description: Realiza la actualización de una persona. Permite modificar cualquiera
+        de sus propiedades.
+      parameters:
+      - name: personId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Operación de actualización parcial sobre persona.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchOperation'
+            example:
+              op: replace
+              path: identificationDoc
+              value: 00000000J
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - ApiKey: []
+  /persons/card/{sgtcId}:
+    get:
+      tags:
+      - Personas
+      summary: Obtiene una persona por su tarjeta ciudadana
+      description: Retorna una única persona
+      parameters:
+      - name: sgtcId
+        in: path
+        description: ID de la tarjeta ciudadana
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /persons/email/{email}:
+    get:
+      tags:
+      - Personas
+      summary: Obtiene una persona por su email
+      description: Retorna una única persona mediante el email con el que se registró
+      parameters:
+      - name: email
+        in: path
+        description: Dirección de email
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Person'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /persons/filter:
+    post:
+      tags:
+      - Personas
+      summary: Servicio de búsqueda de personas
+      description: Realiza una búsqueda de personas con los parámetros recibidos
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filter'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /CustomForm:
+    get:
+      tags:
+      - CustomForms
+      summary: Obtiene formularios.
+      description: Obtiene formularios customizados
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomForm'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+    put:
+      tags:
+      - CustomForms
+      summary: Actualiza un formulario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomForm'
+        required: true
+      responses:
+        "201":
+          description: Created
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    post:
+      tags:
+      - CustomForms
+      summary: Alta de formulario
+      description: Crea el formulario customizado
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomForm'
+        required: true
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomForm'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    delete:
+      tags:
+      - CustomForms
+      summary: Elimina un formulario custom.
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /users:
+    post:
+      tags:
+      - Usuarios
+      summary: Alta de usuario
+      description: Crea el usuario de la persona asociada que debe de existir en el
+        módulo de idetificación única y realiza el alta de un nuevo usuario a traves
+        de Bus de integración en IS. Retorna el usuario creado. Si ya existe un usuario
+        creado asociado a la persona recibida retornará un error 400 con la correspondiente
+        descripción del error
+      requestBody:
+        $ref: '#/components/requestBodies/UserRequest'
+      responses:
+        "201":
+          description: created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /users/{userId}:
+    get:
+      tags:
+      - Usuarios
+      summary: Obtiene un usuario por su ID
+      description: Retorna un usuario
+      parameters:
+      - name: userId
+        in: path
+        description: ID del usuario a recuperar
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    put:
+      tags:
+      - Usuarios
+      summary: Actualiza un usuario con el objeto recibido en el body
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UserRequest'
+      responses:
+        "201":
+          description: Created
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+    delete:
+      tags:
+      - Usuarios
+      summary: Elimina un usuario. Realiza la baja en IS y marca como baja el perfil
+        de la persona en CRM sin eliminar el documento.
+      parameters:
+      - name: userId
+        in: path
+        description: id del usuario a eliminar
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /users/userName/{userName}:
+    get:
+      tags:
+      - Usuarios
+      summary: Obtener usuario por nombre de usuario
+      description: Obtiene el usuario pasado por parámetro en el path de la url.
+      parameters:
+      - name: userName
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /users/tc/{idSgtc}:
+    get:
+      tags:
+      - Usuarios
+      summary: Obtener usuario por id de tarjeta ciudadana
+      description: Obtiene el usuario a partir de su identificador de tarjeta ciudadana.
+      parameters:
+      - name: idSgtc
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+      - ApiKey: []
+  /auth/login:
+    post:
+      tags:
+      - Autorizaciones
+      summary: login de usuario
+      description: <h2>Login</h2> <p> Autentica un usuario mediante el uso de un identificador
+        admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña. Como respuesta
+        proporciona un objeto con un token de acceso, su periodo de vigencia y un
+        token de refresco que permitirá obtener un nuevo token cuando este haya caducado.<p>
+        Las aplicaciones cliente deberán <strong>almacenar los tokens de forma segura
+        y eliminar tanto el token de acceso como el de refresco cuando el usuario
+        realice el logout</strong> </p> <p> El token devuelto en formato JWT contendrá
+        en el payload el id el usuario, el id de la persona, id de la tarjeta ciudadana
+        si se dispone de ella y el id de la aplicación desde la que e hizo login obtenido
+        desde el ApiKey</p>
+      externalDocs:
+        url: https://auth0.com/docs/tokens/access-tokens
+      requestBody:
+        description: Objeto para el login, permitirá hacer login mediante usuario,
+          teléfono, email o tarjeta ciudadana los cuales son excluyentes.  Si se proporciona
+          mas de uno devolverá error 400 en la petición
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      responses:
+        "200":
+          description: Login ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security: []
+  /auth/logout:
+    description: Realiza en el servicio las operaciones necesarias en la desconexión
+      de un usuario <p>Las aplicaciones cliente deberán <strong>eliminar tanto el
+      token de acceso como el de refresco cuando el usuario realice el logout</strong></p>
+    post:
+      tags:
+      - Autorizaciones
+      summary: Realiza el logout de un usuario invalidando su token de acceso
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /auth/refreshToken:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Refresca el token de autorización
+      description: Obtiene un nuevo token de acceso a partir del token válido actual
+        y el token de refresco
+      externalDocs:
+        description: Info sobre método de refresco de token
+        url: https://auth0.com/docs/tokens/access-tokens/refresh-tokens
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenResponse'
+      responses:
+        "200":
+          description: Refresh ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "405":
+          description: Invalid input
+      security: []
+  /auth/authorize:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Autoriza usuario autenticado por proveedor de confianza
+      description: |-
+        <p>Autoriza en CRM un usuario que ya ha sido autenticado por alguno de los métodos en los que se confía como certificado, dni electrónico y LDAP</p> <ol>
+         <li>El proceso autentica el usuario de forma segura a traves del bus de integración y el bus solicita la autorización del usuario mediante los datos identificados sin necesidad de contraseña.
+         </li>
+        <li>Si no existe se crea el usuario y la persona asociada. </li> <li>
+          Se genera el token del usuario y se retorna
+        </li> </ol>
+      requestBody:
+        description: Objeto para el login en aplicación de terceros, permitirá hacer
+          login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son
+          excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si
+          se proporciona mas de uno devolverá error 400 en la petición
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginTrusted'
+        required: true
+      responses:
+        "200":
+          description: Login ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /auth/fid/login:
+    post:
+      tags:
+      - Autorizaciones
+      summary: login federado
+      description: |-
+        <h1>Login Federado</h1>  <p>Autentica un usuario para el acceso a una aplicación de terceros mediante el uso de un identificador admitido (nombre, email, id tarjeta ciudadana,...) y su contraseña CRM. El proceso identifica el usuario en CRM y busca una autorización previa de acceso a la aplicación de terceros..</p> <ol>
+         <li>El proceso identifica el usuario mediante sus credenciales CRM y busca una autorización previa de acceso a la aplicación.</li>
+        <li>Si existe autorización previa se redirige al acceso de la aplicación con el código de autorización almacenado lo que proporcionará acceso a esta son necesidad de realizar una nueva identificación.</li> <li> Si no existe se redirige al componente C11 pasando como parámetros la aplicación a autorizar y el id del usuario. </li> <li> El bus de integración redirige al login de la aplicación solicitada. Esta tras un login correcto realiza nueva llamada al bus adjuntando los parámetros del id de usuario, identificador de aplicación y código de autorización obtenido en el login. </li> <li> El bus de integración realiza llamada a CRM al método de almacenamiento de identificación federada, donde CRM almacenará la información para posteriores solicitudes de acceso a la aplicación. </li> </ol>
+      externalDocs:
+        url: https://en.wikipedia.org/wiki/Federated_identity
+      requestBody:
+        description: Objeto para el login en aplicación de terceros, permitirá hacer
+          login mediante usuario, teléfono, email o tarjeta ciudadana los cuales son
+          excluyentes y deberá identificar la aplicación a la que se desea acceder.  Si
+          se proporciona mas de uno devolverá error 400 en la petición
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginFid'
+        required: true
+      responses:
+        "200":
+          description: Login ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security: []
+  /auth/fid/store:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Almacena identificación federada
+      description: Almacena una identificación federada asociada a un usuario y una
+        aplicación. Cuando en posteriores ocasiones el usuario intente acceder a la
+        aplicación podrá usar el código de autorización reconocido por la app para
+        el acceso.
+      requestBody:
+        description: Objeto con la identificación federada a almacenar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fid'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /auth/fid/revoque:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Revoca identificación federada almacenada
+      description: Revoca una identificación federada obtenida previamente estableciéndola
+        como no habilitada.
+      requestBody:
+        description: Objeto con la identificación federada a eliminar.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Fid'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /auth/password/change:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Cambio de contraseña
+      description: Modifica la contraseña del usuario pasado por body. Si el usuario
+        recibido no es el propietario del token, deberá tener los permisos necesarios.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /auth/password/lost:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Contraseña olvidada
+      description: Envía notificación al usuario para la recuperación de la contraseña
+        mediante el paso del email o el id de su tarjeta ciudadana. Si se pasa el
+        email se envía el enlace de recuperación sin realizar mas comprobaciones.
+        Si no se recibe email y se recibe el id de tarjeta, se obtendrá el email asociado
+        al propietario. Si no se encuentra email asociado o no se localiza el usuario
+        con la tarjeta se retorna error 400
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security: []
+  /auth/password/recover:
+    post:
+      tags:
+      - Autorizaciones
+      summary: Establece la nueva contraseña para el usuario asociado al token de
+        recuperación
+      description: Tras una solicitud de restauración de contraseña, se ha enviado
+        al usuario un enlace con un token de recuperación asociado. Mediante el uso
+        de este token se podrá enviar una nueva contraseña que se establecerá como
+        contraseña del usuario asociado al token de recuperación.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoverPasswordRequest'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security: []
+  /interactions:
+    post:
+      tags:
+      - Interacciones
+      summary: Servicio de registro de interacción.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interaction'
+        required: true
+      responses:
+        "201":
+          description: Interacción creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interaction'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - ApiKey: []
+      - BearerToken: []
+  /interactions/{id}:
+    get:
+      tags:
+      - Interacciones
+      summary: Obtención de ua interacción.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interaction'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Interacciones
+      summary: modifica una interacción. No deberá modificar situaciones ni comentarios
+        que se actualizan por otro endpoint
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interaction'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Interacciones
+      summary: Elimina una interacción.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /interactions/{id}/situation:
+    post:
+      tags:
+      - Interacciones
+      summary: Añade una nueva situación a la interacción
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interaction'
+        required: true
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interaction'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /interactions/{id}/comment:
+    description: añade comentario a la interaccion, no se guarda con el objeto global
+      de interaccion para evitar que un usuario con permisos pueda modificar comentarios
+      anteriores
+    post:
+      tags:
+      - Interacciones
+      summary: Añade una nueva situación a la interacción. No se guarda con el objeto
+        global de interaccion para evitar que un usuario con permisos pueda modificar
+        comentarios anteriores
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Interaction'
+        required: true
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Interaction'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /interactions/last/{personId}:
+    get:
+      tags:
+      - Interacciones
+      summary: Obtención de últimas 10 interacciones de una persona.
+      parameters:
+      - name: personId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: ObjectId
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Interaction'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /interactions/upload:
+    post:
+      tags:
+      - Interacciones
+      summary: Carga por lotes de interacciones.
+      description: Recibe un archivo Json con array de interacciones y realiza su
+        carga
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: object
+              format: binary
+      responses:
+        "202":
+          description: Accepted
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /interactions/types:
+    get:
+      tags:
+      - Interacciones
+      summary: Obtiene tipos de interacciones.
+      description: Obtiene la relación completa de tipos de interacciones
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InteractionType'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /interactions/search:
+    post:
+      tags:
+      - Interacciones
+      summary: búsqueda de interacciones
+      description: Ejecuta una búsqueda sobre la coleccion de interacciones
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Filter'
+        required: true
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /tc:
+    post:
+      tags:
+      - Tarjeta Ciudadana
+      summary: Alta de tarjeta ciudadana
+      description: Realiza el alta de una tarjeta ciudadana asociada a la persona
+        identificada en la request por su id. Si la persona indicada no existe se
+        devolverá un error
+      requestBody:
+        $ref: '#/components/requestBodies/CitizenCardRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CitizenCard'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - ApiKey: []
+  /tc/{idSgtc}:
+    put:
+      tags:
+      - Tarjeta Ciudadana
+      summary: Actualiza tarjeta ciudadana
+      description: Realiza la actualización de una tarjeta ciudadana.
+      parameters:
+      - name: idSgtc
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Tarjeta ciudadana a actualizar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CitizenCard'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - ApiKey: []
+    patch:
+      tags:
+      - Tarjeta Ciudadana
+      summary: Actualiza tarjeta ciudadana con la operación recibida
+      description: Realiza la actualización de una tarjeta ciudadana. Permite modificar
+        cualquiera de sus propiedades
+      parameters:
+      - name: idSgtc
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Operacion de actualización parcial de tarjeta ciudadana.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchOperation'
+            example:
+              op: replace
+              path: enable
+              value: "false"
+        required: true
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - ApiKey: []
+  /languages:
+    get:
+      tags:
+      - Idiomas
+      summary: Obtiene lista de idiomas
+      description: Obtiene todos los idiomas disponibles (sin sus claves)
+      responses:
+        "200":
+          description: created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Language'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /languages/{code}:
+    get:
+      tags:
+      - Idiomas
+      summary: Obtiene un idioma
+      description: Obtiene un idioma por su código con sus claves
+      parameters:
+      - name: code
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageExtended'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Idiomas
+      summary: Actualiza un idioma
+      description: Actualiza un idioma con sus claves
+      parameters:
+      - name: code
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageExtended'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Idiomas
+      summary: Crear un nuevo idioma
+      description: Crea un nuevo idioma a partir del idioma recibido por párametro
+        con el nombre y  código recibidos en el body
+      parameters:
+      - name: code
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Language'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageExtended'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Idiomas
+      summary: Elimina un idioma
+      description: Elimina un idioma y todas las claves asociadas.
+      parameters:
+      - name: code
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /languages/literals/{code}:
+    get:
+      tags:
+      - Idiomas
+      summary: Obtiene literales de un idioma para ngx-translate
+      parameters:
+      - name: code
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      security:
+      - BearerToken: []
+  /groups:
+    get:
+      tags:
+      - Grupos
+      summary: Obtiene lista de grupos
+      description: Obtiene todos los grupos
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsersGroup'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /groups/{id}:
+    get:
+      tags:
+      - Grupos
+      summary: Obtiene un grupo de usuarios
+      description: Obtiene un grupo de usuarios
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersGroup'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Grupos
+      summary: Actualiza un grupo
+      description: Actualiza un grupo de usuarios
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersGroup'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Grupos
+      summary: Crear un nuevo grupo de usuarios
+      description: Gera una nuevo grupo de usuarios
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersGroup'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersGroup'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Grupos
+      summary: Elimina un grupo de usuarios
+      description: Elimina un grupo de usuarios.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /params:
+    description: Obtención de tipos de parámetros de la aplicación
+    get:
+      tags:
+      - Parametrización
+      summary: Tipos de Parámetros
+      description: Obtiene los distintos tipos de parámetros de la aplicación.
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrmParamType'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /params/{paramType}:
+    description: Gestión de parámetros de CRM se agruparán por el tipo
+    get:
+      tags:
+      - Parametrización
+      summary: Parámetros de la aplicación
+      description: Obtiene los distintos valores de parametrización de la aplicación
+        por su tipo. - Tipos de personas - Tipos de documentos
+      parameters:
+      - name: paramType
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CrmParamType'
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrmParam'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Parametrización
+      summary: Actualiza un parámetro
+      description: Actualiza el parámetro recibido
+      parameters:
+      - name: paramType
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CrmParamType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrmParam'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Parametrización
+      summary: Parámetros de la aplicación
+      description: Crea un nuevo parámerto - Tipos de personas - Tipos de documentos
+      parameters:
+      - name: paramType
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CrmParamType'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrmParam'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmParam'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /params/{paramType}/{paramName}:
+    description: Elimina parámetro de un tipo por su nombre
+    delete:
+      tags:
+      - Parametrización
+      summary: Eliminar parámetro
+      description: Elimina el parámetro por su nombre para el tipo enviado en el path
+      parameters:
+      - name: paramType
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/CrmParamType'
+      - name: paramName
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "404":
+          description: Resource Not found
+      security:
+      - BearerToken: []
+  /externalapps:
+    get:
+      tags:
+      - Aplicaciones externas
+      summary: Obtiene aplicaciones externas
+      description: Obtiene todas las aplicaciones externas con acceso a la aplicación
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalAplication'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Aplicaciones externas
+      summary: Crea aplicación externa
+      description: Crea una nueva aplicación externa con acceso a la aplicación
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalAplication'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalAplication'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /externalapps/{aplicationId}:
+    get:
+      tags:
+      - Aplicaciones externas
+      summary: Obtiene aplicación externa
+      description: Obtiene una aplicación externa por su id
+      parameters:
+      - name: aplicationId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalAplication'
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Aplicaciones externas
+      summary: actualiza aplicación externa
+      description: Actualiza un registro de aplicación externa
+      parameters:
+      - name: aplicationId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalAplication'
+        required: true
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    delete:
+      tags:
+      - Aplicaciones externas
+      summary: Elimina aplicación externa
+      description: Elimina un registro de aplicación externa
+      parameters:
+      - name: aplicationId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "401":
+          description: ApiKey is missing , invalid or insuficients rights
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+components:
+  schemas:
+    Audit:
+      title: Audit
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        controller:
+          type: string
+        createDate:
+          type: string
+          example: dd/MM/yyyy hh:mm:ss
+        idUser:
+          type: integer
+          format: int64
+        method:
+          type: string
+        params:
+          type: string
+        path:
+          type: string
+        requestMethod:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        userName:
+          type: string
+    FilterAuditRequest:
+      title: FilterAuditRequest
+      type: object
+      properties:
+        dateFrom:
+          type: string
+          format: date-time
+        dateTo:
+          type: string
+          format: date-time
+        idUser:
+          type: integer
+          format: int64
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sort:
+          type: integer
+          format: int32
+        userName:
+          type: string
+    CensusData:
+      type: object
+      properties:
+        inHabitantCode:
+          type: number
+          description: Código de habitante (codigoHabitante)
+        sex:
+          maxLength: 1
+          type: string
+          description: Sexo V-varón M-Mujer (sexo)
+        district:
+          type: number
+          description: Distrito (distrito)
+        section:
+          type: number
+          description: Sección (seccion)
+        sectionLetter:
+          type: string
+          description: Letra de sección (letraSeccion)
+        birthDate:
+          type: string
+          format: date
+        entryDate:
+          type: string
+          description: Fecha de alta  (fechaAlta)
+          format: date
+        registrationDate:
+          type: string
+          description: Fecha de empadronamieto (fechaEmpadronamiento)
+          format: date
+        lastOperationDate:
+          type: string
+          description: Fecha de última operación (fechaUltimaOperacion)
+          format: date
+        censusState:
+          type: number
+          description: |-
+            Estado. Posibles valores:
+              0 -ESTADO_NO_LOCALIZADO
+              1 -ESTADO_SIN_INCIDENCIAS
+              2 -ESTADO_NO_ACTIVO
+              3 -ESTADO_DOS_REGISTROS
+              4 -ESTADO_PROPUESTA_BAJA_CADUCIDAD
+              5 -ESTADO_PROPUESTA_BAJA_OTRA_CAUSA
+              6 -ESTADO_PROPUESTA_BAJA_OFICIO
+        censusStateText:
+          type: string
+          description: Estado de inscripción en censo (textoEstado)
+        numberOfInhabitants:
+          type: string
+          description: Número de Habitantes encontrados (numeroHabitantes).
+        family:
+          type: number
+          description: Modo Familia 0-No, 1-Nivel Hoja, 2-Nivel Habitante (familia)
+        degreeCode:
+          type: string
+          description: Código de titulación (codigoTitulacion)
+        degreeName:
+          type: string
+          description: Nombre de titulación (nombreTitulacion)
+        nationalityCode:
+          type: string
+          description: 'Código de nacionalidad (codigoNacionalidad) '
+        nationalityName:
+          type: string
+          description: Nombre de nacionalidad (nombreNacionalidad)
+        lastChangeCause:
+          type: string
+          description: Causa de última variación (causaUltimaVariacion)
+        europeanCommunity:
+          type: boolean
+          description: Nacionalidad Comunitaria (comunitario)
+        permanentResidenceCard:
+          type: boolean
+          description: Tarjeta de residencia permanente (tarjetaResidenciaPermanente)
+        city:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: integer
+          format: postal-code
+      description: (BORRADOR) Información censal del padrón actualizable desde procesos,
+        no de forma interactiva
+    Address:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        addressType:
+          $ref: '#/components/schemas/CrmParam'
+        addressLine1:
+          type: string
+        addressLine2:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        state:
+          type: string
+        zipCode:
+          type: integer
+          format: postal-code
+      description: Esquema de dirección (Borrador, ver cómo alinear con censo)
+    AnyValue: {}
+    FilterResponse:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/Filter'
+        totalResults:
+          type: number
+          example: 18
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
+      description: objeto de respuesta de una peticiónd de filtrado, contendrá los
+        datos del estado del filtro y será ampliado en la correspondiente respuesta
+        con los datos retornados
+    SearchResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
+        empty:
+          type: boolean
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        size:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        sort:
+          $ref: '#/components/schemas/Sort'
+        unpaged:
+          type: boolean
+    TokenResponse:
+      type: object
+      properties:
+        token_type:
+          type: string
+        access_token:
+          type: string
+          format: JWT
+        appId:
+          type: string
+        expires_in:
+          type: number
+        refresh_token:
+          type: string
+      description: Respuesta a la solicitud de token de acceso o refresco
+      example:
+        token_type: bearer
+        access_token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyIjoiVlx1MDAxNcKbwoNUwoonbFPCu8KhwrYiLCJpYXQiOjE0NDQyNjI1NDMsImV4cCI6MTQ0NDI2MjU2M30.MldruS1PvZaRZIJR4legQaauQ3_DYKxxP2rFnD37Ip4
+        expires_in: 20
+        refresh_token: fdb8fdbecf1d03ce5e6125c067733c0d51de209c
+    DataSource:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objetId
+        name:
+          type: string
+        collection:
+          type: string
+        query:
+          type: string
+        stages:
+          type: array
+          items:
+            type: string
+      description: Objeto que almacena la descripción de una fuente de datos
+    ControlPanel:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objetId
+      description: Cuadro de mando (Pte de definir)
+    ChangePasswordRequest:
+      type: object
+      properties:
+        userid:
+          type: string
+        oldPassword:
+          type: string
+        newPassword:
+          type: string
+      description: Objeto para la petición de cambio de contraseña
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        sgtcId:
+          type: string
+        email:
+          type: string
+      description: Objeto para la petición de enlace de contraseña olvidada
+    RecoverPasswordRequest:
+      type: object
+      properties:
+        recoverToken:
+          type: string
+        email:
+          type: string
+        newPassword:
+          type: string
+      description: Objeto para la restauración de contraseña
+    Person:
+      required:
+      - name
+      - personType
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: 487f1ff7cbcf86cd799439011
+        identificationType:
+          $ref: '#/components/schemas/CrmParam'
+        identificationDoc:
+          type: string
+          description: Documento de identificación
+          example: 111111111H
+        avatar:
+          $ref: '#/components/schemas/Avatar'
+        personType:
+          $ref: '#/components/schemas/CrmParam'
+        citizenCard:
+          $ref: '#/components/schemas/CitizenCard'
+        interactionsStatistic:
+          type: array
+          items:
+            $ref: '#/components/schemas/interactionStatistic'
+        name:
+          type: string
+          example: JUAN
+        surname1:
+          type: string
+          example: APELLIDO1
+        surname2:
+          type: string
+          example: APELLIDO2
+        birthDate:
+          type: string
+          description: Fecha completa según RFC 3339, section 5.6
+          format: date
+          example: 1980-07-21
+        phones:
+          type: array
+          example:
+          - 695748759
+          - 987458785
+          items:
+            type: string
+            format: phone
+        email:
+          type: string
+          example: juanapellido@santander.es
+        preferedContactMethod:
+          $ref: '#/components/schemas/CrmParam'
+        censusData:
+          $ref: '#/components/schemas/CensusData'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        genre:
+          type: string
+        segmentation:
+          type: array
+          description: Lista de los segmentos de perfilado a los que pertenece la
+            persona
+          items:
+            $ref: '#/components/schemas/Segment'
+        deleted:
+          type: boolean
+          example: true
+        deletedDate:
+          type: string
+          description: Fecha completa según RFC 3339, section 5.6
+          format: date
+          example: 1980-07-21
+      description: Objeto persona que almacena la informaciónd e cada persona física
+        o jurídica
+    Filter:
+      type: object
+      properties:
+        first:
+          type: number
+          description: primer elemento a retornar de los resultados
+        rows:
+          type: number
+          description: Numero de elementos a retornar de los resultados
+        filters:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/FilterMetadata'
+          description: Objeto de filtrado
+        sortOrder:
+          type: number
+          description: Orden , 1 para ascendente  y  -1 para descendente en ordenación
+            simple
+        sortField:
+          type: string
+          description: Campo por el que ordenqar en el modo de ordenación simple
+        globalFilter:
+          type: string
+          description: Filtro global para realiar filtrado en distintos campos
+        multiSortMeta:
+          type: array
+          description: Objeto de ordenación múltiple
+          items:
+            $ref: '#/components/schemas/SortMetadata'
+      description: Petición de filtrado paginado sobre una colección
+      example:
+        first: 0
+        rows: 10
+        filters:
+          name:
+            value: jose
+            matchMode: contains
+          surname1:
+            value: perez
+            matchMode: contains
+          email:
+            value: joseperez@mail.com
+            matchMode: equals
+        sortOrder: 1
+        sortField: name
+        multiSortMeta: []
+    FilterMetadata:
+      type: object
+      properties:
+        value:
+          type: string
+          description: Valor del campo
+        matchMode:
+          type: string
+          description: Modo de comparación valores posibles startsWith, contains,
+            endsWith, equals, notEquals, in, lt, lte, gt, gte
+    SortMetadata:
+      required:
+      - field
+      - order
+      type: object
+      properties:
+        field:
+          type: string
+          description: Campo de ordenación
+        order:
+          type: number
+          description: Orden , 1 para ascendente  y  -1 para descendente
+      description: Metadatos de ordenación de filtros, establece el criterio de ordenación
+        de los resultados
+    CitizenCard:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: identificador de tarjeta ciudadana
+          example: 487f1ff
+        state:
+          type: string
+          description: Estado de la tarjeta
+          example: B
+      description: Tarjeta Ciudadana (Objeto pte de definir por C1)
+    interactionStatistic:
+      type: object
+      properties:
+        count:
+          type: number
+        interactionType:
+          $ref: '#/components/schemas/InteractionType'
+      description: estadistica de interacciones
+    PatchOperation:
+      type: object
+      properties:
+        op:
+          type: string
+          example: replace
+          enum:
+          - add
+          - remove
+          - replace
+          - move
+          - copy
+          - test
+        path:
+          type: string
+          example: address/zipCode
+        value:
+          type: string
+          example: "10200"
+      additionalProperties: false
+      description: objeto que define la operación a realizar en un objeto mediante
+        el método patch. Siguiendo las indicaciones de rfc6902
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user2547
+        telephone:
+          type: string
+          example: "657487598"
+        email:
+          type: string
+          example: user2547@santander.es
+        tc:
+          type: string
+          example: 487f1ff
+        docType:
+          $ref: '#/components/schemas/CrmParam'
+        docId:
+          type: string
+          example: "06898575"
+        password:
+          type: string
+          format: binary
+      description: objeto de login, permitirá hacer login mediante usuario, telefono,email
+        o tarjeta ciudadana. Si se proporciona mas de uno devolverá error en la petición
+    LoginTrusted:
+      type: object
+      properties:
+        providerId:
+          type: string
+        identificationDoc:
+          type: string
+        userName:
+          type: string
+      description: objeto de login de confianza, permitirá hacer login a un usuario
+        autenticado por otros métodos (BORRADOR)
+    LoginFid:
+      type: object
+      properties:
+        appId:
+          type: string
+        allOf:
+          $ref: '#/components/schemas/Login'
+      description: objeto de login Federado, permitirá hacer login mediante usuario,
+        teléfono, email o tarjeta ciudadana en una aplicación de terceros. Si se proporciona
+        mas de un método de identificación se devolverá error en la petición
+    Fid:
+      required:
+      - appId
+      - authCode
+      - authUrl
+      - expires_in
+      - userId
+      type: object
+      properties:
+        appId:
+          type: string
+        userId:
+          type: string
+          format: ObjectId
+        authCode:
+          type: string
+        authUrl:
+          type: string
+        authStamp:
+          type: string
+          format: date-time
+        expires_in:
+          type: number
+        enable:
+          type: boolean
+      description: objeto que contiene la autorización federada en una aplicación
+        de terceros.
+    User:
+      required:
+      - roles
+      - userGroups
+      type: object
+      properties:
+        password:
+          type: string
+          description: Contraseña en Base64
+          format: byte
+        organizationUnit:
+          $ref: '#/components/schemas/OrganizationUnit'
+        person:
+          $ref: '#/components/schemas/Person'
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+        userGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsersGroup'
+      description: Entidad que posibilita a una persona el uso de aplicaciones que
+        componen la iniciativa. Define su método de autenticación y las autorizaciones
+        de uso en el CRM.
+      allOf:
+      - $ref: '#/components/schemas/UserBasic'
+    UserBasic:
+      required:
+      - disabled
+      - email
+      - id
+      - username
+      type: object
+      properties:
+        id:
+          type: string
+          format: ObjectId
+          example: 487f1ff7cbcf86cd799439011
+        username:
+          type: string
+          example: user2548
+        email:
+          type: string
+          example: user2548@santander.es
+        profileProvider:
+          type: string
+          description: Servicio proveedor origen del perfil
+          example: LDAP
+        disabled:
+          type: boolean
+          example: false
+        created:
+          type: string
+          description: timestamp UNIX
+          format: date
+        deleted:
+          type: string
+          description: timestamp UNIX
+          format: date
+      description: Extracto de usuario con las propiedades reducidas, omite persona
+        y contraseña.
+    UserRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        personId:
+          type: string
+          format: ObjectId
+      description: Objeto para la creación de un nuevo usuario. Creará el usuario
+        con el nombre de usuario y el mail indicados y establecerá la contraseña.
+        Este usuario quedará vinculado a la persona indicada por personId
+    Role:
+      required:
+      - _id
+      - name
+      - permissions
+      type: object
+      properties:
+        _id:
+          title: identificador del rol
+          type: string
+        name:
+          title: Nombre del Rol
+          type: string
+          example: administracion de usuarios
+        organizationUnit:
+          $ref: '#/components/schemas/OrganizationUnit'
+        permissions:
+          $ref: '#/components/schemas/CrmPermissions'
+      description: Rol de la aplicación
+    UsersGroup:
+      required:
+      - id
+      - name
+      - roles
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: 507f1f77bcf86cd799439011
+        name:
+          type: string
+          description: Nombre del grupo
+          example: Grupo de usuarios de 010
+        description:
+          type: string
+          description: Descripción del grupo
+          example: Grupo con permisos especiales de acceso solo lectura a ciudadanos
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Role'
+      description: Grupos de usuarios
+    CrmPermissions:
+      type: object
+      properties:
+        default:
+          $ref: '#/components/schemas/CrmFeaturePermissions'
+      additionalProperties:
+        $ref: '#/components/schemas/CrmFeaturePermissions'
+      description: Permisos de usuario. Es un objeto con una estructura de permisos
+        por feature
+    CrmFeaturePermissions:
+      type: object
+      additionalProperties:
+        type: boolean
+      description: Permisos de una feature
+    Interaction:
+      required:
+      - comments
+      - interactionType
+      - situations
+      - sourceId
+      - userAgent
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Como object id tendrá el timestamp de creación
+          format: ObjectId
+          example: 507f1f77bcf86cd799439011
+        userAgent:
+          $ref: '#/components/schemas/UserBasic'
+        subjectId:
+          type: string
+          description: Identificador único del sujeto en la iniciativa. Podrá ser
+            organización, ciudadano, visitante, empresa, etc. No es un atributo requerido
+            porque se podrán registrar interacciones anónimas
+          format: ObjectId
+          example: 487f1ff7cbcf86cd799439011
+        sourceExternalAplicationId:
+          type: string
+          description: ID del componente o aplicación que genera la interacción, en
+            las interactivas será CRM y en el resto será una aplicación previamente
+            identificada
+          format: ObjectId
+          example: e475dff7cbcf86cd799439011
+        interactionType:
+          $ref: '#/components/schemas/InteractionType'
+        interactionDirection:
+          type: string
+          description: Dirección de la interacción persona->sistema o viceversa
+          format: enum - inbound - outbound
+          example: inbound
+        detail:
+          type: string
+          description: Detalle de la interacción
+          example: Llamada telefónica consulta
+        situations:
+          type: array
+          description: Situaciones de la interacción en el caso de interacciones serán
+            creadas y cerradas nomalmente por el agente ya que en otro caso hay que
+            generar una solicitud pero se deja abierto para poder tener tiempos de
+            resolución, atención,...
+          items:
+            $ref: '#/components/schemas/Situations'
+        comments:
+          type: array
+          description: Comentarios a la interacción
+          items:
+            $ref: '#/components/schemas/Comment'
+        createDate:
+          type: string
+          format: Date
+      description: Acción que realiza una persona, componente o sistema relacionado
+        con la iniciativa que no precisa de gestión
+    InteractionInteractive:
+      description: Interaccion que se captura de forma interactiva a traves de CRM
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      - required:
+        - contactMethod
+        - resolutionUserAgent
+        type: object
+        properties:
+          contactMethod:
+            $ref: '#/components/schemas/CrmParam'
+          contactStoredId:
+            type: number
+            description: Identificador de la llamada grabada, chat , conversación
+              por mensajería proporcionadad por el C7
+            example: 55148
+          resolution:
+            type: string
+            description: Solución aportada a la interacción
+          resolutionUserAgent:
+            $ref: '#/components/schemas/UserBasic'
+          request:
+            $ref: '#/components/schemas/CrmRequest'
+    InteractionBatch:
+      description: Interaccion que se captura de forma desatendida desde un componente
+        o aplicación de terceros
+      allOf:
+      - $ref: '#/components/schemas/Interaction'
+      - required:
+        - geom
+        - sourceElementDescription
+        type: object
+        properties:
+          sourceElementDescription:
+            type: string
+            description: descripción del elemento que genera la interacción
+          sourceElementExternalId:
+            type: string
+            description: identificador externo del elemento que genera la interacción
+          geom:
+            type: object
+            format: GeoJSON
+    InteractionType:
+      required:
+      - OrganizationUnit
+      - batch
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: nombre de la interacción
+          example: Registro WiFi
+        description:
+          type: string
+          description: descripción del elemento que genera la interacción
+          example: Registro en punto acceso wifi
+        batch:
+          type: boolean
+          description: Indica si el tipo es de una interacción batch interacción
+          example: true
+        OrganizationUnit:
+          $ref: '#/components/schemas/OrganizationUnit'
+        customForm:
+          $ref: '#/components/schemas/CustomForm'
+      description: Tipo de interacción
+    CrmRequest:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+        userAgent:
+          $ref: '#/components/schemas/UserBasic'
+        userOwner:
+          $ref: '#/components/schemas/UserBasic'
+        requestType:
+          $ref: '#/components/schemas/CrmRequestType'
+        interactionOrigin:
+          $ref: '#/components/schemas/Interaction'
+        interactionRelationsIds:
+          type: array
+          description: Identificadores de interacciones relacionadas con la solicitud
+          items:
+            type: string
+            format: ObjectId
+        bpsProcessInstances:
+          title: Ids de procesos bps lanzados por la solicitud
+          type: array
+          items:
+            $ref: '#/components/schemas/BpsInstance'
+        variables:
+          title: Variables requeridas por los procesos BPS para el cumplimiento de
+            la solicitud
+          type: array
+          items:
+            type: string
+        situations:
+          type: array
+          description: Situaciones de la solicitud
+          items:
+            $ref: '#/components/schemas/Situations'
+      description: 'Solicitud realizada en CRM de una persona o componente que precisa
+        de una gestión y/o la intervención de otros sistemas por lo que dispone de
+        un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre.
+        Podrá disponer de un proceso de negocio asociado o un usuario asignado para
+        la realiazción de la solicitud de forma manual '
+    CrmRequestType:
+      required:
+      - bpsProcessDefinitionsId
+      - identificator
+      - summary
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+        identificator:
+          maxLength: 8
+          type: string
+          description: identificador corto de la solicitud
+          example: INSEVN
+        summary:
+          title: Nombre del tipo de solicitud
+          type: string
+          example: Inscripción a evento
+        description:
+          title: Descripción extendida de la solicitud
+          type: string
+          example: Inscripción a eventos gratuíto
+        bpsProcessDefinitionsId:
+          title: Lista de procesos BPS que desencadena la solicitud
+          type: array
+          example:
+          - sampleJavaServiceTask:1:27503
+          - sample2JavaServiceTask:1:27587
+          items:
+            type: string
+      description: Tipo de solicitud crm
+    BpsInstance:
+      type: object
+      properties:
+        _id:
+          type: number
+          description: identificador de la instancia del BPS en WSO2
+          example: 27504
+        suspended:
+          type: boolean
+          example: false
+        ended:
+          type: boolean
+          example: false
+        activityId:
+          type: string
+          example: waitState
+    CrmParamType:
+      type: string
+      properties:
+        paramType:
+          maxLength: 10
+          type: string
+          description: Tipo de parámetro
+          example: ContactMethods
+      description: Tipos de parámetros CRM ( ContactMethod, identificationType, Genre,
+        AddressType, PesonType,..)
+    CrmParam:
+      required:
+      - description
+      - value
+      type: object
+      properties:
+        value:
+          maxLength: 15
+          type: string
+          description: nombre del  parámetro
+          example: DNI
+        description:
+          type: string
+          description: Descripción del parámetro
+          example: Documento nacional de identidad
+      description: Valores de parámetros de configuración de CRM
+      example:
+        value: DNI
+        description: Documento nacional de identidad
+    Avatar:
+      type: string
+      description: Imagen de persona en base64
+      format: byte
+    OrganizationUnit:
+      required:
+      - _id
+      - name
+      - organizationUnitType
+      type: object
+      properties:
+        _id:
+          maxLength: 6
+          type: string
+          description: identificador corto de la unidad
+          example: CONJUV
+        organizationUnitType:
+          $ref: '#/components/schemas/OrganizationUnitType'
+        name:
+          type: string
+          description: Nombre de la unidad
+          example: Concejalía de juventud
+        description:
+          type: string
+          description: Info adicional de la unidad
+          example: Concejalía encargada de asuntos de Juventud
+        logo:
+          type: string
+          description: Imagen de la unidad
+          format: byte
+        primaryColor:
+          type: string
+          description: Color Primario
+        secondaryColor:
+          type: string
+          description: Color secundario
+        address:
+          type: string
+          description: dirección de la unidad
+        zipCode:
+          maxLength: 6
+          type: string
+          description: dirección de la unidad
+        city:
+          type: string
+          description: Población
+        responsable:
+          type: string
+          description: Persona responsable de la unidad
+        email:
+          type: string
+          description: email de la unidad
+        phone:
+          type: string
+          description: teléfono de contacto de la unidad
+        url:
+          type: string
+          description: url de la unidad
+        parentId:
+          maxLength: 6
+          type: string
+          description: identificador corto de la unidad Padre
+          example: PRESID
+      description: Unidad organizativa
+    OrganizationUnitType:
+      type: object
+      properties:
+        _id:
+          maxLength: 6
+          type: string
+          description: identificador corto del tipo de unidad organizativa
+          example: UNIORG
+        description:
+          type: string
+          description: Descripción de unidad organizativa
+          example: Unidad Orgánica
+      description: Unidad organizativa
+    Segment:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        identificator:
+          maxLength: 6
+          type: string
+          description: identificador corto del segmento
+          example: USRTRA
+        name:
+          type: string
+          description: Nombre del segmento
+          example: Usuario de transporte público
+      description: Segmentos de perfilado de personas. Definirán el perfil de la persona
+        en base a interacciones y servicios utilizados
+    ServiceResponseError:
+      required:
+      - errorDescription
+      - errorId
+      - errorName
+      type: object
+      properties:
+        errorId:
+          type: integer
+          format: int64
+        errorName:
+          type: string
+        errorDescription:
+          type: string
+        aditionalErrors:
+          type: array
+          items:
+            type: string
+      description: Objeto de error retornado por la capa de servicios
+      example:
+        errorId: 524
+        errorName: AREA_ERROR
+        errorDescription: ERROR EN EL ID DE AREA, NO ENCONTRADO
+        aditionalErrors:
+        - Id de área 50 no existe
+        - No se ha podido obtener área relacionada
+    ApiKey:
+      required:
+      - ExternalAplicationId
+      - allowedOrigins
+      - disabled
+      - name
+      - permissions
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: Id de objeto
+        name:
+          type: string
+          example: Apikey para consulta personas desde c3
+        key:
+          type: string
+          example: 8a42adee-caa1-413a-aed6-6b65db8eb3ce
+        ExternalAplicationId:
+          type: string
+          description: Id de la aplicación a la que pertenece la Key
+        allowedOrigins:
+          type: array
+          description: Urls de origen dede la que se permite el uso de la key
+          items:
+            type: string
+        created:
+          type: string
+          format: date
+        createdBy:
+          $ref: '#/components/schemas/UserBasic'
+        modified:
+          type: string
+          format: date
+        modifiedBy:
+          $ref: '#/components/schemas/UserBasic'
+        disabled:
+          type: boolean
+          default: false
+        permissions:
+          $ref: '#/components/schemas/CrmPermissions'
+      description: APIKey
+      example:
+        errorId: 524
+        errorName: AREA_ERROR
+        errorDescription: ERROR EN EL ID DE AREA, NO ENCONTRADO
+        aditionalErrors:
+        - Id de área 50 no existe
+        - No se ha podido obtener área relacionada
+    ExternalAplication:
+      required:
+      - aplicationId
+      - errorDescription
+      - errorName
+      type: object
+      properties:
+        _id:
+          maxLength: 6
+          type: string
+          example: SSCC07
+        description:
+          type: string
+          example: Santader Smart Citicen Componente 7
+        provider:
+          type: string
+          example: Telefónica
+        contact:
+          type: string
+          example: ssc@telefonica.es
+      description: Registro de aplicaciones externas que se integran con CRM
+    Language:
+      required:
+      - code
+      - name
+      type: object
+      properties:
+        code:
+          maxLength: 2
+          type: string
+          description: Código de idioma según ISO 639-1
+          example: us
+        name:
+          type: string
+      description: Idioma de la aplicación
+      example:
+        code: es
+        name: Español
+    LanguageExtended:
+      allOf:
+      - $ref: '#/components/schemas/Language'
+      - required:
+        - literals
+        type: object
+        properties:
+          literals:
+            type: object
+            additionalProperties:
+              type: string
+    Situations:
+      required:
+      - code
+      - literals
+      - name
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: Date
+        code:
+          type: string
+          example: I100
+        situation:
+          type: string
+          example: Interación creada
+      description: Situaciones para interacciones y solicitudes
+    CustomForm:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Formulario 1
+        code:
+          type: string
+          example: F100
+        description:
+          type: string
+          example: Descripcion del formulario
+        components:
+          type: array
+          example:
+          - textArea
+          - InputText
+          items:
+            type: string
+            format: string
+        type:
+          type: string
+          example: Tipo
+      description: Formularios personalizados
+    Sort:
+      title: Sort
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    SortMetadataBean:
+      title: SortMetadataBean
+      type: object
+      properties:
+        field:
+          type: string
+        order:
+          type: integer
+          format: int64
+    Comment:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: Id de objeto
+        text:
+          type: string
+        timestamp:
+          type: string
+          format: date
+    inline_response_200:
+      allOf:
+      - $ref: '#/components/schemas/FilterResponse'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/Person'
+  responses:
+    Ok:
+      description: Success
+    NoContent:
+      description: No content
+    Created:
+      description: Created
+    InvalidID:
+      description: Invalid Path ID
+    InvalidRequestBody:
+      description: Invalid request body
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServiceResponseError'
+    NotFound:
+      description: Resource Not found
+    UnauthorizedError:
+      description: ApiKey is missing , invalid or insuficients rights
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ServiceResponseError'
+  parameters:
+    apiKey:
+      name: apiKey
+      in: header
+      description: (Obligatoria si no se dispone de token)
+      required: false
+      style: simple
+      explode: false
+      schema:
+        type: string
+  requestBodies:
+    PersonRequest:
+      description: objeto persona
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Person'
+      required: true
+    CitizenCardRequest:
+      description: Objeto para la solicitud de creación o actualización de tarjeta
+      content:
+        application/json:
+          schema:
+            additionalProperties: false
+            allOf:
+            - $ref: '#/components/schemas/CitizenCard'
+            - required:
+              - personId
+              type: object
+              properties:
+                personId:
+                  type: string
+      required: true
+    UserRequest:
+      description: Objeto para la solicitud de creación o actualización de Usuario
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserRequest'
+      required: true
+  securitySchemes:
+    BearerToken:
+      type: http
+      description: Token obtenido en el proceso de login
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKey:
+      type: apiKey
+      description: ApiKey de aplicación de terceros
+      name: X-API-Key
+      in: header

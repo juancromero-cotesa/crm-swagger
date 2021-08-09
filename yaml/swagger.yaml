@@ -64,7 +64,7 @@ info:
     \  \n##0.3.5 \n***\n\nUsers\n***\nSe define el nuevo método put /users/{userId}/defaultdashboard\
     \ mediante el cual se establece la propieda defaultDashboard con el dashboard\
     \ recibido en el body\n\n##0.3.6\n***\n\nPerson\n***\nSe añade la propiedad electronicOffice\
-    \ a la persona\n\nAdminstrativeFile\n***\nDefine el esquema de expediente administrativo\
+    \ a la persona\n\nAdministrativeFile\n***\nDefine el esquema de expediente administrativo\
     \ de experta importado desde ETL\n\nElectronicOffice\n***\nSe define el esquema\
     \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
     \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n"
@@ -6141,7 +6141,7 @@ components:
           type: string
           description: tipo de tercero
           example: "2"
-        adminstrativeFiles:
+        AdministrativeFiles:
           type: array
           description: lista de expedientes administrativos
           items:

@@ -66,7 +66,8 @@ info:
     \ recibido en el body\n\n##0.3.6\n***\n\nPerson\n***\nSe añade la propiedad electronicOffice\
     \ a la persona\n\nAdminstrativeFile\n***\nDefine el esquema de expediente administrativo\
     \ de experta importado desde ETL\n\nElectronicOffice\n***\nSe define el esquema\
-    \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n"
+    \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
+    \n##0.3.7\n***\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/

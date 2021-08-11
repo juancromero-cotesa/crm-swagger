@@ -45,7 +45,7 @@ info:
     \  \n## 0.3.5 \n***\n\n### Users\nSe define el nuevo método put /users/{userId}/defaultdashboard\
     \ mediante el cual se establece la propieda defaultDashboard con el dashboard\
     \ recibido en el body\n\n## 0.3.6\n***\n\n### Person\nSe añade la propiedad electronicOffice\
-    \ a la persona\n\n### AdminstrativeFile\nDefine el esquema de expediente administrativo\
+    \ a la persona\n\n### AdministrativeFile\nDefine el esquema de expediente administrativo\
     \ de experta importado desde ETL\n\n### ElectronicOffice\nSe define el esquema\
     \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
     \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n## 0.3.8\n\
@@ -6053,18 +6053,25 @@ components:
         _id:
           type: string
           format: objetId
-        name:
-          type: string
-        description:
-          type: string
         collection:
           $ref: '#/components/schemas/CollectionName'
+        description:
+          type: string
+        name:
+          type: string
+        limit:
+          type: number
         ruleSet:
           type: object
-          description: Regla o conjunto de reglas para el componente query-builder
+          deprecated: true
           oneOf:
           - $ref: '#/components/schemas/Rule'
           - $ref: '#/components/schemas/RuleSet'
+        rules:
+          type: array
+          description: Reglas o conjunto de reglas para el componente query-builder
+          items:
+            $ref: '#/components/schemas/RuleSet'
         projection:
           type: array
           description: subconjunto propiedades del resultado de la consulta a recuperar
@@ -6075,9 +6082,9 @@ components:
           description: campos de ordenación de la consulta
           items:
             type: string
-        mongoQuery:
-          type: string
-          description: query mongo
+        sort:
+          type: number
+          description: Sentido de la ordenación
         stages:
           type: array
           items:
@@ -6124,7 +6131,7 @@ components:
           type: string
           description: tipo de tercero
           example: "2"
-        adminstrativeFiles:
+        AdministrativeFiles:
           type: array
           description: lista de expedientes administrativos
           items:

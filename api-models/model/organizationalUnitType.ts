@@ -17,7 +17,7 @@ export interface OrganizationalUnitType {
     /**
      * identificador corto del tipo de unidad organizativa
      */
-    id?: string;
+    _id?: string;
     /**
      * Descripción de unidad organizativa
      */

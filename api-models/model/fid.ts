@@ -19,6 +19,6 @@ export interface Fid {
     authCode: string;
     authUrl: string;
     authStamp?: Date;
-    expiresIn: number;
+    expires_in: number;
     enable?: boolean;
 }

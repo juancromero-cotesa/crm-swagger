@@ -19,29 +19,29 @@ import { UserBasic } from './userBasic';
  * Objeto que almacena la descripción de una fuente de datos
  */
 export interface DataSource { 
-    id: string;
+    _id: string;
     collection: CollectionName;
     description: string;
     name: string;
-    limit?: number;
+    limit: number;
     ruleSet: Rule | RuleSet;
     /**
      * Reglas o conjunto de reglas para el componente query-builder
      */
-    rules?: Array<RuleSet>;
+    rules: Array<RuleSet>;
     /**
      * subconjunto propiedades del resultado de la consulta a recuperar
      */
-    projection?: Array<string>;
+    projection: Array<string>;
     /**
      * campos de ordenación de la consulta
      */
-    orderBy?: Array<string>;
+    orderBy: Array<string>;
     /**
      * Sentido de la ordenación
      */
-    sort?: number;
+    sort: number;
     stages: Array<string>;
-    userOwner?: UserBasic;
+    userOwner: UserBasic;
     organizationalUnitAllowed?: OrganizationalUnit;
 }

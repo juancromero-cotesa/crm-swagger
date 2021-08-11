@@ -17,7 +17,7 @@ export interface AdministrativeFile {
     /**
      * identificador. ID
      */
-    id?: number;
+    _id?: number;
     /**
      * Código o referencia del expediente en experta. COD
      */

@@ -11,7 +11,7 @@
  */
 
 export interface SituationType { 
-    id: string;
+    _id: string;
     /**
      * Tipo de situación
      */

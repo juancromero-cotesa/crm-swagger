@@ -32,5 +32,5 @@ export interface ElectronicOffice {
     /**
      * lista de expedientes administrativos
      */
-    administrativeFiles?: Array<AdministrativeFile>;
+    AdministrativeFiles?: Array<AdministrativeFile>;
 }

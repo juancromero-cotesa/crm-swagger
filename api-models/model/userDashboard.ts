@@ -18,7 +18,7 @@ export interface UserDashboard {
     /**
      * Id del usuario del detalle de una configuración
      */
-    id: string;
+    _id: string;
     /**
      * Id del dashboard
      */

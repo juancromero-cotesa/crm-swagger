@@ -6044,10 +6044,16 @@ components:
       - _id
       - collection
       - description
+      - limit
       - mongoQuery
       - name
+      - orderBy
+      - projection
       - ruleSet
+      - rules
+      - sort
       - stages
+      - userOwner
       type: object
       properties:
         _id:

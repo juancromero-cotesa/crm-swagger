@@ -49,7 +49,8 @@ info:
     \ de experta importado desde ETL\n\n### ElectronicOffice\nSe define el esquema\
     \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
     \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n## 0.3.8\n\
-    ***\n"
+    ***\n\n### CrmRequestType\nse renombra la propiedad bpsProcessDefinitionsId a\
+    \ businessProcessesDefinitionsIds\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -5893,7 +5894,7 @@ components:
     CrmRequestType:
       required:
       - _id
-      - bpsProcessDefinitionsId
+      - businessProcessesDefinitionsIds
       - customForm
       - description
       - identificator
@@ -5917,8 +5918,8 @@ components:
           title: Descripción extendida de la solicitud
           type: string
           example: Inscripción a eventos gratuíto
-        bpsProcessDefinitionsId:
-          title: Lista de procesos BPS que desencadena la solicitud
+        businessProcessesDefinitionsIds:
+          title: Lista de identificadores de procesos BP que desencadena la solicitud
           type: array
           example:
           - sampleJavaServiceTask:1:27503

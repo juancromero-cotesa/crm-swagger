@@ -9,29 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Comment } from './comment';
-import { CrmParam } from './crmParam';
-import { CrmRequest } from './crmRequest';
-import { Interaction } from './interaction';
-import { InteractionType } from './interactionType';
-import { Situation } from './situation';
-import { UserBasic } from './userBasic';
 
-/**
- * Interaccion que se captura de forma interactiva a traves de CRM
- */
-export interface InteractionInteractive extends Interaction { 
-    contactMethod: CrmParam;
-    /**
-     * Identificador de la llamada grabada, chat , conversación por mensajería proporcionadad por el C7
-     */
-    contactStoredId?: number;
-    /**
-     * Solución aportada a la interacción
-     */
-    resolution?: string;
-    resolutionUserAgent: UserBasic;
-    request?: CrmRequest;
-}
-export namespace InteractionInteractive {
+export interface BusinessProcessTaskDefinition { 
+    name?: string;
+    taskDefinitionKey?: string;
+    type?: string;
+    processInstancesCount?: boolean;
+    alarmCount?: string;
 }

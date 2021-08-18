@@ -17,9 +17,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { AnyValue } from '../model/anyValue';
-import { Integration } from '../model/integration';
-import { ModelObject } from '../model/modelObject';
+import { BusinessProcessDefinition } from '../model/businessProcessDefinition';
+import { BusinessProcessInstance } from '../model/businessProcessInstance';
+import { BusinessProcessTaskDefinition } from '../model/businessProcessTaskDefinition';
 import { ServiceResponseError } from '../model/serviceResponseError';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 
 
 @Injectable()
-export class IntegracionesService {
+export class ProcesosDeNegocioService {
 
     protected basePath = '{servidor}/public/{version}';
     public defaultHeaders = new HttpHeaders();
@@ -59,62 +59,19 @@ export class IntegracionesService {
 
 
     /**
-     * Obtiene el catálogo de integraciones
-     * Obtiene todas las integraciones sin paginar
+     * Obtiene proceso de negocio
+     * Obtiene la definción de un proceso de negocio por su id
+     * @param businessprocessId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public integrationsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<Integration>>;
-    public integrationsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Integration>>>;
-    public integrationsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Integration>>>;
-    public integrationsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<BusinessProcessDefinition>;
+    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BusinessProcessDefinition>>;
+    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BusinessProcessDefinition>>;
+    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<Integration>>('get',`${this.basePath}/integrations`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Elimina todos los datos de una  integración
-     * Elimina los datos de una integración realizada
-     * @param integrationId nombre de la integración (id)
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public integrationsIntegrationIdDataDelete(integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public integrationsIntegrationIdDataDelete(integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public integrationsIntegrationIdDataDelete(integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public integrationsIntegrationIdDataDelete(integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdDataDelete.');
+        if (businessprocessId === null || businessprocessId === undefined) {
+            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -139,7 +96,7 @@ export class IntegracionesService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}/data`,
+        return this.httpClient.request<BusinessProcessDefinition>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -150,82 +107,31 @@ export class IntegracionesService {
     }
 
     /**
-     * Obtiene los datos de una integración
-     * Obtiene los todos los datos de una integración externa por su id
-     * @param integrationId nombre de la integración (id)
+     * Obtiene las tareas definidas de un proceso de negocio
+     * Obtiene todas las tareas definidas de un proceso de negocio
+     * @param businessprocessId 
+     * @param process_instance_id retorna los indicadores de la instancia de proceso
+     * @param include_alarm_list incluye la lista de alarmas en la respuesta
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public integrationsIntegrationIdDataGet(integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<AnyValue>;
-    public integrationsIntegrationIdDataGet(integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AnyValue>>;
-    public integrationsIntegrationIdDataGet(integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AnyValue>>;
-    public integrationsIntegrationIdDataGet(integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessTaskDefinition>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessTaskDefinition>>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessTaskDefinition>>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdDataGet.');
+        if (businessprocessId === null || businessprocessId === undefined) {
+            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdIndicatorsGet.');
         }
 
-        let headers = this.defaultHeaders;
 
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<AnyValue>('get',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}/data`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Carga datos de de una integración
-     * Realiza una carga de datos de integración *** Por defecto inserta todos los registros, este comportamiento se puede cambiar con el parámetro mode.  Deberá realizar las siguientes comprobaciones en los datos a importar - Llega en el atributo integrationName con el nombre de la integración y esta existe - Llegan los valores definidos en la integración comoperson claves (key)  Para cada registro de importación deberá anotar a cada persona en su propiedad integrations que es un array - El nombre de la importación - la fecha de importación  Para acceder a la persona se usará la relación definida en la integración 
-     * @param body 
-     * @param mode Modo de carga de los datos de integración, pueden ser - reset - Elimina el contenido actual y carga el nuevo - upsert - Inserta o actualiza los datos por la clave especificada - insert - Inserta todo el contenido 
-     * @param integrationId nombre de la integración (id)
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public integrationsIntegrationIdDataPost(body: ModelObject, mode: string, integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public integrationsIntegrationIdDataPost(body: ModelObject, mode: string, integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public integrationsIntegrationIdDataPost(body: ModelObject, mode: string, integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public integrationsIntegrationIdDataPost(body: ModelObject, mode: string, integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling integrationsIntegrationIdDataPost.');
-        }
-
-        if (mode === null || mode === undefined) {
-            throw new Error('Required parameter mode was null or undefined when calling integrationsIntegrationIdDataPost.');
-        }
-
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdDataPost.');
-        }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (mode !== undefined && mode !== null) {
-            queryParameters = queryParameters.set('mode', <any>mode);
+        if (process_instance_id !== undefined && process_instance_id !== null) {
+            queryParameters = queryParameters.set('process-instance-id', <any>process_instance_id);
+        }
+        if (include_alarm_list !== undefined && include_alarm_list !== null) {
+            queryParameters = queryParameters.set('include-alarm-list', <any>include_alarm_list);
         }
 
         let headers = this.defaultHeaders;
@@ -248,16 +154,10 @@ export class IntegracionesService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}/data`,
+        return this.httpClient.request<Array<BusinessProcessTaskDefinition>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/indicators`,
             {
-                body: body,
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -268,19 +168,19 @@ export class IntegracionesService {
     }
 
     /**
-     * Elimina integración
-     * Elimina una configuración de integración
-     * @param integrationId nombre de la integración (id)
+     * Obtiene instancias de proceso de negocio
+     * Obtiene todas las instancias de un proceso de negocio
+     * @param businessprocessId 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public integrationsIntegrationIdDelete(integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public integrationsIntegrationIdDelete(integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public integrationsIntegrationIdDelete(integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public integrationsIntegrationIdDelete(integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessInstance>>;
+    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessInstance>>>;
+    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessInstance>>>;
+    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdDelete.');
+        if (businessprocessId === null || businessprocessId === undefined) {
+            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdInstancesGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -305,7 +205,7 @@ export class IntegracionesService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}`,
+        return this.httpClient.request<Array<BusinessProcessInstance>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/instances`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -316,19 +216,31 @@ export class IntegracionesService {
     }
 
     /**
-     * Obtiene una integración
-     * Obtiene una integración externa por su id
-     * @param integrationId nombre de la integración (id)
+     * Obtiene instancias de proceso de negocio
+     * Obtiene todas las instancias de un proceso de negocio
+     * @param businessprocessId 
+     * @param instanceId 
+     * @param finished si es true, retorna sólo las instancias finalizadas
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public integrationsIntegrationIdGet(integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<Integration>;
-    public integrationsIntegrationIdGet(integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Integration>>;
-    public integrationsIntegrationIdGet(integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Integration>>;
-    public integrationsIntegrationIdGet(integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public businessprocessBusinessprocessIdInstancesInstanceIdGet(businessprocessId: string, instanceId: string, finished?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessInstance>>;
+    public businessprocessBusinessprocessIdInstancesInstanceIdGet(businessprocessId: string, instanceId: string, finished?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessInstance>>>;
+    public businessprocessBusinessprocessIdInstancesInstanceIdGet(businessprocessId: string, instanceId: string, finished?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessInstance>>>;
+    public businessprocessBusinessprocessIdInstancesInstanceIdGet(businessprocessId: string, instanceId: string, finished?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdGet.');
+        if (businessprocessId === null || businessprocessId === undefined) {
+            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdInstancesInstanceIdGet.');
+        }
+
+        if (instanceId === null || instanceId === undefined) {
+            throw new Error('Required parameter instanceId was null or undefined when calling businessprocessBusinessprocessIdInstancesInstanceIdGet.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (finished !== undefined && finished !== null) {
+            queryParameters = queryParameters.set('finished', <any>finished);
         }
 
         let headers = this.defaultHeaders;
@@ -353,7 +265,56 @@ export class IntegracionesService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Integration>('get',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}`,
+        return this.httpClient.request<Array<BusinessProcessInstance>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/instances/${encodeURIComponent(String(instanceId))}`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Obtiene las tareas definidas de un proceso de negocio
+     * Obtiene todas las tareas definidas de un proceso de negocio
+     * @param businessprocessId 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessTaskDefinition>>;
+    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessTaskDefinition>>>;
+    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessTaskDefinition>>>;
+    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (businessprocessId === null || businessprocessId === undefined) {
+            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdTaskdefinitionsGet.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<BusinessProcessTaskDefinition>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/taskdefinitions`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -364,25 +325,15 @@ export class IntegracionesService {
     }
 
     /**
-     * Actualiza integración
-     * Actualiza una configuración de integración
-     * @param body 
-     * @param integrationId nombre de la integración (id)
+     * Obtiene definiciones de procesos de negocio
+     * Obtiene todas las definiciones de procesos de negocio
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public integrationsIntegrationIdPut(body: Integration, integrationId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public integrationsIntegrationIdPut(body: Integration, integrationId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public integrationsIntegrationIdPut(body: Integration, integrationId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public integrationsIntegrationIdPut(body: Integration, integrationId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling integrationsIntegrationIdPut.');
-        }
-
-        if (integrationId === null || integrationId === undefined) {
-            throw new Error('Required parameter integrationId was null or undefined when calling integrationsIntegrationIdPut.');
-        }
+    public businessprocessGet(observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessDefinition>>;
+    public businessprocessGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessDefinition>>>;
+    public businessprocessGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessDefinition>>>;
+    public businessprocessGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -404,70 +355,10 @@ export class IntegracionesService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
 
-        return this.httpClient.request<any>('put',`${this.basePath}/integrations/${encodeURIComponent(String(integrationId))}`,
+        return this.httpClient.request<Array<BusinessProcessDefinition>>('get',`${this.basePath}/businessprocess`,
             {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Nueva configuración de integración
-     * Crea una nueva configuración de integración
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public integrationsPost(body: Integration, observe?: 'body', reportProgress?: boolean): Observable<Integration>;
-    public integrationsPost(body: Integration, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Integration>>;
-    public integrationsPost(body: Integration, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Integration>>;
-    public integrationsPost(body: Integration, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling integrationsPost.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Integration>('post',`${this.basePath}/integrations`,
-            {
-                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

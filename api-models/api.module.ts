@@ -18,6 +18,7 @@ import { IntegracionesService } from './api/integraciones.service';
 import { InteraccionesService } from './api/interacciones.service';
 import { ParametrizacinService } from './api/parametrizacin.service';
 import { PersonasService } from './api/personas.service';
+import { ProcesosDeNegocioService } from './api/procesosDeNegocio.service';
 import { SegmentsService } from './api/segments.service';
 import { SolicitudesService } from './api/solicitudes.service';
 import { TarjetaCiudadanaService } from './api/tarjetaCiudadana.service';
@@ -45,6 +46,7 @@ import { WidgetsService } from './api/widgets.service';
     InteraccionesService,
     ParametrizacinService,
     PersonasService,
+    ProcesosDeNegocioService,
     SegmentsService,
     SolicitudesService,
     TarjetaCiudadanaService,

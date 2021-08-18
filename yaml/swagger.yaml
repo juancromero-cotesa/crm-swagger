@@ -50,7 +50,13 @@ info:
     \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
     \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n## 0.3.8\n\
     ***\n\n### CrmRequestType\nse renombra la propiedad bpsProcessDefinitionsId a\
-    \ businessProcessesDefinitionsIds\n"
+    \ businessProcessesDefinitionsIds\n\n### Preocesos de negocio\nSe elimina esquema\
+    \ BpsInstance\n\nSe definen los métodos: \n  - GET/businessprocess/{businessprocessId}\n\
+    \  - GET/businessprocess/{businessprocessId}/indicators\n  - GET/businessprocess/{businessprocessId}/instances\n\
+    \  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\
+    \nSe definen los esquemas: \n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n\
+    \  - BusinessProcessIndicator\n  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n\
+    \  - BusinessProcessTaskDefinition\n  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -111,6 +117,8 @@ tags:
 - name: Personas
   description: Gestión de personas en el módulo de indentificación única. Identificación
     única de personas físicas y personas jurídicas
+- name: Procesos de negocio
+  description: Gestión de procesos de negocio de WSO2 BPS
 - name: Segments
   description: Segmentos para categorización de personas por uso.
 - name: Solicitudes
@@ -529,6 +537,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
+      deprecated: true
       security:
       - ApiKey: []
   /auth/fid/revoque:
@@ -554,6 +563,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
+      deprecated: true
       security:
       - ApiKey: []
   /auth/password/change:
@@ -637,6 +647,215 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
+  /businessprocess:
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene definiciones de procesos de negocio
+      description: Obtiene todas las definiciones de procesos de negocio
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BusinessProcessDefinition'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /businessprocess/{businessprocessId}:
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene proceso de negocio
+      description: Obtiene la definción de un proceso de negocio por su id
+      parameters:
+      - name: businessprocessId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessProcessDefinition'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /businessprocess/{businessprocessId}/indicators:
+    description: obtiene los indicadores de un proceso de negocio o de una instancia
+      concreta si se añade el parámetro get process-instance-id.
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene las tareas definidas de un proceso de negocio
+      description: Obtiene todas las tareas definidas de un proceso de negocio
+      parameters:
+      - name: businessprocessId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: process-instance-id
+        in: query
+        description: retorna los indicadores de la instancia de proceso
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: include-alarm-list
+        in: query
+        description: incluye la lista de alarmas en la respuesta
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BusinessProcessTaskDefinition'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /businessprocess/{businessprocessId}/instances:
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene instancias de proceso de negocio
+      description: Obtiene todas las instancias de un proceso de negocio
+      parameters:
+      - name: businessprocessId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BusinessProcessInstance'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /businessprocess/{businessprocessId}/instances/{instanceId}:
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene instancias de proceso de negocio
+      description: Obtiene todas las instancias de un proceso de negocio
+      parameters:
+      - name: businessprocessId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: instanceId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: finished
+        in: query
+        description: "si es true, retorna sólo las instancias finalizadas"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BusinessProcessInstance'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+  /businessprocess/{businessprocessId}/taskdefinitions:
+    get:
+      tags:
+      - Procesos de negocio
+      summary: Obtiene las tareas definidas de un proceso de negocio
+      description: Obtiene todas las tareas definidas de un proceso de negocio
+      parameters:
+      - name: businessprocessId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BusinessProcessTaskDefinition'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
   /check-session:
     post:
       tags:
@@ -660,7 +879,7 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
-      deprecated: false
+      deprecated: true
       security:
       - BearerToken: []
       - ApiKey: []
@@ -1757,7 +1976,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BpsInstance'
+                  $ref: '#/components/schemas/BusinessProcessInstance'
         "401":
           description: Unauthorized
         "403":
@@ -5560,22 +5779,173 @@ components:
       type: string
       description: Imagen de persona en base64
       format: byte
-    BpsInstance:
+    BusinessProcessDefinition:
+      type: object
+    BusinessProcessEntity:
       type: object
       properties:
-        _id:
+        name:
+          type: string
+        value:
+          $ref: '#/components/schemas/AnyValue'
+        type:
+          type: string
+    BusinessProcessIndicator:
+      type: object
+      properties:
+        indicatorId:
           type: number
-          description: identificador de la instancia del BPS en WSO2
-          example: 27504
+        description:
+          type: string
+        processDefinitionId:
+          type: string
+        initialTaskDefinitionKey:
+          type: string
+        finalTaskDefinitionKey:
+          type: string
+        minTimeInHours:
+          type: number
+        maxTimeInHours:
+          type: number
+        minLoops:
+          type: number
+        maxLoops:
+          type: number
+        type:
+          type: string
+        state:
+          type: string
+        alarmList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessProcessIndicatorAlarm'
+        alarmCount:
+          type: number
+        alarmMeanValue:
+          type: number
+    BusinessProcessIndicatorAlarm:
+      type: object
+      properties:
+        alarmId:
+          type: number
+        indicator:
+          $ref: '#/components/schemas/BusinessProcessIndicator'
+        value:
+          type: number
+        alarmDateTime:
+          type: string
+        readDateTime:
+          type: string
+        state:
+          type: string
+        processInstanceId:
+          type: string
+    BusinessProcessInstance:
+      type: object
+      properties:
+        completed:
+          type: boolean
         suspended:
           type: boolean
-          example: false
+        variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
         ended:
           type: boolean
-          example: false
+        processDefinitionId:
+          type: string
         activityId:
           type: string
-          example: waitState
+        businessKey:
+          type: string
+        id:
+          type: string
+        entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessProcessEntity'
+        startTime:
+          type: string
+        endTime:
+          type: string
+        startUserId:
+          type: string
+        activityName:
+          type: string
+        assignee:
+          type: string
+        resource:
+          type: string
+        activityStartTime:
+          type: string
+        alarmCount:
+          type: string
+        indicatorList:
+          type: array
+          items:
+            $ref: '#/components/schemas/BusinessProcessIndicator'
+        superProcessInstanceId:
+          type: string
+        startActivityId:
+          type: string
+        endActivityId:
+          type: string
+        durationInMillis:
+          type: string
+        deleteReason:
+          type: string
+    BusinessProcessTaskDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+        taskDefinitionKey:
+          type: string
+        type:
+          type: string
+        processInstancesCount:
+          type: boolean
+        alarmCount:
+          type: string
+    BusinessProcessTaskInstance:
+      type: object
+      properties:
+        sort:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnyValue'
+        order:
+          type: string
+        total:
+          type: number
+        start:
+          type: number
+        message:
+          type: string
+        size:
+          type: number
+    BusinessProcessFormProperty:
+      type: object
+      properties:
+        writable:
+          type: boolean
+        required:
+          type: boolean
+        datePattern:
+          type: string
+        name:
+          type: string
+        value:
+          type: string
+        resource:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
     CensusData:
       type: object
       properties:
@@ -5859,7 +6229,7 @@ components:
           title: Ids de procesos bps lanzados por la solicitud
           type: array
           items:
-            $ref: '#/components/schemas/BpsInstance'
+            $ref: '#/components/schemas/BusinessProcessInstance'
         details:
           type: string
           description: descripción de la solicitud

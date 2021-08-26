@@ -6,19 +6,19 @@ info:
     lido.\n\nLos métodos que puedan ser accedidos por aplicaciones de terceros estará\
     n protegidos por el paso de una api key que tendrá definidos los permisos correspondientes.\n\
     \nSe eliminan las descriciones de cambios de versiones anteriores, se pueden consultar\
-    \ en las versiones previas\n\n## 0.3.2\n***\n\n### Address\n- Se añaden los campos\
-    \ number, floor, door, ladder, km, municipality y forcedAddress.\n- Se elimina\
-    \ el campo addressLine2\n\n### Dashboards\n- Se definen los métodos crud de dashboards\n\
-    - se define el esquema de dashboard\n\n\n### UsersDashboards\n- Se definen los\
-    \ métodos crud de la configuracion de dashboards \n- Se define el esquema de usersDashboards\
-    \ y DashboardConfiguration\n\n### Datasources\n- Se especifica el retorno correcto\
-    \ del método /datasource/collectionsfields/{collection} es un objeto en vez de\
-    \ un array\n\n### Widgets\n- Se renombra la propiedad organizationalUnit a organizationalUnits\
-    \ y se convierte en array\n- Se elimina la propiedad privateWidget ya que no es\
-    \ necesaria al tener un array de organizationalUnits.\n\n    \n### WidgetChart\n\
-    - Se elimina la propiedad xAxisLabels pues se gestionan las etiquetas desde la\
-    \ serie\n\n### DataSerie\n- Se define la propiedad dataSourceFieldForLabel que\
-    \ indica la propiedad que contiene las etiquetas de la serie\n\n### Persons\n\
+    \ en las versiones previas\n\n\n## 0.3.2\n***\n\n### Address\n- Se añaden los\
+    \ campos number, floor, door, ladder, km, municipality y forcedAddress.\n- Se\
+    \ elimina el campo addressLine2\n\n### Dashboards\n- Se definen los métodos crud\
+    \ de dashboards\n- se define el esquema de dashboard\n\n\n### UsersDashboards\n\
+    - Se definen los métodos crud de la configuracion de dashboards \n- Se define\
+    \ el esquema de usersDashboards y DashboardConfiguration\n\n### Datasources\n\
+    - Se especifica el retorno correcto del método /datasource/collectionsfields/{collection}\
+    \ es un objeto en vez de un array\n\n### Widgets\n- Se renombra la propiedad organizationalUnit\
+    \ a organizationalUnits y se convierte en array\n- Se elimina la propiedad privateWidget\
+    \ ya que no es necesaria al tener un array de organizationalUnits.\n\n    \n###\
+    \ WidgetChart\n- Se elimina la propiedad xAxisLabels pues se gestionan las etiquetas\
+    \ desde la serie\n\n### DataSerie\n- Se define la propiedad dataSourceFieldForLabel\
+    \ que indica la propiedad que contiene las etiquetas de la serie\n\n### Persons\n\
     - Nuevo método/persons/forcedvias que retorna las vías forzadas en direcciones\
     \ de personas\n- Nuevo esquema ForcedVia\n- Nuevas propiedades segmentationWhiteList\
     \ y segmentationBlackList \n\n### Users\n- Se define al usuario el dashboard por\
@@ -42,21 +42,25 @@ info:
     \ - Se modifica la respuesta y la forma de obtener las vías forzadas. Se obtienen\
     \ por id de municipio y se retorna la vía con su código y el tipo de vía con su\
     \ código\n  - Se elimina el esquema ForcedVia, ahora se retorna CensusViaViaType\n\
-    \  \n## 0.3.5 \n***\n\n### Users\nSe define el nuevo método put /users/{userId}/defaultdashboard\
+    \  \n##0.3.5 \n***\n\n### Users\nSe define el nuevo método put /users/{userId}/defaultdashboard\
     \ mediante el cual se establece la propieda defaultDashboard con el dashboard\
-    \ recibido en el body\n\n## 0.3.6\n***\n\n### Person\nSe añade la propiedad electronicOffice\
+    \ recibido en el body\n\n##0.3.6\n***\n\n### Person\nSe añade la propiedad electronicOffice\
     \ a la persona\n\n### AdministrativeFile\nDefine el esquema de expediente administrativo\
     \ de experta importado desde ETL\n\n### ElectronicOffice\nSe define el esquema\
     \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
-    \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n## 0.3.8\n\
-    ***\n\n### CrmRequestType\nse renombra la propiedad bpsProcessDefinitionsId a\
-    \ businessProcessesDefinitionsIds\n\n### Preocesos de negocio\nSe elimina esquema\
-    \ BpsInstance\n\nSe definen los métodos: \n  - GET/businessprocess/{businessprocessId}\n\
-    \  - GET/businessprocess/{businessprocessId}/indicators\n  - GET/businessprocess/{businessprocessId}/instances\n\
-    \  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\
-    \nSe definen los esquemas: \n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n\
-    \  - BusinessProcessIndicator\n  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n\
-    \  - BusinessProcessTaskDefinition\n  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n"
+    \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n##0.3.8.0\n\
+    ***\n\n### Datasources \nIncorpora método run\nModifica modelo Datasource, Propiedad\
+    \ rules de tipo RuleSet, Propiedad group de tipo GroupOperator.\nPropiedad projectionField\
+    \ de tipo CustomField. Propiedad orderBy de tipo CustomFieldSort.\nSe modifica\
+    \ el modelo RuleSet\nSe añaden los métodos run y run/{datasourceId}\nSe definene\
+    \ los modelos GroupOperator, CustomField,GroupField,CustomFieldSort\n\n### USERBUS\
+    \ API\nCreación del api para las consultas de usuarios del bus. Métodos públicos\
+    \ que requieren de una apikey especifica para el bus\nMétodo POST /userbus\nguarda\
+    \ el usuario que llega por el body deshabilitado.\nMétodo GET /usersbus/{username}/{password}\n\
+    Busca usuario por username y password.\nMétodo GET /usersbus/doc/{docId}\nBusca\
+    \ usuario por numero de documento.\nMétodo GET /usersbus/tc/{idSgtc}\nBusca usuario\
+    \ por numero de tarjeta ciudadana asociada a la persona asociada al usuario.\n\
+    Método GET /usersbus/validusername/{username}\nValida que una username sea valida.\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -117,8 +121,6 @@ tags:
 - name: Personas
   description: Gestión de personas en el módulo de indentificación única. Identificación
     única de personas físicas y personas jurídicas
-- name: Procesos de negocio
-  description: Gestión de procesos de negocio de WSO2 BPS
 - name: Segments
   description: Segmentos para categorización de personas por uso.
 - name: Solicitudes
@@ -647,215 +649,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
-  /businessprocess:
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene definiciones de procesos de negocio
-      description: Obtiene todas las definiciones de procesos de negocio
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BusinessProcessDefinition'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
-  /businessprocess/{businessprocessId}:
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene proceso de negocio
-      description: Obtiene la definción de un proceso de negocio por su id
-      parameters:
-      - name: businessprocessId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BusinessProcessDefinition'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
-  /businessprocess/{businessprocessId}/indicators:
-    description: obtiene los indicadores de un proceso de negocio o de una instancia
-      concreta si se añade el parámetro get process-instance-id.
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene las tareas definidas de un proceso de negocio
-      description: Obtiene todas las tareas definidas de un proceso de negocio
-      parameters:
-      - name: businessprocessId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: process-instance-id
-        in: query
-        description: retorna los indicadores de la instancia de proceso
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: include-alarm-list
-        in: query
-        description: incluye la lista de alarmas en la respuesta
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BusinessProcessTaskDefinition'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
-  /businessprocess/{businessprocessId}/instances:
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene instancias de proceso de negocio
-      description: Obtiene todas las instancias de un proceso de negocio
-      parameters:
-      - name: businessprocessId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BusinessProcessInstance'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
-  /businessprocess/{businessprocessId}/instances/{instanceId}:
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene instancias de proceso de negocio
-      description: Obtiene todas las instancias de un proceso de negocio
-      parameters:
-      - name: businessprocessId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: instanceId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: finished
-        in: query
-        description: "si es true, retorna sólo las instancias finalizadas"
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BusinessProcessInstance'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
-  /businessprocess/{businessprocessId}/taskdefinitions:
-    get:
-      tags:
-      - Procesos de negocio
-      summary: Obtiene las tareas definidas de un proceso de negocio
-      description: Obtiene todas las tareas definidas de un proceso de negocio
-      parameters:
-      - name: businessprocessId
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      responses:
-        "200":
-          description: ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BusinessProcessTaskDefinition'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-      security:
-      - BearerToken: []
   /check-session:
     post:
       tags:
@@ -1976,7 +1769,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/BusinessProcessInstance'
+                  $ref: '#/components/schemas/BpsInstance'
         "401":
           description: Unauthorized
         "403":
@@ -2459,37 +2252,6 @@ paths:
       deprecated: false
       security:
       - BearerToken: []
-    put:
-      tags:
-      - Fuentes de datos
-      summary: Actualiza una fuente de datos
-      requestBody:
-        description: dataSource
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DataSource'
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataSource'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-      deprecated: false
-      security:
-      - BearerToken: []
     post:
       tags:
       - Fuentes de datos
@@ -2521,42 +2283,6 @@ paths:
                 $ref: '#/components/schemas/ServiceResponseError'
         "404":
           description: Not Found
-      deprecated: false
-      security:
-      - BearerToken: []
-  /datasource/aggregate:
-    post:
-      tags:
-      - Fuentes de datos
-      description: "Crea una agreación [ampliar]"
-      requestBody:
-        description: aggregate
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DataSourceQuery'
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataSourceQuery'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-        "403":
-          description: insuficients rights
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-        "404":
-          description: Resource Not found
       deprecated: false
       security:
       - BearerToken: []
@@ -2624,34 +2350,57 @@ paths:
       deprecated: false
       security:
       - BearerToken: []
-  /datasource/find:
+  /datasource/run:
     post:
       tags:
       - Fuentes de datos
-      summary: findCollectionByQuery
-      operationId: findCollectionByQueryUsingPOST
+      summary: Ejecuta y devuelve los datos de una fuente de datos
       requestBody:
-        description: query
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DataSourceQuery'
-        required: true
+              $ref: '#/components/schemas/DataSource'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                type: object
-        "201":
-          description: Created
+                type: array
+                items:
+                  type: object
         "401":
-          description: ApiKey is missing or invalid
+          description: Unauthorized
+        "403":
+          description: Forbidden
+      deprecated: false
+      security:
+      - BearerToken: []
+  /datasource/run/{datasourceId}:
+    post:
+      tags:
+      - Fuentes de datos
+      summary: Ejecuta una fuente de datos por su Id
+      parameters:
+      - name: datasourceId
+        in: path
+        description: id de la fuente de datos
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceResponseError'
+                type: array
+                items:
+                  type: object
+        "401":
+          description: Unauthorized
         "403":
           description: Forbidden
         "404":
@@ -2694,6 +2443,46 @@ paths:
                 $ref: '#/components/schemas/ServiceResponseError'
         "404":
           description: Resource Not found
+      deprecated: false
+      security:
+      - BearerToken: []
+    put:
+      tags:
+      - Fuentes de datos
+      summary: Actualiza una fuente de datos
+      parameters:
+      - name: dataSourceId
+        in: path
+        description: datasourceId
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: dataSource
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSource'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
       deprecated: false
       security:
       - BearerToken: []
@@ -5111,6 +4900,195 @@ paths:
       deprecated: false
       security:
       - BearerToken: []
+  /usersbus:
+    post:
+      tags:
+      - users-bus-controller
+      summary: save
+      operationId: saveUsingPOST_6
+      requestBody:
+        description: user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "201":
+          description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
+  /usersbus/doc/{docId}:
+    get:
+      tags:
+      - users-bus-controller
+      summary: getUserByDocId
+      operationId: getUserByDocIdUsingGET
+      parameters:
+      - name: docId
+        in: path
+        description: docId
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: getperson
+        in: query
+        description: getperson
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
+  /usersbus/tc/{idSgtc}:
+    get:
+      tags:
+      - users-bus-controller
+      summary: getUserByIdSgtc
+      operationId: getUserByIdSgtcUsingGET_1
+      parameters:
+      - name: getperson
+        in: query
+        description: getperson
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: idSgtc
+        in: path
+        description: idSgtc
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
+  /usersbus/validusername/{username}:
+    get:
+      tags:
+      - users-bus-controller
+      summary: validUserName
+      operationId: validUserNameUsingGET_1
+      parameters:
+      - name: username
+        in: path
+        description: username
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: boolean
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
+  /usersbus/{username}/{password}:
+    get:
+      tags:
+      - users-bus-controller
+      summary: getUserByUserName
+      operationId: getUserByUserNameUsingGET_1
+      parameters:
+      - name: getperson
+        in: query
+        description: getperson
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      - name: password
+        in: path
+        description: password
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: username
+        in: path
+        description: username
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+      deprecated: false
+      security:
+      - BearerToken: []
   /params:
     description: Obtención de tipos de parámetros de la aplicación
     get:
@@ -5779,173 +5757,22 @@ components:
       type: string
       description: Imagen de persona en base64
       format: byte
-    BusinessProcessDefinition:
-      type: object
-    BusinessProcessEntity:
+    BpsInstance:
       type: object
       properties:
-        name:
-          type: string
-        value:
-          $ref: '#/components/schemas/AnyValue'
-        type:
-          type: string
-    BusinessProcessIndicator:
-      type: object
-      properties:
-        indicatorId:
+        _id:
           type: number
-        description:
-          type: string
-        processDefinitionId:
-          type: string
-        initialTaskDefinitionKey:
-          type: string
-        finalTaskDefinitionKey:
-          type: string
-        minTimeInHours:
-          type: number
-        maxTimeInHours:
-          type: number
-        minLoops:
-          type: number
-        maxLoops:
-          type: number
-        type:
-          type: string
-        state:
-          type: string
-        alarmList:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessProcessIndicatorAlarm'
-        alarmCount:
-          type: number
-        alarmMeanValue:
-          type: number
-    BusinessProcessIndicatorAlarm:
-      type: object
-      properties:
-        alarmId:
-          type: number
-        indicator:
-          $ref: '#/components/schemas/BusinessProcessIndicator'
-        value:
-          type: number
-        alarmDateTime:
-          type: string
-        readDateTime:
-          type: string
-        state:
-          type: string
-        processInstanceId:
-          type: string
-    BusinessProcessInstance:
-      type: object
-      properties:
-        completed:
-          type: boolean
+          description: identificador de la instancia del BPS en WSO2
+          example: 27504
         suspended:
           type: boolean
-        variables:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnyValue'
+          example: false
         ended:
           type: boolean
-        processDefinitionId:
-          type: string
+          example: false
         activityId:
           type: string
-        businessKey:
-          type: string
-        id:
-          type: string
-        entities:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessProcessEntity'
-        startTime:
-          type: string
-        endTime:
-          type: string
-        startUserId:
-          type: string
-        activityName:
-          type: string
-        assignee:
-          type: string
-        resource:
-          type: string
-        activityStartTime:
-          type: string
-        alarmCount:
-          type: string
-        indicatorList:
-          type: array
-          items:
-            $ref: '#/components/schemas/BusinessProcessIndicator'
-        superProcessInstanceId:
-          type: string
-        startActivityId:
-          type: string
-        endActivityId:
-          type: string
-        durationInMillis:
-          type: string
-        deleteReason:
-          type: string
-    BusinessProcessTaskDefinition:
-      type: object
-      properties:
-        name:
-          type: string
-        taskDefinitionKey:
-          type: string
-        type:
-          type: string
-        processInstancesCount:
-          type: boolean
-        alarmCount:
-          type: string
-    BusinessProcessTaskInstance:
-      type: object
-      properties:
-        sort:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AnyValue'
-        order:
-          type: string
-        total:
-          type: number
-        start:
-          type: number
-        message:
-          type: string
-        size:
-          type: number
-    BusinessProcessFormProperty:
-      type: object
-      properties:
-        writable:
-          type: boolean
-        required:
-          type: boolean
-        datePattern:
-          type: string
-        name:
-          type: string
-        value:
-          type: string
-        resource:
-          type: string
-        id:
-          type: string
-        type:
-          type: string
+          example: waitState
     CensusData:
       type: object
       properties:
@@ -6229,7 +6056,7 @@ components:
           title: Ids de procesos bps lanzados por la solicitud
           type: array
           items:
-            $ref: '#/components/schemas/BusinessProcessInstance'
+            $ref: '#/components/schemas/BpsInstance'
         details:
           type: string
           description: descripción de la solicitud
@@ -6264,7 +6091,7 @@ components:
     CrmRequestType:
       required:
       - _id
-      - businessProcessesDefinitionsIds
+      - bpsProcessDefinitionsId
       - customForm
       - description
       - identificator
@@ -6288,8 +6115,8 @@ components:
           title: Descripción extendida de la solicitud
           type: string
           example: Inscripción a eventos gratuíto
-        businessProcessesDefinitionsIds:
-          title: Lista de identificadores de procesos BP que desencadena la solicitud
+        bpsProcessDefinitionsId:
+          title: Lista de procesos BPS que desencadena la solicitud
           type: array
           example:
           - sampleJavaServiceTask:1:27503
@@ -6306,6 +6133,23 @@ components:
           items:
             $ref: '#/components/schemas/Segment'
       description: Tipo de solicitud crm
+    CustomField:
+      title: CustomField
+      type: object
+      properties:
+        name:
+          type: string
+        target:
+          type: string
+    CustomFieldSort:
+      title: CustomFieldSort
+      type: object
+      properties:
+        order:
+          type: integer
+          format: int32
+        target:
+          type: string
     CustomForm:
       type: object
       properties:
@@ -6411,66 +6255,37 @@ components:
           description: Color de la serie
       description: series de datos a mostrar en widgets
     DataSource:
-      required:
-      - _id
-      - collection
-      - description
-      - limit
-      - mongoQuery
-      - name
-      - orderBy
-      - projection
-      - ruleSet
-      - rules
-      - sort
-      - stages
-      - userOwner
+      title: DataSource
       type: object
       properties:
         _id:
           type: string
-          format: objetId
+          format: ObjectId
         collection:
           $ref: '#/components/schemas/CollectionName'
         description:
           type: string
+        group:
+          $ref: '#/components/schemas/GroupOperator'
+        limit:
+          type: integer
+          format: int32
         name:
           type: string
-        limit:
-          type: number
-        ruleSet:
-          type: object
-          deprecated: true
-          oneOf:
-          - $ref: '#/components/schemas/Rule'
-          - $ref: '#/components/schemas/RuleSet'
-        rules:
-          type: array
-          description: Reglas o conjunto de reglas para el componente query-builder
-          items:
-            $ref: '#/components/schemas/RuleSet'
-        projection:
-          type: array
-          description: subconjunto propiedades del resultado de la consulta a recuperar
-          items:
-            type: string
         orderBy:
           type: array
-          description: campos de ordenación de la consulta
           items:
-            type: string
-        sort:
-          type: number
-          description: Sentido de la ordenación
-        stages:
-          type: array
-          items:
-            type: string
-        userOwner:
-          $ref: '#/components/schemas/UserBasic'
+            $ref: '#/components/schemas/CustomFieldSort'
         organizationalUnitAllowed:
           $ref: '#/components/schemas/OrganizationalUnit'
-      description: Objeto que almacena la descripción de una fuente de datos
+        projectionField:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        rules:
+          $ref: '#/components/schemas/RuleSet'
+        userOwner:
+          $ref: '#/components/schemas/User'
     DataSourceQuery:
       type: object
       properties:
@@ -6670,6 +6485,28 @@ components:
         email:
           type: string
       description: Objeto para la petición de enlace de contraseña olvidada
+    GroupField:
+      title: GroupField
+      type: object
+      properties:
+        accumulator:
+          type: string
+        expression:
+          type: string
+        field:
+          type: string
+    GroupOperator:
+      title: GroupOperator
+      type: object
+      properties:
+        _id:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupField'
     Integration:
       type: object
       properties:
@@ -6980,6 +6817,21 @@ components:
           type: string
           format: date-time
       deprecated: true
+    Operators:
+      type: string
+      enum:
+      - COUNT
+      - SUM
+      - COUNTSUM
+      - LAST
+      - FIRST
+      - PUSH
+      - AVG
+      - MIN
+      - MAX
+      - ADD_TO_SET
+      - STD_DEV_POP
+      - STD_DEV_SAMP
     OrganizationalUnit:
       required:
       - OrganizationalUnitType
@@ -7187,6 +7039,47 @@ components:
             $ref: '#/components/schemas/IntegrationItem'
       description: Objeto persona que almacena la información de cada persona física
         o jurídica
+    PersonDto:
+      title: PersonDto
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        birthDate:
+          type: string
+          format: date-time
+        citizenCard:
+          $ref: '#/components/schemas/CitizenCard'
+        deleted:
+          type: boolean
+        deletedDate:
+          type: string
+          format: date-time
+        email:
+          type: string
+        genre:
+          $ref: '#/components/schemas/CrmParam'
+        identificationDoc:
+          type: string
+        identificationType:
+          $ref: '#/components/schemas/CrmParam'
+        name:
+          type: string
+        personType:
+          $ref: '#/components/schemas/CrmParam'
+        phones:
+          type: array
+          items:
+            type: string
+        surname1:
+          type: string
+        surname2:
+          type: string
     RecoverPasswordRequest:
       type: object
       properties:
@@ -7217,22 +7110,6 @@ components:
         permissions:
           $ref: '#/components/schemas/CrmPermissions'
       description: Rol de la aplicación
-    Rule:
-      required:
-      - field
-      type: object
-      properties:
-        field:
-          type: string
-          description: campo de la regla
-        value:
-          $ref: '#/components/schemas/AnyValue'
-        operator:
-          type: string
-          description: operador de comparación de la regla
-        entity:
-          type: string
-          description: entidad
     RuleSet:
       required:
       - condition
@@ -7242,19 +7119,17 @@ components:
         condition:
           type: string
           description: indica la colección sobre la que hacer la query
+        field:
+          type: string
+        operator:
+          $ref: '#/components/schemas/Operators'
         rules:
           type: array
-          description: Array<RuleSet | Rule>;
+          description: Reglas del ruleset;
           items:
-            oneOf:
-            - $ref: '#/components/schemas/Rule'
-            - $ref: '#/components/schemas/RuleSet'
-        collapsed:
-          type: number
-          description: límite de registros a devolver
-        isChild:
-          type: number
-          description: límite de registros a devolver
+            $ref: '#/components/schemas/RuleSet'
+        value:
+          type: string
     SearchResponse:
       type: object
       properties:
@@ -7310,11 +7185,9 @@ components:
           description: Nombre del segmento
           example: Usuario de transporte público
         ruleSet:
-          type: object
           description: "Reglas para el establecimiento del segmento, podrá establecer\
             \ criterios en base a atributos de la persona"
-          oneOf:
-          - $ref: '#/components/schemas/Rule'
+          allOf:
           - $ref: '#/components/schemas/RuleSet'
         minThreshold:
           type: number
@@ -7575,6 +7448,27 @@ components:
           format: date
       description: "Extracto de usuario con las propiedades reducidas, omite persona\
         \ y contraseña."
+    UserDto:
+      title: UserDto
+      type: object
+      properties:
+        _id:
+          type: string
+          format: objectId
+        created:
+          type: string
+          format: date-time
+        deleted:
+          type: string
+          format: date-time
+        disabled:
+          type: boolean
+        email:
+          type: string
+        person:
+          $ref: '#/components/schemas/PersonDto'
+        username:
+          type: string
     UserRequest:
       type: object
       properties:

@@ -15,18 +15,18 @@ import { CustomFieldSort } from './customFieldSort';
 import { GroupOperator } from './groupOperator';
 import { OrganizationalUnit } from './organizationalUnit';
 import { RuleSet } from './ruleSet';
-import { User } from './user';
+import { UserBasic } from './userBasic';
 
 export interface DataSource { 
-    id?: string;
-    collection?: CollectionName;
-    description?: string;
-    group?: GroupOperator;
-    limit?: number;
-    name?: string;
-    orderBy?: Array<CustomFieldSort>;
-    organizationalUnitAllowed?: OrganizationalUnit;
-    projectionField?: Array<CustomField>;
-    rules?: RuleSet;
-    userOwner?: User;
+    id: string;
+    collection: CollectionName;
+    description: string;
+    group: GroupOperator;
+    limit: number;
+    name: string;
+    orderBy: Array<CustomFieldSort>;
+    organizationalUnitAllowed: OrganizationalUnit;
+    projectionFields: Array<CustomField>;
+    rules: RuleSet;
+    userOwner: UserBasic;
 }

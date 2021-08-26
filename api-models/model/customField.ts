@@ -9,13 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Sort } from './sort';
 
-export interface Pageable { 
-    offset?: number;
-    pageNumber?: number;
-    pageSize?: number;
-    paged?: boolean;
-    sort?: Sort;
-    unpaged?: boolean;
+export interface CustomField { 
+    name?: string;
+    target?: string;
 }

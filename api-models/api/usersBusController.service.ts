@@ -17,16 +17,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { ServiceResponseError } from '../model/serviceResponseError';
-import { Widget } from '../model/widget';
-import { WidgetChartWidgetIndicatorWidgetTable } from '../model/widgetChartWidgetIndicatorWidgetTable';
+import { User } from '../model/user';
+import { UserDto } from '../model/userDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class WidgetsService {
+export class UsersBusControllerService {
 
     protected basePath = '{servidor}/public/{version}';
     public defaultHeaders = new HttpHeaders();
@@ -58,15 +57,30 @@ export class WidgetsService {
 
 
     /**
-     * Obtiene widgets.
-     * Obtiene widgets del usuario y aquellos de su unidad organizativa
+     * getUserByDocId
+     * 
+     * @param docId docId
+     * @param getperson getperson
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public widgetGet(observe?: 'body', reportProgress?: boolean): Observable<Array<WidgetChart | WidgetIndicator | WidgetTable>>;
-    public widgetGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<WidgetChart | WidgetIndicator | WidgetTable>>>;
-    public widgetGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<WidgetChart | WidgetIndicator | WidgetTable>>>;
-    public widgetGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUserByDocIdUsingGET(docId: string, getperson: boolean, observe?: 'body', reportProgress?: boolean): Observable<UserDto>;
+    public getUserByDocIdUsingGET(docId: string, getperson: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserDto>>;
+    public getUserByDocIdUsingGET(docId: string, getperson: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserDto>>;
+    public getUserByDocIdUsingGET(docId: string, getperson: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (docId === null || docId === undefined) {
+            throw new Error('Required parameter docId was null or undefined when calling getUserByDocIdUsingGET.');
+        }
+
+        if (getperson === null || getperson === undefined) {
+            throw new Error('Required parameter getperson was null or undefined when calling getUserByDocIdUsingGET.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (getperson !== undefined && getperson !== null) {
+            queryParameters = queryParameters.set('getperson', <any>getperson);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -90,8 +104,9 @@ export class WidgetsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<WidgetChart | WidgetIndicator | WidgetTable>>('get',`${this.basePath}/widget`,
+        return this.httpClient.request<UserDto>('get',`${this.basePath}/usersbus/doc/${encodeURIComponent(String(docId))}`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -101,19 +116,142 @@ export class WidgetsService {
     }
 
     /**
-     * Crea un nuevo widget
-     * Crea un nuevo widget
-     * @param body 
+     * getUserByIdSgtc
+     * 
+     * @param getperson getperson
+     * @param idSgtc idSgtc
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public widgetPost(body: Widget, observe?: 'body', reportProgress?: boolean): Observable<Widget>;
-    public widgetPost(body: Widget, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Widget>>;
-    public widgetPost(body: Widget, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Widget>>;
-    public widgetPost(body: Widget, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getUserByIdSgtcUsingGET1(getperson: boolean, idSgtc: string, observe?: 'body', reportProgress?: boolean): Observable<UserDto>;
+    public getUserByIdSgtcUsingGET1(getperson: boolean, idSgtc: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserDto>>;
+    public getUserByIdSgtcUsingGET1(getperson: boolean, idSgtc: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserDto>>;
+    public getUserByIdSgtcUsingGET1(getperson: boolean, idSgtc: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (getperson === null || getperson === undefined) {
+            throw new Error('Required parameter getperson was null or undefined when calling getUserByIdSgtcUsingGET1.');
+        }
+
+        if (idSgtc === null || idSgtc === undefined) {
+            throw new Error('Required parameter idSgtc was null or undefined when calling getUserByIdSgtcUsingGET1.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (getperson !== undefined && getperson !== null) {
+            queryParameters = queryParameters.set('getperson', <any>getperson);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<UserDto>('get',`${this.basePath}/usersbus/tc/${encodeURIComponent(String(idSgtc))}`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * getUserByUserName
+     * 
+     * @param getperson getperson
+     * @param password password
+     * @param username username
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserByUserNameUsingGET1(getperson: boolean, password: string, username: string, observe?: 'body', reportProgress?: boolean): Observable<UserDto>;
+    public getUserByUserNameUsingGET1(getperson: boolean, password: string, username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UserDto>>;
+    public getUserByUserNameUsingGET1(getperson: boolean, password: string, username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UserDto>>;
+    public getUserByUserNameUsingGET1(getperson: boolean, password: string, username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (getperson === null || getperson === undefined) {
+            throw new Error('Required parameter getperson was null or undefined when calling getUserByUserNameUsingGET1.');
+        }
+
+        if (password === null || password === undefined) {
+            throw new Error('Required parameter password was null or undefined when calling getUserByUserNameUsingGET1.');
+        }
+
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling getUserByUserNameUsingGET1.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (getperson !== undefined && getperson !== null) {
+            queryParameters = queryParameters.set('getperson', <any>getperson);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<UserDto>('get',`${this.basePath}/usersbus/${encodeURIComponent(String(username))}/${encodeURIComponent(String(password))}`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * save
+     * 
+     * @param body user
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public saveUsingPOST6(body: User, observe?: 'body', reportProgress?: boolean): Observable<User>;
+    public saveUsingPOST6(body: User, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<User>>;
+    public saveUsingPOST6(body: User, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<User>>;
+    public saveUsingPOST6(body: User, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling widgetPost.');
+            throw new Error('Required parameter body was null or undefined when calling saveUsingPOST6.');
         }
 
         let headers = this.defaultHeaders;
@@ -143,7 +281,7 @@ export class WidgetsService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Widget>('post',`${this.basePath}/widget`,
+        return this.httpClient.request<User>('post',`${this.basePath}/usersbus`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -155,19 +293,19 @@ export class WidgetsService {
     }
 
     /**
-     * Elimina el widget indicado en el path
+     * validUserName
      * 
-     * @param widgetId identificador del widget
+     * @param username username
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public widgetWidgetIdDelete(widgetId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public widgetWidgetIdDelete(widgetId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public widgetWidgetIdDelete(widgetId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public widgetWidgetIdDelete(widgetId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public validUserNameUsingGET1(username: string, observe?: 'body', reportProgress?: boolean): Observable<{ [key: string]: boolean; }>;
+    public validUserNameUsingGET1(username: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<{ [key: string]: boolean; }>>;
+    public validUserNameUsingGET1(username: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<{ [key: string]: boolean; }>>;
+    public validUserNameUsingGET1(username: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (widgetId === null || widgetId === undefined) {
-            throw new Error('Required parameter widgetId was null or undefined when calling widgetWidgetIdDelete.');
+        if (username === null || username === undefined) {
+            throw new Error('Required parameter username was null or undefined when calling validUserNameUsingGET1.');
         }
 
         let headers = this.defaultHeaders;
@@ -192,115 +330,8 @@ export class WidgetsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/widget/${encodeURIComponent(String(widgetId))}`,
+        return this.httpClient.request<{ [key: string]: boolean; }>('get',`${this.basePath}/usersbus/validusername/${encodeURIComponent(String(username))}`,
             {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Elimina el widget indicado en el path
-     * 
-     * @param widgetId identificador del widget
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public widgetWidgetIdGet(widgetId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public widgetWidgetIdGet(widgetId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public widgetWidgetIdGet(widgetId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public widgetWidgetIdGet(widgetId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (widgetId === null || widgetId === undefined) {
-            throw new Error('Required parameter widgetId was null or undefined when calling widgetWidgetIdGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('get',`${this.basePath}/widget/${encodeURIComponent(String(widgetId))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Actualiza un widget
-     * Actualiza un widget, sólo se podrán actualizar los widgets propios del usuario
-     * @param body 
-     * @param widgetId identificador del widget
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public widgetWidgetIdPut(body: Widget, widgetId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public widgetWidgetIdPut(body: Widget, widgetId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public widgetWidgetIdPut(body: Widget, widgetId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public widgetWidgetIdPut(body: Widget, widgetId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling widgetWidgetIdPut.');
-        }
-
-        if (widgetId === null || widgetId === undefined) {
-            throw new Error('Required parameter widgetId was null or undefined when calling widgetWidgetIdPut.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/widget/${encodeURIComponent(String(widgetId))}`,
-            {
-                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

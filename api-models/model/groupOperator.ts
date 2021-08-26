@@ -9,13 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Sort } from './sort';
+import { CustomField } from './customField';
+import { GroupField } from './groupField';
 
-export interface Pageable { 
-    offset?: number;
-    pageNumber?: number;
-    pageSize?: number;
-    paged?: boolean;
-    sort?: Sort;
-    unpaged?: boolean;
+export interface GroupOperator { 
+    id?: Array<CustomField>;
+    fields?: Array<GroupField>;
 }

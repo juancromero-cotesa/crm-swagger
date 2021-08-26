@@ -9,13 +9,24 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Sort } from './sort';
+import { Address } from './address';
+import { CitizenCard } from './citizenCard';
+import { CrmParam } from './crmParam';
 
-export interface Pageable { 
-    offset?: number;
-    pageNumber?: number;
-    pageSize?: number;
-    paged?: boolean;
-    sort?: Sort;
-    unpaged?: boolean;
+export interface PersonDto { 
+    id?: string;
+    addresses?: Array<Address>;
+    birthDate?: Date;
+    citizenCard?: CitizenCard;
+    deleted?: boolean;
+    deletedDate?: Date;
+    email?: string;
+    genre?: CrmParam;
+    identificationDoc?: string;
+    identificationType?: CrmParam;
+    name?: string;
+    personType?: CrmParam;
+    phones?: Array<string>;
+    surname1?: string;
+    surname2?: string;
 }

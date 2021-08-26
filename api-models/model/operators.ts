@@ -9,13 +9,20 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Sort } from './sort';
 
-export interface Pageable { 
-    offset?: number;
-    pageNumber?: number;
-    pageSize?: number;
-    paged?: boolean;
-    sort?: Sort;
-    unpaged?: boolean;
-}
+export type Operators = 'COUNT' | 'SUM' | 'COUNTSUM' | 'LAST' | 'FIRST' | 'PUSH' | 'AVG' | 'MIN' | 'MAX' | 'ADD_TO_SET' | 'STD_DEV_POP' | 'STD_DEV_SAMP';
+
+export const Operators = {
+    COUNT: 'COUNT' as Operators,
+    SUM: 'SUM' as Operators,
+    COUNTSUM: 'COUNTSUM' as Operators,
+    LAST: 'LAST' as Operators,
+    FIRST: 'FIRST' as Operators,
+    PUSH: 'PUSH' as Operators,
+    AVG: 'AVG' as Operators,
+    MIN: 'MIN' as Operators,
+    MAX: 'MAX' as Operators,
+    ADDTOSET: 'ADD_TO_SET' as Operators,
+    STDDEVPOP: 'STD_DEV_POP' as Operators,
+    STDDEVSAMP: 'STD_DEV_SAMP' as Operators
+};

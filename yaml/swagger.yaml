@@ -6115,7 +6115,7 @@ components:
           title: Descripción extendida de la solicitud
           type: string
           example: Inscripción a eventos gratuíto
-        bpsProcessDefinitionsId:
+        businessProcessesDefinitionsIds:
           title: Lista de procesos BPS que desencadena la solicitud
           type: array
           example:
@@ -6256,6 +6256,18 @@ components:
       description: series de datos a mostrar en widgets
     DataSource:
       title: DataSource
+      required:
+      - _id
+      - collection
+      - description
+      - group
+      - limit
+      - name
+      - orderBy
+      - organizationalUnitAllowed
+      - projectionFields
+      - rules
+      - userOwner
       type: object
       properties:
         _id:
@@ -6278,14 +6290,14 @@ components:
             $ref: '#/components/schemas/CustomFieldSort'
         organizationalUnitAllowed:
           $ref: '#/components/schemas/OrganizationalUnit'
-        projectionField:
+        projectionFields:
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
         rules:
           $ref: '#/components/schemas/RuleSet'
         userOwner:
-          $ref: '#/components/schemas/User'
+          $ref: '#/components/schemas/UserBasic'
     DataSourceQuery:
       type: object
       properties:
@@ -6323,7 +6335,7 @@ components:
           type: string
           description: tipo de tercero
           example: "2"
-        AdministrativeFiles:
+        administrativeFiles:
           type: array
           description: lista de expedientes administrativos
           items:
@@ -7235,8 +7247,8 @@ components:
       type: object
       properties:
         status:
+          type: string
           description: texto con el estado del error
-          format: string
         timestamp:
           type: string
         message:

@@ -17,7 +17,7 @@ export interface DashboardConfiguration {
     /**
      * Id del widget
      */
-    id: string;
+    _id: string;
     /**
      * posición en el eje x
      */

@@ -15,7 +15,7 @@ import { Segment } from './segment';
  * Elemento de segmento a establecer a una persona. Indicará el segmento establecido y los valores propios para la persona como un contador y la fecha de expiración del segmento que no será permanente
  */
 export interface SegmentItem { 
-    id: string;
+    _id: string;
     segment: Segment;
     /**
      * Contador de ocurrencias del segmento

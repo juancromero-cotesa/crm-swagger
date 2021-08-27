@@ -18,7 +18,7 @@ export interface Integration {
     /**
      * nombre de la importación, este nombre debrerá coincidir con el que llegue en los datos de la ETL.
      */
-    id?: string;
+    _id?: string;
     /**
      * Descripción de la importación
      */

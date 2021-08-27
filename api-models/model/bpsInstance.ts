@@ -14,7 +14,7 @@ export interface BpsInstance {
     /**
      * identificador de la instancia del BPS en WSO2
      */
-    id?: number;
+    _id?: number;
     suspended?: boolean;
     ended?: boolean;
     activityId?: string;

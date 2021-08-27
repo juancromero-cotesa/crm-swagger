@@ -9,7 +9,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ModelObject } from './modelObject';
 
 /**
  * Objeto de error retornado por la capa de servicios
@@ -18,7 +17,7 @@ export interface ServiceResponseError {
     /**
      * texto con el estado del error
      */
-    status: ModelObject;
+    status: string;
     timestamp: string;
     /**
      * mensaje de error

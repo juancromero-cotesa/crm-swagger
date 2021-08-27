@@ -14,9 +14,9 @@
  * Respuesta a la solicitud de token de acceso o refresco
  */
 export interface TokenResponse { 
-    tokenType?: string;
-    accessToken?: string;
+    token_type?: string;
+    access_token?: string;
     appId?: string;
-    expiresIn?: number;
-    refreshToken?: string;
+    expires_in?: number;
+    refresh_token?: string;
 }

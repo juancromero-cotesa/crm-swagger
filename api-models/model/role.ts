@@ -16,7 +16,7 @@ import { OrganizationalUnit } from './organizationalUnit';
  * Rol de la aplicación
  */
 export interface Role { 
-    id: string;
+    _id: string;
     name: string;
     organizationalUnit: OrganizationalUnit;
     permissions: CrmPermissions;

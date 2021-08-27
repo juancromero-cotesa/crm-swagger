@@ -15,7 +15,7 @@ import { Dashboard } from './dashboard';
  * Extracto de usuario con las propiedades reducidas, omite persona y contraseña.
  */
 export interface UserBasic { 
-    id: string;
+    _id: string;
     username: string;
     email: string;
     /**

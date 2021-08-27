@@ -15,7 +15,7 @@ import { User } from './user';
  * Registro de auditoría
  */
 export interface Audit { 
-    id?: string;
+    _id?: string;
     controller?: string;
     createDate?: string;
     idUser?: number;

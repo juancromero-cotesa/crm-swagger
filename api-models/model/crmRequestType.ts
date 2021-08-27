@@ -17,14 +17,14 @@ import { Segment } from './segment';
  * Tipo de solicitud crm
  */
 export interface CrmRequestType { 
-    id: string;
+    _id: string;
     /**
      * identificador corto de la solicitud
      */
     identificator: string;
     name: string;
     description: string;
-    bpsProcessDefinitionsId: Array<string>;
+    businessProcessesDefinitionsIds?: Array<string>;
     customForm: CustomForm;
     organizationalUnit: OrganizationalUnit;
     /**

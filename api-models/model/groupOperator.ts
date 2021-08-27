@@ -13,6 +13,6 @@ import { CustomField } from './customField';
 import { GroupField } from './groupField';
 
 export interface GroupOperator { 
-    id?: Array<CustomField>;
+    _id?: Array<CustomField>;
     fields?: Array<GroupField>;
 }

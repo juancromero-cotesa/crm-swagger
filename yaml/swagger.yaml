@@ -61,14 +61,16 @@ info:
     \ usuario por numero de documento.\nMétodo GET /usersbus/tc/{idSgtc}\nBusca usuario\
     \ por numero de tarjeta ciudadana asociada a la persona asociada al usuario.\n\
     Método GET /usersbus/validusername/{username}\nValida que una username sea valida.\n\
-    \n## 0.3.9\n***\n\n### CrmRequestType\nse renombra la propiedad bpsProcessDefinitionsId\
-    \ a businessProcessesDefinitionsIds\n\n### Preocesos de negocio\nSe elimina esquema\
-    \ BpsInstance\n\nSe definen los métodos: \n  - GET/businessprocess/{businessprocessId}\n\
-    \  - GET/businessprocess/{businessprocessId}/indicators\n  - GET/businessprocess/{businessprocessId}/instances\n\
-    \  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\
-    \nSe definen los esquemas: \n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n\
-    \  - BusinessProcessIndicator\n  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n\
-    \  - BusinessProcessTaskDefinition\n  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n"
+    \n## 0.3.9\n***\n\n### DataSources\nse renombra la propiedad rules a ruleSet\n\
+    \ \n### DataSourceQuery\nSe elimina el esquema DataSourceQuery\n\n### CrmRequestType\n\
+    se renombra la propiedad bpsProcessDefinitionsId a businessProcessesDefinitionsIds\n\
+    \n### Procesos de negocio\nSe elimina esquema BpsInstance\n\nSe definen los mé\
+    todos: \n  - GET/businessprocess/{businessprocessId}\n  - GET/businessprocess/{businessprocessId}/indicators\n\
+    \  - GET/businessprocess/{businessprocessId}/instances\n  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n\
+    \  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\nSe definen los\
+    \ esquemas: \n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n  - BusinessProcessIndicator\n\
+    \  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n  - BusinessProcessTaskDefinition\n\
+    \  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -6298,6 +6300,7 @@ components:
           type: string
         name:
           type: string
+      description: Nombre de colección
     CollectionProperty:
       type: object
       properties:
@@ -6512,17 +6515,22 @@ components:
       properties:
         name:
           type: string
+          description: Nombre asignado en la salida
         target:
           type: string
+          description: Nombre de la propiedad en la colección.
+      description: campos de la consulta a recuperar o columnas calculadas
     CustomFieldSort:
-      title: CustomFieldSort
       type: object
       properties:
         order:
           type: integer
+          description: ASC > 0 DESC <= 0.
           format: int32
         target:
           type: string
+          description: Nombre de la propiedad en la collection
+      description: campos que definen el orden de cada uno de ellos
     CustomForm:
       type: object
       properties:
@@ -6639,7 +6647,7 @@ components:
       - orderBy
       - organizationalUnitAllowed
       - projectionFields
-      - rules
+      - rule
       - userOwner
       type: object
       properties:
@@ -6651,7 +6659,9 @@ components:
         description:
           type: string
         group:
-          $ref: '#/components/schemas/GroupOperator'
+          description: definición de agrupación (groupBy)
+          allOf:
+          - $ref: '#/components/schemas/GroupOperator'
         limit:
           type: integer
           format: int32
@@ -6667,22 +6677,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomField'
-        rules:
+        ruleSet:
           $ref: '#/components/schemas/RuleSet'
         userOwner:
           $ref: '#/components/schemas/UserBasic'
-    DataSourceQuery:
-      type: object
-      properties:
-        clazz:
-          type: string
-          description: indica la colección sobre la que hacer la query
-        query:
-          type: string
-          description: query mongo a ejecutar
-        limit:
-          type: number
-          description: límite de registros a devolver
     ElectronicOffice:
       required:
       - _id
@@ -6875,21 +6873,27 @@ components:
       type: object
       properties:
         accumulator:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/Operators'
+          - description: "Operación a realizar, SUM, COUNT, AVG, ETC…"
         expression:
           type: string
+          description: Propiedad por la que se realiza la operación.
         field:
           type: string
+          description: Alias nombre de salida.
     GroupOperator:
       title: GroupOperator
       type: object
       properties:
         _id:
           type: array
+          description: Campos por los que agrupar
           items:
             $ref: '#/components/schemas/CustomField'
         fields:
           type: array
+          description: Campos calculados con operadores
           items:
             $ref: '#/components/schemas/GroupField'
     Integration:
@@ -7217,6 +7221,22 @@ components:
       - ADD_TO_SET
       - STD_DEV_POP
       - STD_DEV_SAMP
+    Comparators:
+      type: string
+      enum:
+      - startsWith
+      - contains
+      - endsWith
+      - equals
+      - notEquals
+      - exists
+      - is
+      - in
+      - lt
+      - lte
+      - gt
+      - gte
+      - betweenDate
     OrganizationalUnit:
       required:
       - OrganizationalUnitType
@@ -7507,7 +7527,7 @@ components:
         field:
           type: string
         operator:
-          $ref: '#/components/schemas/Operators'
+          $ref: '#/components/schemas/Comparators'
         rules:
           type: array
           description: Reglas del ruleset;
@@ -7515,6 +7535,7 @@ components:
             $ref: '#/components/schemas/RuleSet'
         value:
           type: string
+      description: "Reglas de selección, pueden estar vacías"
     SearchResponse:
       type: object
       properties:

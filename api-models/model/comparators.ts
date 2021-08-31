@@ -10,16 +10,20 @@
  * Do not edit the class manually.
  */
 
-/**
- * Unidad organizativa
- */
-export interface OrganizationalUnitType { 
-    /**
-     * identificador corto del tipo de unidad organizativa
-     */
-    _id?: string;
-    /**
-     * Descripción de unidad organizativa
-     */
-    description?: string;
-}
+export type Comparators = 'startsWith' | 'contains' | 'endsWith' | 'equals' | 'notEquals' | 'exists' | 'is' | 'in' | 'lt' | 'lte' | 'gt' | 'gte' | 'betweenDate';
+
+export const Comparators = {
+    StartsWith: 'startsWith' as Comparators,
+    Contains: 'contains' as Comparators,
+    EndsWith: 'endsWith' as Comparators,
+    Equals: 'equals' as Comparators,
+    NotEquals: 'notEquals' as Comparators,
+    Exists: 'exists' as Comparators,
+    Is: 'is' as Comparators,
+    In: 'in' as Comparators,
+    Lt: 'lt' as Comparators,
+    Lte: 'lte' as Comparators,
+    Gt: 'gt' as Comparators,
+    Gte: 'gte' as Comparators,
+    BetweenDate: 'betweenDate' as Comparators
+};

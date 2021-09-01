@@ -62,16 +62,16 @@ info:
     \ por numero de tarjeta ciudadana asociada a la persona asociada al usuario.\n\
     Método GET /usersbus/validusername/{username}\nValida que una username sea valida.\n\
     \n## 0.3.9\n***\n\n### DataSources\nse renombra la propiedad rules a ruleSet\n\
-    \ \n### DataSourceQuery\nSe elimina el esquema DataSourceQuery\n\n### CrmRequestType\n\
-    se renombra la propiedad bpsProcessDefinitionsId a businessProcessesDefinitionsIds\n\
-    \n### Procesos de negocio\nSe elimina esquema BpsInstance\n\n\nSe definen los\
-    \ métodos \n  - GET/businessprocess/{businessprocessId}\n  - GET/businessprocess/{businessprocessId}/indicators\n\
-    \  - GET/businessprocess/{businessprocessId}/instances\n  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n\
-    \  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\nSe definen los\
-    \ esquemas\n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n  - BusinessProcessIndicator\n\
-    \  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n  - BusinessProcessTaskDefinition\n\
-    \  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n  \n## 0.4.0\n\
-    ***\n\n### CrmRequest\nbpsProcessInstances se renombra como businessProcessesInstancesIds\
+    se renombra la propiedad projectionField a projectionFields\n \n### DataSourceQuery\n\
+    Se elimina el esquema DataSourceQuery\n\n### CrmRequestType\nse renombra la propiedad\
+    \ bpsProcessDefinitionsId a businessProcessesDefinitionsIds\n\n### Procesos de\
+    \ negocio\nSe elimina esquema BpsInstance\n\n\nSe definen los métodos \n  - GET/businessprocess/{businessprocessId}\n\
+    \  - GET/businessprocess/{businessprocessId}/indicators\n  - GET/businessprocess/{businessprocessId}/instances\n\
+    \  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\
+    \nSe definen los esquemas\n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n\
+    \  - BusinessProcessIndicator\n  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n\
+    \  - BusinessProcessTaskDefinition\n  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n\
+    \  \n## 0.4.0\n***\n\n### CrmRequest\nbpsProcessInstances se renombra como businessProcessesInstancesIds\
     \ y pasa a ser un array de strings\n"
   contact:
     name: Cotesa

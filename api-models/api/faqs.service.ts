@@ -17,11 +17,9 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { BusinessProcessDefinition } from '../model/businessProcessDefinition';
-import { BusinessProcessIndicator } from '../model/businessProcessIndicator';
-import { BusinessProcessInstance } from '../model/businessProcessInstance';
-import { BusinessProcessTaskActivity } from '../model/businessProcessTaskActivity';
-import { BusinessProcessTaskDefinition } from '../model/businessProcessTaskDefinition';
+import { Faq } from '../model/faq';
+import { FaqAnswer } from '../model/faqAnswer';
+import { FaqFile } from '../model/faqFile';
 import { ServiceResponseError } from '../model/serviceResponseError';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -29,7 +27,7 @@ import { Configuration }                                     from '../configurat
 
 
 @Injectable()
-export class ProcesosDeNegocioService {
+export class FaqsService {
 
     protected basePath = '{servidor}/public/{version}';
     public defaultHeaders = new HttpHeaders();
@@ -61,176 +59,24 @@ export class ProcesosDeNegocioService {
 
 
     /**
-     * Obtiene proceso de negocio
-     * Obtiene la definición de un proceso de negocio por su id  (/applications/3/process-definitions/{id})
-     * @param businessprocessId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<BusinessProcessDefinition>;
-    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<BusinessProcessDefinition>>;
-    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<BusinessProcessDefinition>>;
-    public businessprocessBusinessprocessIdGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (businessprocessId === null || businessprocessId === undefined) {
-            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<BusinessProcessDefinition>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Obtiene las tareas definidas de un proceso de negocio
-     * Obtiene todas las tareas definidas de un proceso de negocio
-     * @param businessprocessId 
-     * @param process_instance_id retorna los indicadores de la instancia de proceso
-     * @param include_alarm_list incluye la lista de alarmas en la respuesta
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessIndicator>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessIndicator>>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessIndicator>>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (businessprocessId === null || businessprocessId === undefined) {
-            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdIndicatorsGet.');
-        }
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (process_instance_id !== undefined && process_instance_id !== null) {
-            queryParameters = queryParameters.set('process-instance-id', <any>process_instance_id);
-        }
-        if (include_alarm_list !== undefined && include_alarm_list !== null) {
-            queryParameters = queryParameters.set('include-alarm-list', <any>include_alarm_list);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<BusinessProcessIndicator>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/indicators`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Obtiene instancias de proceso de negocio
-     * Obtiene todas las instancias de un proceso de negocio
-     * @param businessprocessId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessInstance>>;
-    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessInstance>>>;
-    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessInstance>>>;
-    public businessprocessBusinessprocessIdInstancesGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (businessprocessId === null || businessprocessId === undefined) {
-            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdInstancesGet.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<BusinessProcessInstance>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/instances`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Obtiene la definición de tareas de un proceso de negocio
+     * elimina la respuesta de la faq
      * 
-     * @param businessprocessId 
+     * @param faqId Id de faq a actualizar
+     * @param answerId Id de respuesta de la faq a actualizar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessTaskDefinition>>;
-    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessTaskDefinition>>>;
-    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessTaskDefinition>>>;
-    public businessprocessBusinessprocessIdTaskdefinitionsGet(businessprocessId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public faqsFaqIdAnswersAnswerIdDelete(faqId: string, answerId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFaqIdAnswersAnswerIdDelete(faqId: string, answerId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFaqIdAnswersAnswerIdDelete(faqId: string, answerId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFaqIdAnswersAnswerIdDelete(faqId: string, answerId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (businessprocessId === null || businessprocessId === undefined) {
-            throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdTaskdefinitionsGet.');
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdAnswersAnswerIdDelete.');
+        }
+
+        if (answerId === null || answerId === undefined) {
+            throw new Error('Required parameter answerId was null or undefined when calling faqsFaqIdAnswersAnswerIdDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -255,7 +101,7 @@ export class ProcesosDeNegocioService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<BusinessProcessTaskDefinition>>('get',`${this.basePath}/businessprocess/${encodeURIComponent(String(businessprocessId))}/taskdefinitions`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}/answers/${encodeURIComponent(String(answerId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -266,15 +112,141 @@ export class ProcesosDeNegocioService {
     }
 
     /**
-     * Obtiene definiciones de procesos de negocio
-     * Obtiene todas las definiciones de procesos de negocio (/applications/3/process-definitions)
+     * Actualiza una faq
+     * 
+     * @param body actualiza un respuesta con la incluida en el body
+     * @param faqId Id de faq a actualizar
+     * @param answerId Id de respuesta de la faq a actualizar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public businessprocessGet(observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessDefinition>>;
-    public businessprocessGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessDefinition>>>;
-    public businessprocessGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessDefinition>>>;
-    public businessprocessGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public faqsFaqIdAnswersAnswerIdPut(body: FaqAnswer, faqId: string, answerId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFaqIdAnswersAnswerIdPut(body: FaqAnswer, faqId: string, answerId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFaqIdAnswersAnswerIdPut(body: FaqAnswer, faqId: string, answerId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFaqIdAnswersAnswerIdPut(body: FaqAnswer, faqId: string, answerId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling faqsFaqIdAnswersAnswerIdPut.');
+        }
+
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdAnswersAnswerIdPut.');
+        }
+
+        if (answerId === null || answerId === undefined) {
+            throw new Error('Required parameter answerId was null or undefined when calling faqsFaqIdAnswersAnswerIdPut.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}/answers/${encodeURIComponent(String(answerId))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Nueva respuesta a FAQ
+     * 
+     * @param body añade una respuesta a la faq
+     * @param faqId Id de faq a actualizar
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsFaqIdAnswersPost(body: FaqAnswer, faqId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFaqIdAnswersPost(body: FaqAnswer, faqId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFaqIdAnswersPost(body: FaqAnswer, faqId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFaqIdAnswersPost(body: FaqAnswer, faqId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling faqsFaqIdAnswersPost.');
+        }
+
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdAnswersPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('post',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}/answers`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Actualiza una faq
+     * 
+     * @param faqId Id de faq a actualizar
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsFaqIdDelete(faqId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFaqIdDelete(faqId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFaqIdDelete(faqId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFaqIdDelete(faqId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdDelete.');
+        }
 
         let headers = this.defaultHeaders;
 
@@ -298,7 +270,7 @@ export class ProcesosDeNegocioService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<BusinessProcessDefinition>>('get',`${this.basePath}/businessprocess`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -309,26 +281,19 @@ export class ProcesosDeNegocioService {
     }
 
     /**
-     * Detalle de una instancia de proceso
-     * Detalle de instancia de proceso (/applications/3/process-definitions/{businessprocessId}/process-instances/{businessprocessId})
-     * @param instanceId 
-     * @param finished si es true, retorna sólo las instancias finalizadas
+     * Actualiza una faq
+     * 
+     * @param faqId Id de faq a actualizar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public businessprocessInstancesInstanceIdGet(instanceId: string, finished?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessInstance>>;
-    public businessprocessInstancesInstanceIdGet(instanceId: string, finished?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessInstance>>>;
-    public businessprocessInstancesInstanceIdGet(instanceId: string, finished?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessInstance>>>;
-    public businessprocessInstancesInstanceIdGet(instanceId: string, finished?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public faqsFaqIdGet(faqId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Faq>>;
+    public faqsFaqIdGet(faqId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Faq>>>;
+    public faqsFaqIdGet(faqId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Faq>>>;
+    public faqsFaqIdGet(faqId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (instanceId === null || instanceId === undefined) {
-            throw new Error('Required parameter instanceId was null or undefined when calling businessprocessInstancesInstanceIdGet.');
-        }
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (finished !== undefined && finished !== null) {
-            queryParameters = queryParameters.set('finished', <any>finished);
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -342,7 +307,7 @@ export class ProcesosDeNegocioService {
         }
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
-            'application/json'
+            'application/json:'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -353,9 +318,8 @@ export class ProcesosDeNegocioService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<BusinessProcessInstance>>('get',`${this.basePath}/businessprocess/instances/${encodeURIComponent(String(instanceId))}`,
+        return this.httpClient.request<Array<Faq>>('get',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}`,
             {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -365,20 +329,152 @@ export class ProcesosDeNegocioService {
     }
 
     /**
-     * Obtiene la definición de tareas de un proceso de negocio
-     * definición de tareas de un proceso de negocio (/applications/3/tasks//task-definitions-extended)
-     * @param processInstanceId 
+     * Actualiza una faq
+     * 
+     * @param body actualiza una faq
+     * @param faqId Id de faq a actualizar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public businessprocessInstancesProcessInstanceIdHistoricActivitiesGet(processInstanceId: string, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessTaskActivity>>;
-    public businessprocessInstancesProcessInstanceIdHistoricActivitiesGet(processInstanceId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessTaskActivity>>>;
-    public businessprocessInstancesProcessInstanceIdHistoricActivitiesGet(processInstanceId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessTaskActivity>>>;
-    public businessprocessInstancesProcessInstanceIdHistoricActivitiesGet(processInstanceId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public faqsFaqIdPut(body: Faq, faqId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFaqIdPut(body: Faq, faqId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFaqIdPut(body: Faq, faqId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFaqIdPut(body: Faq, faqId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (processInstanceId === null || processInstanceId === undefined) {
-            throw new Error('Required parameter processInstanceId was null or undefined when calling businessprocessInstancesProcessInstanceIdHistoricActivitiesGet.');
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling faqsFaqIdPut.');
         }
+
+        if (faqId === null || faqId === undefined) {
+            throw new Error('Required parameter faqId was null or undefined when calling faqsFaqIdPut.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/faqs/${encodeURIComponent(String(faqId))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * Carga un archivo con su nombre y descripción
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsFileUploadPost(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public faqsFileUploadPost(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public faqsFileUploadPost(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public faqsFileUploadPost(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        return this.httpClient.request<any>('post',`${this.basePath}/faqs/fileUpload`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * obtiene los identificadores de los archivos almacenados
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsFilesGet(observe?: 'body', reportProgress?: boolean): Observable<Array<FaqFile>>;
+    public faqsFilesGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<FaqFile>>>;
+    public faqsFilesGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<FaqFile>>>;
+    public faqsFilesGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json:'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<FaqFile>>('get',`${this.basePath}/faqs/files`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Obtiene lista de faqs
+     * Obtiene lista de faqs
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsGet(observe?: 'body', reportProgress?: boolean): Observable<Array<Faq>>;
+    public faqsGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Faq>>>;
+    public faqsGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Faq>>>;
+    public faqsGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -402,8 +498,67 @@ export class ProcesosDeNegocioService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<BusinessProcessTaskActivity>>('get',`${this.basePath}/businessprocess/instances/${encodeURIComponent(String(processInstanceId))}/historic-activities`,
+        return this.httpClient.request<Array<Faq>>('get',`${this.basePath}/faqs`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * postType
+     * 
+     * @param body Crea una Faq
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public faqsPost(body: Faq, observe?: 'body', reportProgress?: boolean): Observable<Faq>;
+    public faqsPost(body: Faq, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Faq>>;
+    public faqsPost(body: Faq, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Faq>>;
+    public faqsPost(body: Faq, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling faqsPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (ApiKey) required
+        if (this.configuration.apiKeys && this.configuration.apiKeys["X-API-Key"]) {
+            headers = headers.set('X-API-Key', this.configuration.apiKeys["X-API-Key"]);
+        }
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Faq>('post',`${this.basePath}/faqs`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

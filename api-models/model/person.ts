@@ -24,7 +24,7 @@ import { SegmentItem } from './segmentItem';
  * Objeto persona que almacena la información de cada persona física o jurídica
  */
 export interface Person { 
-    id?: string;
+    _id?: string;
     identificationType?: CrmParam;
     /**
      * Documento de identificación

@@ -15,7 +15,7 @@ import { Role } from './role';
  * Grupos de usuarios
  */
 export interface UsersGroup { 
-    id: string;
+    _id: string;
     /**
      * Nombre del grupo
      */

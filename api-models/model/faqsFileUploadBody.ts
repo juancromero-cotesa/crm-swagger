@@ -9,26 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { IntegrationKeyRelation } from './integrationKeyRelation';
+import { FaqFile } from './faqFile';
 
-/**
- * objeto que configura una integración de datos de otro sistema que se realziará mediante ETL
- */
-export interface Integration { 
-    /**
-     * nombre de la importación, este nombre debrerá coincidir con el que llegue en los datos de la ETL.
-     */
-    _id?: string;
-    /**
-     * Descripción de la importación
-     */
-    description?: string;
-    /**
-     * nombre de la colección que almacenará los datos importados
-     */
-    collection?: string;
-    /**
-     * Clave de los datos importados que establecerán la relación
-     */
-    key?: Array<IntegrationKeyRelation>;
+export interface FaqsFileUploadBody extends FaqFile { 
+    fileName?: Blob;
 }

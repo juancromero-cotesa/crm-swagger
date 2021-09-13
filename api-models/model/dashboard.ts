@@ -17,7 +17,7 @@ import { Widget } from './widget';
  * Cuadro de mando o dashboard que consiste en un conjunto de widgets con sus respectivas configuraciones.
  */
 export interface Dashboard { 
-    id?: string;
+    _id?: string;
     /**
      * Nombre del dashboard
      */

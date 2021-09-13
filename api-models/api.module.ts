@@ -11,6 +11,7 @@ import { CustomFormsService } from './api/customForms.service';
 import { DashboardsService } from './api/dashboards.service';
 import { DashboardsDeUsuariosService } from './api/dashboardsDeUsuarios.service';
 import { EstructuraOrganizativaService } from './api/estructuraOrganizativa.service';
+import { FaqsService } from './api/faqs.service';
 import { FuentesDeDatosService } from './api/fuentesDeDatos.service';
 import { GruposService } from './api/grupos.service';
 import { IdiomasService } from './api/idiomas.service';
@@ -40,6 +41,7 @@ import { WidgetsService } from './api/widgets.service';
     DashboardsService,
     DashboardsDeUsuariosService,
     EstructuraOrganizativaService,
+    FaqsService,
     FuentesDeDatosService,
     GruposService,
     IdiomasService,

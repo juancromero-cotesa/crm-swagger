@@ -17,7 +17,7 @@ export interface CitizenCard {
     /**
      * identificador de tarjeta ciudadana
      */
-    id?: string;
+    _id?: string;
     /**
      * Estado de la tarjeta
      */

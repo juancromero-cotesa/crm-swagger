@@ -17,7 +17,7 @@ import { Segment } from './segment';
  * Tipo de interacción
  */
 export interface InteractionType { 
-    id?: string;
+    _id?: string;
     /**
      * nombre de la interacción
      */

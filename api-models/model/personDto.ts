@@ -14,7 +14,7 @@ import { CitizenCard } from './citizenCard';
 import { CrmParam } from './crmParam';
 
 export interface PersonDto { 
-    id?: string;
+    _id?: string;
     addresses?: Array<Address>;
     birthDate?: Date;
     citizenCard?: CitizenCard;

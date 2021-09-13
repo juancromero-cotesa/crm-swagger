@@ -14,7 +14,7 @@
  * Registro de aplicaciones externas que se integran con CRM
  */
 export interface ExternalAplication { 
-    id: string;
+    _id: string;
     description: string;
     provider: string;
     contact: string;

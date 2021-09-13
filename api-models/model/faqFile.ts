@@ -17,7 +17,7 @@ export interface FaqFile {
     /**
      * referencia al archivo (url, ubicación,...) Pendiente de definir almacenamiento
      */
-    id?: string;
+    _id?: string;
     name?: string;
     description?: string;
 }

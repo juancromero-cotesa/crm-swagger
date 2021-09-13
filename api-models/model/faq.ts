@@ -9,13 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { FaqAnswer } from './faqAnswer';
 import { OrganizationalUnit } from './organizationalUnit';
 
 /**
  * Pregunta ferquiente de la BBDD de conocimiento
  */
 export interface Faq { 
-    id?: string;
+    _id?: string;
     organizationalUnit?: OrganizationalUnit;
     /**
      * Nombre descriptivo de la FAQ
@@ -25,4 +26,5 @@ export interface Faq {
      * Descripción de la FAQ
      */
     description?: string;
+    answers?: Array<FaqAnswer>;
 }

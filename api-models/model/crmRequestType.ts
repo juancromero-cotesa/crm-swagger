@@ -17,7 +17,7 @@ import { Segment } from './segment';
  * Tipo de solicitud crm
  */
 export interface CrmRequestType { 
-    id: string;
+    _id: string;
     /**
      * identificador corto de la solicitud
      */

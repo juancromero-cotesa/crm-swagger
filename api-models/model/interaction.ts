@@ -21,7 +21,7 @@ export interface Interaction {
     /**
      * Como object id tendrá el timestamp de creación
      */
-    id: string;
+    _id: string;
     userAgent: UserBasic;
     /**
      * Identificador único del sujeto en la iniciativa. Podrá ser organización, ciudadano, visitante, empresa, etc. No es un atributo requerido porque se podrán registrar interacciones anónimas

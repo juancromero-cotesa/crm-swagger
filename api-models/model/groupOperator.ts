@@ -16,7 +16,7 @@ export interface GroupOperator {
     /**
      * Campos por los que agrupar
      */
-    id?: Array<CustomField>;
+    _id?: Array<CustomField>;
     /**
      * Campos calculados con operadores
      */

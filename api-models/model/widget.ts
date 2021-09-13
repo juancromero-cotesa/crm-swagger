@@ -12,7 +12,7 @@
 import { OrganizationalUnit } from './organizationalUnit';
 
 export interface Widget { 
-    id: string;
+    _id: string;
     name: string;
     description: string;
     /**

@@ -12,7 +12,7 @@
 import { UserBasic } from './userBasic';
 
 export interface Comment { 
-    id: string;
+    _id: string;
     text: string;
     /**
      * Creation date and time

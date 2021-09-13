@@ -18,7 +18,7 @@ import { RuleSet } from './ruleSet';
 import { UserBasic } from './userBasic';
 
 export interface DataSource { 
-    id: string;
+    _id: string;
     collection: CollectionName;
     description: string;
     /**

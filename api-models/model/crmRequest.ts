@@ -20,7 +20,7 @@ import { UserBasic } from './userBasic';
  * Solicitud realizada en CRM de una persona o componente que precisa de una gestión y/o la intervención de otros sistemas por lo que dispone de un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre. Podrá disponer de un proceso de negocio asociado o un usuario asignado para la realiazción de la solicitud de forma manual 
  */
 export interface CrmRequest { 
-    id: string;
+    _id: string;
     createDate: string;
     lastModifiedDate: string;
     /**

@@ -78,7 +78,10 @@ info:
     \  Se define el esquema BusinessProcessTaskActivity\n \n Se modifica el método\
     \ \n eliminando el párametro bussinesProcessId \n /businessprocess/{businessprocessId}/instances/{instanceId}\n\
     \n## 0.4.2\n***\n\n### FAQs\nse definen los esquemas Faqs, FaqAnswer y FaqFile\n\
-    \  \n \n \n"
+    Se definen los métodos sobre faqs\n\n  - GET /faqs\n  - POST /faqs\n  - GET /faqs/{faqId}\n\
+    \  - PUT /faqs/{faqId}\n  - DELETE /faqs/{faqId}\n  - POST /faqs/{faqId}/answers\n\
+    \  - PUT /faqs/{faqId}/answers/{answerId}\n  - DELETE /faqs/{faqId}/answers/{answerId}\n\
+    \  - GET /faqs/files\n  - POST /faqs/fileUpload\n  \n \n \n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -2625,7 +2628,7 @@ paths:
     post:
       tags:
       - Faqs
-      description: Carga un archivo con su nombre y descripción
+      description: Carga un archivo con su nombre y descripción (definicion provisional)
       requestBody:
         content:
           multipart/form-data:
@@ -7088,6 +7091,12 @@ components:
         userOwner:
           $ref: '#/components/schemas/UserBasic'
     Faq:
+      required:
+      - _id
+      - answers
+      - description
+      - name
+      - organizationalUnit
       type: object
       properties:
         _id:
@@ -7098,23 +7107,38 @@ components:
         name:
           type: string
           description: Nombre descriptivo de la FAQ
+          example: Préstamo de material
         description:
           type: string
           description: Descripción de la FAQ
+          example: El ayuntamiento pone a disposición de ciudadanos el material necesario
+            para la realización de eventos
         answers:
           type: array
           items:
             $ref: '#/components/schemas/FaqAnswer'
-      description: Pregunta ferquiente de la BBDD de conocimiento
+      description: Pregunta frecuente de la BBDD de conocimiento
     FaqAnswer:
+      required:
+      - _id
+      - answerDescription
+      - answerText
+      - relatedInfoFiles
       type: object
       properties:
         _id:
           type: string
           format: ObjectId
+        answerDescription:
+          type: string
+          description: Descripción de la respuesta
+          example: Prestamos a ciudadanos menores de 18 años
         answerText:
           type: string
           description: texto de la respuesta
+          example: Mediante la solicitud a través del formulario adjunto o tramite
+            en sede electrónica pueden acceder al prestamo. Será necesaria la decalración
+            responsable de una adulto.
         relatedInfoFiles:
           type: array
           description: Descripción de la FAQ
@@ -7122,6 +7146,8 @@ components:
             $ref: '#/components/schemas/FaqFile'
       description: Respuestas a pregunta frecuente
     FaqFile:
+      required:
+      - name
       type: object
       properties:
         _id:
@@ -7130,8 +7156,10 @@ components:
             \ almacenamiento"
         name:
           type: string
+          example: 00015-Formulario prestamos
         description:
           type: string
+          example: Formulario de solicitud de prestamo de material
       description: archivo realcionado con pregunta frecuente
     ElectronicOffice:
       required:

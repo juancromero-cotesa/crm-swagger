@@ -41,7 +41,7 @@ export * from './externalAplication';
 export * from './faq';
 export * from './faqAnswer';
 export * from './faqFile';
-export * from './faqsFileUploadBody';
+export * from './faqsFileBody';
 export * from './fid';
 export * from './filter';
 export * from './filterAuditRequest';

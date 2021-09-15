@@ -9,31 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { RuleSet } from './ruleSet';
+import { FaqFile } from './faqFile';
 
-/**
- * Segmentos de perfilado de personas. Definirán el perfil de la persona en base a interacciones y servicios utilizados
- */
-export interface Segment { 
-    _id: string;
-    /**
-     * identificador corto del segmento
-     */
-    identificator: string;
-    /**
-     * Nombre del segmento
-     */
-    name: string;
-    /**
-     * Reglas para el establecimiento del segmento, podrá establecer criterios en base a atributos de la persona
-     */
-    ruleSet: RuleSet;
-    /**
-     * umbral mínimo para considerar el segmento en una persona. Si no llega al umbral el segmento no se considera
-     */
-    minThreshold: number;
-    /**
-     * tiempo de expiración del segmento en días, si no se actualiza el segmento con nuevas interacciones o solicitudes expirará
-     */
-    expirationTime: number;
+export interface FaqsFileBody extends FaqFile { 
+    fileName?: Blob;
 }

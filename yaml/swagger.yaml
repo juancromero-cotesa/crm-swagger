@@ -6,7 +6,7 @@ info:
     lido.\n\nLos métodos que puedan ser accedidos por aplicaciones de terceros estará\
     n protegidos por el paso de una api key que tendrá definidos los permisos correspondientes.\n\
     \nSe eliminan las descriciones de cambios de versiones anteriores, se pueden consultar\
-    \ en las versiones previas\n\n\n## 0.3.2\n***\n\n### Address\n- Se añaden los\
+    \ en las versiones previas\n\n\n## 0.3.2 \n***\n\n### Address\n- Se añaden los\
     \ campos number, floor, door, ladder, km, municipality y forcedAddress.\n- Se\
     \ elimina el campo addressLine2\n\n### Dashboards\n- Se definen los métodos crud\
     \ de dashboards\n- se define el esquema de dashboard\n\n\n### UsersDashboards\n\
@@ -2603,28 +2603,7 @@ paths:
       deprecated: false
       security:
       - BearerToken: []
-  /faqs/files:
-    get:
-      tags:
-      - Faqs
-      summary: obtiene los identificadores de los archivos almacenados
-      responses:
-        "200":
-          description: OK
-          content:
-            'application/json:':
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FaqFile'
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-      deprecated: false
-      security:
-      - BearerToken: []
-  /faqs/fileUpload:
+  /faqs/file:
     post:
       tags:
       - Faqs
@@ -2633,10 +2612,35 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/faqs_fileUpload_body'
+              $ref: '#/components/schemas/faqs_file_body'
       responses:
         "204":
           description: No content
+  /faqs/file/{fileId}:
+    delete:
+      tags:
+      - Faqs
+      description: Elimina el archivo
+      parameters:
+      - name: fileId
+        in: path
+        description: identificador del archivo
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No content
+        "404":
+          description: Resource Not found
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
   /groups:
     get:
       tags:
@@ -2652,6 +2656,38 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UsersGroup'
+        "401":
+          description: ApiKey is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+      security:
+      - BearerToken: []
+    post:
+      tags:
+      - Grupos
+      summary: Crear un nuevo grupo de usuarios
+      description: Gera una nuevo grupo de usuarios
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsersGroup'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersGroup'
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
         "401":
           description: ApiKey is missing or invalid
           content:
@@ -2719,46 +2755,6 @@ paths:
                 $ref: '#/components/schemas/ServiceResponseError'
         "404":
           description: Resource Not found
-      security:
-      - BearerToken: []
-    post:
-      tags:
-      - Grupos
-      summary: Crear un nuevo grupo de usuarios
-      description: Gera una nuevo grupo de usuarios
-      parameters:
-      - name: id
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UsersGroup'
-        required: true
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UsersGroup'
-        "400":
-          description: Invalid request body
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
-        "401":
-          description: ApiKey is missing or invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ServiceResponseError'
       security:
       - BearerToken: []
     delete:
@@ -3067,12 +3063,6 @@ paths:
         schema:
           type: string
       responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: string
         "204":
           description: No Content
         "401":
@@ -8549,7 +8539,7 @@ components:
             description: columnas a mostrar en el widget
             items:
               type: string
-    faqs_fileUpload_body:
+    faqs_file_body:
       allOf:
       - $ref: '#/components/schemas/FaqFile'
       - type: object

@@ -17,14 +17,15 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
-import { Segment } from '../model/segment';
+import { Campaign } from '../model/campaign';
+import { ServiceResponseError } from '../model/serviceResponseError';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
-export class SegmentsService {
+export class CampaasService {
 
     protected basePath = '{servidor}/public/{version}';
     public defaultHeaders = new HttpHeaders();
@@ -57,14 +58,14 @@ export class SegmentsService {
 
     /**
      * 
-     * obtiene todos los segmentos
+     * obtiene las campañas a las que tiene permisos de acceso el usuario segun el permiso de campañas en casa unidad organizativa
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public segmentGet(observe?: 'body', reportProgress?: boolean): Observable<Array<Segment>>;
-    public segmentGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Segment>>>;
-    public segmentGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Segment>>>;
-    public segmentGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public campaignGet(observe?: 'body', reportProgress?: boolean): Observable<Array<Campaign>>;
+    public campaignGet(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Campaign>>>;
+    public campaignGet(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Campaign>>>;
+    public campaignGet(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -88,7 +89,7 @@ export class SegmentsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<Segment>>('get',`${this.basePath}/segment`,
+        return this.httpClient.request<Array<Campaign>>('get',`${this.basePath}/campaign`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -99,66 +100,19 @@ export class SegmentsService {
     }
 
     /**
+     * Elmimina campaña
      * 
-     * 
-     * @param id id del segmento
+     * @param id id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public segmentIdDelete(id: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public segmentIdDelete(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public segmentIdDelete(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public segmentIdDelete(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public campaignIdDelete(id: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public campaignIdDelete(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public campaignIdDelete(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public campaignIdDelete(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling segmentIdDelete.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (BearerToken) required
-        if (this.configuration.accessToken) {
-            const accessToken = typeof this.configuration.accessToken === 'function'
-                ? this.configuration.accessToken()
-                : this.configuration.accessToken;
-            headers = headers.set('Authorization', 'Bearer ' + accessToken);
-        }
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/segment/${encodeURIComponent(String(id))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param id id del segmento
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public segmentIdGet(id: string, observe?: 'body', reportProgress?: boolean): Observable<Segment>;
-    public segmentIdGet(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Segment>>;
-    public segmentIdGet(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Segment>>;
-    public segmentIdGet(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling segmentIdGet.');
+            throw new Error('Required parameter id was null or undefined when calling campaignIdDelete.');
         }
 
         let headers = this.defaultHeaders;
@@ -183,7 +137,7 @@ export class SegmentsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Segment>('get',`${this.basePath}/segment/${encodeURIComponent(String(id))}`,
+        return this.httpClient.request<any>('delete',`${this.basePath}/campaign/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -194,19 +148,19 @@ export class SegmentsService {
     }
 
     /**
+     * findApiKeyById
      * 
-     * 
-     * @param id id del segmento
+     * @param id id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public segmentIdPut(id: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public segmentIdPut(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public segmentIdPut(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public segmentIdPut(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public campaignIdGet(id: string, observe?: 'body', reportProgress?: boolean): Observable<Campaign>;
+    public campaignIdGet(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Campaign>>;
+    public campaignIdGet(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Campaign>>;
+    public campaignIdGet(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
-            throw new Error('Required parameter id was null or undefined when calling segmentIdPut.');
+            throw new Error('Required parameter id was null or undefined when calling campaignIdGet.');
         }
 
         let headers = this.defaultHeaders;
@@ -220,6 +174,7 @@ export class SegmentsService {
         }
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
+            'application/json'
         ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected != undefined) {
@@ -230,7 +185,7 @@ export class SegmentsService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('put',`${this.basePath}/segment/${encodeURIComponent(String(id))}`,
+        return this.httpClient.request<Campaign>('get',`${this.basePath}/campaign/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -242,18 +197,124 @@ export class SegmentsService {
 
     /**
      * 
-     * 
-     * @param body Crea un nuevo segmento
+     * Ejecuta la carga de contactos de la campaña, requiere que el usaurio tenga permisos de ¿ publicación ? de campañas
+     * @param id id
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public segmentPost(body: Segment, observe?: 'body', reportProgress?: boolean): Observable<Segment>;
-    public segmentPost(body: Segment, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Segment>>;
-    public segmentPost(body: Segment, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Segment>>;
-    public segmentPost(body: Segment, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public campaignIdPost(id: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public campaignIdPost(id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public campaignIdPost(id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public campaignIdPost(id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling campaignIdPost.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<any>('post',`${this.basePath}/campaign/${encodeURIComponent(String(id))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * update
+     * 
+     * @param body Actualiza una campaña
+     * @param id id
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public campaignIdPut(body: Campaign, id: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public campaignIdPut(body: Campaign, id: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public campaignIdPut(body: Campaign, id: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public campaignIdPut(body: Campaign, id: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling segmentPost.');
+            throw new Error('Required parameter body was null or undefined when calling campaignIdPut.');
+        }
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling campaignIdPut.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (BearerToken) required
+        if (this.configuration.accessToken) {
+            const accessToken = typeof this.configuration.accessToken === 'function'
+                ? this.configuration.accessToken()
+                : this.configuration.accessToken;
+            headers = headers.set('Authorization', 'Bearer ' + accessToken);
+        }
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<any>('put',`${this.basePath}/campaign/${encodeURIComponent(String(id))}`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * save
+     * 
+     * @param body apiKey
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public campaignPost(body: Campaign, observe?: 'body', reportProgress?: boolean): Observable<Campaign>;
+    public campaignPost(body: Campaign, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Campaign>>;
+    public campaignPost(body: Campaign, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Campaign>>;
+    public campaignPost(body: Campaign, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling campaignPost.');
         }
 
         let headers = this.defaultHeaders;
@@ -283,7 +344,7 @@ export class SegmentsService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<Segment>('post',`${this.basePath}/segment`,
+        return this.httpClient.request<Campaign>('post',`${this.basePath}/campaign`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

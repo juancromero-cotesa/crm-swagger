@@ -14,7 +14,7 @@ export * from './businessProcessTaskActivity';
 export * from './businessProcessTaskDefinition';
 export * from './businessProcessTaskInstance';
 export * from './campaign';
-export * from './campaignList';
+export * from './campaignFieldsMap';
 export * from './censusData';
 export * from './censusEntity';
 export * from './censusViaType';

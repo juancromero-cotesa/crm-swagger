@@ -9,16 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CustomField } from './customField';
-import { GroupField } from './groupField';
 
-export interface GroupOperator { 
-    /**
-     * Campos por los que agrupar
-     */
-    id?: Array<CustomField>;
-    /**
-     * Campos calculados con operadores
-     */
-    fields?: Array<GroupField>;
+export interface CampaignFieldsMap { 
+    templateFieldName?: number;
+    datasourceFieldName?: number;
 }

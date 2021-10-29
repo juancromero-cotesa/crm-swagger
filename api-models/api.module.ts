@@ -7,6 +7,7 @@ import { ApikeysService } from './api/apikeys.service';
 import { AplicacionesExternasService } from './api/aplicacionesExternas.service';
 import { AuditoraService } from './api/auditora.service';
 import { AutorizacionesService } from './api/autorizaciones.service';
+import { CampaasService } from './api/campaas.service';
 import { CustomFormsService } from './api/customForms.service';
 import { DashboardsService } from './api/dashboards.service';
 import { DashboardsDeUsuariosService } from './api/dashboardsDeUsuarios.service';
@@ -37,6 +38,7 @@ import { WidgetsService } from './api/widgets.service';
     AplicacionesExternasService,
     AuditoraService,
     AutorizacionesService,
+    CampaasService,
     CustomFormsService,
     DashboardsService,
     DashboardsDeUsuariosService,

@@ -9,22 +9,17 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { FaqAnswer } from './faqAnswer';
-import { OrganizationalUnit } from './organizationalUnit';
 
 /**
- * Pregunta frecuente de la BBDD de conocimiento
+ * ids de campos de agrupación en consultas
  */
-export interface Faq { 
-    _id: string;
-    organizationalUnit: OrganizationalUnit;
+export interface GroupIdField { 
     /**
-     * Nombre descriptivo de la FAQ
+     * Nombre asignado en la salida
      */
-    name: string;
+    name?: string;
     /**
-     * Descripción de la FAQ
+     * Nombre de la propiedad en la proyección.
      */
-    description: string;
-    answers: Array<FaqAnswer>;
+    target?: string;
 }

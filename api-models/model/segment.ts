@@ -15,7 +15,7 @@ import { RuleSet } from './ruleSet';
  * Segmentos de perfilado de personas. Definirán el perfil de la persona en base a interacciones y servicios utilizados
  */
 export interface Segment { 
-    id: string;
+    _id: string;
     /**
      * identificador corto del segmento
      */

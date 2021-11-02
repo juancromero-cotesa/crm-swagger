@@ -19,7 +19,7 @@ export interface Situation {
     /**
      * del objectID se debería obtener el timestamp
      */
-    id?: string;
+    _id?: string;
     situationType: SituationType;
     user: UserBasic;
 }

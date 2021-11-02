@@ -16,7 +16,7 @@ import { UserBasic } from './userBasic';
  * APIKey
  */
 export interface ApiKey { 
-    id?: string;
+    _id?: string;
     name: string;
     key?: string;
     /**

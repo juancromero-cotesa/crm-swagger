@@ -52,6 +52,7 @@ export * from './filterMetadata';
 export * from './filterResponse';
 export * from './forgotPasswordRequest';
 export * from './groupField';
+export * from './groupIdField';
 export * from './groupOperator';
 export * from './inlineResponse200';
 export * from './integration';

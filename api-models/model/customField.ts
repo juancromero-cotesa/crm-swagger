@@ -17,9 +17,17 @@ export interface CustomField {
     /**
      * Nombre asignado en la salida
      */
-    name?: string;
+    name: string;
     /**
      * Nombre de la propiedad en la colección.
      */
-    target?: string;
+    target: string;
+    /**
+     * tipo de campo, se usa para almacenarlo en front a partir de propiedades de la coleccion
+     */
+    type?: string;
+    /**
+     * Operador en proyecciones
+     */
+    operator?: string;
 }

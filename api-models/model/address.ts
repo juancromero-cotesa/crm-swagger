@@ -16,7 +16,7 @@ import { CensusViaType } from './censusViaType';
  * Esquema de dirección
  */
 export interface Address { 
-    id: string;
+    _id: string;
     viaType: CensusViaType;
     via: CensusEntity;
     number: string;

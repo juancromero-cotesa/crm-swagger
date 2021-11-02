@@ -12,7 +12,7 @@
 import { PersonDto } from './personDto';
 
 export interface UserDto { 
-    id?: string;
+    _id?: string;
     created?: Date;
     deleted?: Date;
     disabled?: boolean;

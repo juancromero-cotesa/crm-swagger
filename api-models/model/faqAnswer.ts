@@ -15,7 +15,7 @@ import { FaqFile } from './faqFile';
  * Respuestas a pregunta frecuente
  */
 export interface FaqAnswer { 
-    id: string;
+    _id: string;
     /**
      * Descripción de la respuesta
      */

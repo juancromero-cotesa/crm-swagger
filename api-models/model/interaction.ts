@@ -21,7 +21,7 @@ export interface Interaction {
     /**
      * Como object id tendrá el timestamp de creación
      */
-    id: string;
+    _id: string;
     /**
      * Discriminador del tipo de interacción
      */

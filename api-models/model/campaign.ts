@@ -20,7 +20,7 @@ export interface Campaign {
     /**
      * identificador de la campaña en el Contact Center
      */
-    id: number;
+    _id: number;
     /**
      * Nombre descriptivo en CRM
      */
@@ -66,5 +66,5 @@ export interface Campaign {
     /**
      * fecha y hora de ejecución de la carga
      */
-    readonly loadTime?: string;
+    readonly LoadTime?: string;
 }

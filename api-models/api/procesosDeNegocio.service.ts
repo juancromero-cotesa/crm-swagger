@@ -112,15 +112,15 @@ export class ProcesosDeNegocioService {
      * Obtiene las tareas definidas de un proceso de negocio
      * Obtiene todas las tareas definidas de un proceso de negocio
      * @param businessprocessId 
-     * @param processInstanceId retorna los indicadores de la instancia de proceso
-     * @param includeAlarmList incluye la lista de alarmas en la respuesta
+     * @param process_instance_id retorna los indicadores de la instancia de proceso
+     * @param include_alarm_list incluye la lista de alarmas en la respuesta
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, processInstanceId?: string, includeAlarmList?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessIndicator>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, processInstanceId?: string, includeAlarmList?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessIndicator>>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, processInstanceId?: string, includeAlarmList?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessIndicator>>>;
-    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, processInstanceId?: string, includeAlarmList?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<BusinessProcessIndicator>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<BusinessProcessIndicator>>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<BusinessProcessIndicator>>>;
+    public businessprocessBusinessprocessIdIndicatorsGet(businessprocessId: string, process_instance_id?: string, include_alarm_list?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (businessprocessId === null || businessprocessId === undefined) {
             throw new Error('Required parameter businessprocessId was null or undefined when calling businessprocessBusinessprocessIdIndicatorsGet.');
@@ -129,11 +129,11 @@ export class ProcesosDeNegocioService {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (processInstanceId !== undefined && processInstanceId !== null) {
-            queryParameters = queryParameters.set('process-instance-id', <any>processInstanceId);
+        if (process_instance_id !== undefined && process_instance_id !== null) {
+            queryParameters = queryParameters.set('process-instance-id', <any>process_instance_id);
         }
-        if (includeAlarmList !== undefined && includeAlarmList !== null) {
-            queryParameters = queryParameters.set('include-alarm-list', <any>includeAlarmList);
+        if (include_alarm_list !== undefined && include_alarm_list !== null) {
+            queryParameters = queryParameters.set('include-alarm-list', <any>include_alarm_list);
         }
 
         let headers = this.defaultHeaders;

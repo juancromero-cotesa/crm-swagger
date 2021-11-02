@@ -9,14 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { CustomField } from './customField';
 import { GroupField } from './groupField';
+import { GroupIdField } from './groupIdField';
 
 export interface GroupOperator { 
     /**
      * Campos por los que agrupar
      */
-    id?: Array<CustomField>;
+    _id?: Array<GroupIdField>;
     /**
      * Campos calculados con operadores
      */

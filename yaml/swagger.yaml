@@ -7243,6 +7243,9 @@ components:
       description: Tipo de solicitud crm
     CustomField:
       title: CustomField
+      required:
+      - name
+      - target
       type: object
       properties:
         name:
@@ -7251,6 +7254,13 @@ components:
         target:
           type: string
           description: Nombre de la propiedad en la colección.
+        type:
+          type: string
+          description: "tipo de campo, se usa para almacenarlo en front a partir de\
+            \ propiedades de la coleccion"
+        operator:
+          type: string
+          description: Operador en proyecciones
       description: campos de la consulta a recuperar o columnas calculadas
     CustomFieldSort:
       type: object
@@ -7695,6 +7705,17 @@ components:
         email:
           type: string
       description: Objeto para la petición de enlace de contraseña olvidada
+    GroupIdField:
+      title: CustomField
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre asignado en la salida
+        target:
+          type: string
+          description: Nombre de la propiedad en la proyección.
+      description: ids de campos de agrupación en consultas
     GroupField:
       title: GroupField
       type: object
@@ -7717,7 +7738,7 @@ components:
           type: array
           description: Campos por los que agrupar
           items:
-            $ref: '#/components/schemas/CustomField'
+            $ref: '#/components/schemas/GroupIdField'
         fields:
           type: array
           description: Campos calculados con operadores

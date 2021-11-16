@@ -76,14 +76,15 @@ export interface Campaign {
      */
     readonly loadTime?: string;
     /**
-     * Estados de la campaña created (creada) scheduled (planificada) onLoad (Cargando contactos) onProcess (procesandose en contact center ) error (error en carga) finished (finalizada)
+     * Estados de la campaña created (creada) modified (modificada) scheduled (planificada) onLoad (Cargando contactos) onProcess (procesandose en contact center ) error (error en carga) finished (finalizada)
      */
     status: Campaign.StatusEnum;
 }
 export namespace Campaign {
-    export type StatusEnum = 'created' | 'scheduled' | 'onLoad' | 'onProcess' | 'error' | 'finished';
+    export type StatusEnum = 'created' | 'modified' | 'scheduled' | 'onLoad' | 'onProcess' | 'error' | 'finished';
     export const StatusEnum = {
         Created: 'created' as StatusEnum,
+        Modified: 'modified' as StatusEnum,
         Scheduled: 'scheduled' as StatusEnum,
         OnLoad: 'onLoad' as StatusEnum,
         OnProcess: 'onProcess' as StatusEnum,

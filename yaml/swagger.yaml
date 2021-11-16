@@ -6900,11 +6900,12 @@ components:
           readOnly: true
         status:
           type: string
-          description: Estados de la campaña created (creada) scheduled (planificada)
-            onLoad (Cargando contactos) onProcess (procesandose en contact center
-            ) error (error en carga) finished (finalizada)
+          description: Estados de la campaña created (creada) modified (modificada)
+            scheduled (planificada) onLoad (Cargando contactos) onProcess (procesandose
+            en contact center ) error (error en carga) finished (finalizada)
           enum:
           - created
+          - modified
           - scheduled
           - onLoad
           - onProcess

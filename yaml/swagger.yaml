@@ -94,7 +94,7 @@ info:
     modifica _id y fieldMaps en el esquema Campaign\n\n### 0.4.8\n***\nSe añade text\
     \ en campaign para usar como texto a enviar en campañas que no usan plantillas\
     \ como las notificaciones push\nSe añade subject \nSe elimina campaignListId y\
-    \ se añade campaignListName\n"
+    \ se añade campaignListName\nSe añade la propiedad status (enumerado)\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/

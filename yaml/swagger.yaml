@@ -22,7 +22,7 @@ info:
     \ esquema CampaignContact\nSe añaden los métodos para la obtención, creación y\
     \ borrado masivo de contactos en una campaña\nSe añaden los métodos para la obtenció\
     n, edición y borrado de contactos , de manera individual, en una campaña\n\n###CitizenCard\n\
-    Se añade la propiedad citizenId en tarjeta ciudadana \n\n### 0.5.0\n***\nSe declara\
+    Se añade la propiedad citizenId en tarjeta ciudadana \n\n### 0.5.1\n***\nSe declara\
     \ el esquema Survey que almacenará valoraciones del ciudadano\n\n###Solicitudes\n\
     Se depreca   /crmrequests/{crmRequestId}/bpsprocess\nAñade el método POST   /crmrequests/{crmRequestId}/survey\
     \ para almacenar la respuesta a la valoración de la solicitud\nSe añade la propiedad\

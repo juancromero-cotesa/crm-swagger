@@ -92,6 +92,7 @@ export * from './situationType';
 export * from './sort';
 export * from './sortMetadata';
 export * from './sortMetadataBean';
+export * from './survey';
 export * from './tokenResponse';
 export * from './user';
 export * from './userBasic';

@@ -11,11 +11,23 @@
  */
 
 /**
- * Objeto para la creación de un nuevo usuario. Creará el usuario con el nombre de usuario y el mail indicados y establecerá la contraseña. Este usuario quedará vinculado a la persona indicada por personId
+ * Encuesta de satisfacción sobre el desarrollo de  una solicitud o a nivel general sobre un servicio
  */
-export interface UserRequest { 
-    username?: string;
-    email?: string;
-    password?: string;
-    personId?: string;
+export interface Survey { 
+    /**
+     * se establece al crearla en backend
+     */
+    readonly timestamp: Date;
+    /**
+     * ip origen de la valoración, se establece desde backend
+     */
+    readonly sourceIp: string;
+    /**
+     * Valoracion de la atención
+     */
+    assessment: number;
+    /**
+     * Comentario adicional a la valoración
+     */
+    comment: string;
 }

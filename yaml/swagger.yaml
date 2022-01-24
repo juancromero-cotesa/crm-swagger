@@ -5,102 +5,33 @@ info:
     blica. \n***\n\nLos métodos estaran protegidos mediante el paso de un token vá\
     lido.\n\nLos métodos que puedan ser accedidos por aplicaciones de terceros estará\
     n protegidos por el paso de una api key que tendrá definidos los permisos correspondientes.\n\
-    \nSe eliminan las descriciones de cambios de versiones anteriores, se pueden consultar\
-    \ en las versiones previas\n\n\n## 0.3.2\n***\n\n### Address\n- Se añaden los\
-    \ campos number, floor, door, ladder, km, municipality y forcedAddress.\n- Se\
-    \ elimina el campo addressLine2\n\n### Dashboards\n- Se definen los métodos crud\
-    \ de dashboards\n- se define el esquema de dashboard\n\n\n### UsersDashboards\n\
-    - Se definen los métodos crud de la configuracion de dashboards \n- Se define\
-    \ el esquema de usersDashboards y DashboardConfiguration\n\n### Datasources\n\
-    - Se especifica el retorno correcto del método /datasource/collectionsfields/{collection}\
-    \ es un objeto en vez de un array\n\n### Widgets\n- Se renombra la propiedad organizationalUnit\
-    \ a organizationalUnits y se convierte en array\n- Se elimina la propiedad privateWidget\
-    \ ya que no es necesaria al tener un array de organizationalUnits.\n\n    \n###\
-    \ WidgetChart\n- Se elimina la propiedad xAxisLabels pues se gestionan las etiquetas\
-    \ desde la serie\n\n### DataSerie\n- Se define la propiedad dataSourceFieldForLabel\
-    \ que indica la propiedad que contiene las etiquetas de la serie\n\n### Persons\n\
-    - Nuevo método/persons/forcedvias que retorna las vías forzadas en direcciones\
-    \ de personas\n- Nuevo esquema ForcedVia\n- Nuevas propiedades segmentationWhiteList\
-    \ y segmentationBlackList \n\n### Users\n- Se define al usuario el dashboard por\
-    \ defecto en la propiedad defaultDashboard. Deberá actualizarse cada vez que se\
-    \ actualice ese dashboard\n\n### InteractionTypes , CrmRequestTypes\n- Se define\
-    \ la propiedad segmentation que contiene los segmentos que genera la interacció\
-    n o solicitud\n\n## 0.3.3\n***\n\n### users\nSe especifica el retorno del error\
-    \ 460 cuando no se puede procesar la petición por condiciones de la lógica de\
-    \ la aplicación. P. Ej. el usuario se asocia a una persona que ya tiene usuario\
-    \ asociado\n\n### ServiceResponseError\nSe redefine el esquema del error en las\
-    \ respuestas para alinearlo con back\n\n### Personas\nDocumenta núevos métodos\
-    \ lock y unlock ya implementados\n\n### CensusViaType\nSe define el modelo\n\n\
-    ### CensusEntity\nSe define el modelo\n\n### Addresses\nSe modifica el modelo\
-    \ \n  addressType -se renombra a viaType del tipo pasa a CensusViaType\n  addressLine1\
-    \ -se renombra a via y se define como CensusEntity\n  city, province(state) y\
-    \ municipality pasan a ser de tipo CensusEntity\n  state - se renombra a province\n\
-    \n### Census Data\neuropeanCommunity y pasan de boolean a numérico para alinearlos\
-    \ con lo recibido de padrón\n\n## 0.3.4\n***\n \n### Addresses\n  -  Se modifica\
-    \ el modelo. Se añaden las propiedades letter, block, portal de tipo string para\
-    \ alinear las direcciones con padrón\n\n### Persons\n  - /persons/forcedvias/\
-    \ - Se modifica la respuesta y la forma de obtener las vías forzadas. Se obtienen\
-    \ por id de municipio y se retorna la vía con su código y el tipo de vía con su\
-    \ código\n  - Se elimina el esquema ForcedVia, ahora se retorna CensusViaViaType\n\
-    \  \n##0.3.5 \n***\n\n### Users\nSe define el nuevo método put /users/{userId}/defaultdashboard\
-    \ mediante el cual se establece la propieda defaultDashboard con el dashboard\
-    \ recibido en el body\n\n##0.3.6\n***\n\n### Person\nSe añade la propiedad electronicOffice\
-    \ a la persona\n\n### AdministrativeFile\nDefine el esquema de expediente administrativo\
-    \ de experta importado desde ETL\n\n### ElectronicOffice\nSe define el esquema\
-    \ de oficina electrónica que contiene los datos de sede electrónica de la persona\n\
-    \n## 0.3.7\n***\n\n### CensusData\nSe añade la propiedad domicileCode\n\n##0.3.8\n\
-    ***\n\n### Datasources \nIncorpora método run\nModifica modelo Datasource, Propiedad\
-    \ rules de tipo RuleSet, Propiedad group de tipo GroupOperator.\nPropiedad projectionField\
-    \ de tipo CustomField. Propiedad orderBy de tipo CustomFieldSort.\nSe modifica\
-    \ el modelo RuleSet\nSe añaden los métodos run y run/{datasourceId}\nSe definene\
-    \ los modelos GroupOperator, CustomField,GroupField,CustomFieldSort\n\n### USERBUS\
-    \ API\nCreación del api para las consultas de usuarios del bus. Métodos públicos\
-    \ que requieren de una apikey especifica para el bus\nMétodo POST /userbus\nguarda\
-    \ el usuario que llega por el body deshabilitado.\nMétodo GET /usersbus/{username}/{password}\n\
-    Busca usuario por username y password.\nMétodo GET /usersbus/doc/{docId}\nBusca\
-    \ usuario por numero de documento.\nMétodo GET /usersbus/tc/{idSgtc}\nBusca usuario\
-    \ por numero de tarjeta ciudadana asociada a la persona asociada al usuario.\n\
-    Método GET /usersbus/validusername/{username}\nValida que una username sea valida.\n\
-    \n## 0.3.9\n***\n\n### DataSources\nse renombra la propiedad rules a ruleSet\n\
-    se renombra la propiedad projectionField a projectionFields\n \n### DataSourceQuery\n\
-    Se elimina el esquema DataSourceQuery\n\n### CrmRequestType\nse renombra la propiedad\
-    \ bpsProcessDefinitionsId a businessProcessesDefinitionsIds\n\n### Procesos de\
-    \ negocio\nSe elimina esquema BpsInstance\n\n\nSe definen los métodos \n  - GET/businessprocess\n\
-    \  - GET/businessprocess/{businessprocessId}\n  - GET/businessprocess/{businessprocessId}/indicators\n\
-    \  - GET/businessprocess/{businessprocessId}/instances\n  - GET/businessprocess/{businessprocessId}/instances/{instanceId}\n\
-    \  - GET/businessprocess/{businessprocessId}/taskdefinitions\n\nSe definen los\
-    \ esquemas\n  - BusinessProcessDefinition\n  - BusinessProcessEntity\n  - BusinessProcessIndicator\n\
-    \  - BusinessProcessIndicatorAlarm\n  - BusinessProcessInstance\n  - BusinessProcessTaskDefinition\n\
-    \  - BusinessProcessTaskInstance\n  - BusinessProcessFormProperty\n  \n## 0.4.0\n\
-    ***\n\n### CrmRequest\nbpsProcessInstances se renombra como businessProcessesInstancesIds\
-    \ y pasa a ser un array de strings\n\n## 0.4.1\n***\n\n### Procesos de negocio\n\
-    \  Metodo para la obtención de actividades de una instancia\n    GET /search/historic-activities-instances\n\
-    \  Se define el esquema BusinessProcessTaskActivity\n \n Se modifica el método\
-    \ \n eliminando el párametro bussinesProcessId \n /businessprocess/{businessprocessId}/instances/{instanceId}\n\
-    \n## 0.4.2\n***\n\n### FAQs\nse definen los esquemas Faqs, FaqAnswer y FaqFile\n\
-    Se definen los métodos sobre faqs\n\n  - GET /faqs\n  - POST /faqs\n  - GET /faqs/{faqId}\n\
-    \  - PUT /faqs/{faqId}\n  - DELETE /faqs/{faqId}\n  - POST /faqs/{faqId}/answers\n\
-    \  - PUT /faqs/{faqId}/answers/{answerId}\n  - DELETE /faqs/{faqId}/answers/{answerId}\n\
-    \  - GET /faqs/files\n  - POST /faqs/fileUpload\n   \n## 0.4.3\n***\n\nSe añade\
-    \ el método POST /faqs/{faqId}/name\nSe define el esquema FaqNameUpdateRequest\n\
-    \n### 0.4.4\n***\n\nInteractionInteractive\nSe añade el atributo active\n    \n\
-    ### 0.4.5\n***\n\n### FAQs\nSe renombran los métodos /faqs/file a /faqs/files\
-    \ para igualarlo con lo implementado en back\nse añade el método get  /faqs/files/{fileId}\
-    \ para la descarga de ficheros\nSe define corrctamente el método de subida de\
-    \ archivos post /faqs/files\nSe modifica FaqFile se añaden las propiedades fileName\
-    \ y fileType\n\n### 0.4.6\n***\n\n###Campañas\nSe definen el esquema Campaign\n\
-    Se definen los mátodos de camapañas\n\n\n###Users\nSe añade la propiedad citizen\
-    \ al esquema UserBasic que indica si es un usuario ciudadano\n\n### 0.4.7\n***\n\
-    modifica _id y fieldMaps en el esquema Campaign\n\n### 0.4.8\n***\nSe añade text\
-    \ en campaign para usar como texto a enviar en campañas que no usan plantillas\
-    \ como las notificaciones push\nSe añade subject \nSe elimina campaignListId y\
-    \ se añade campaignListName\nSe añade la propiedad status (enumerado)\n\n    \n\
-    ### 0.4.9\n***\nSe añade metodo POST /persons/personContact\n\n### 0.5.0\n***\n\
-    \n###Contacto Campaña\nSe define el esquema CampaignContact\nSe añaden los mé\
-    todos para la obtención, creación y borrado masivo de contactos en una campañ\
-    a\nSe añaden los métodos para la obtención, edición y borrado de contactos , de\
-    \ manera individual, en una campaña\n\n###CitizenCard\nSe añade la propiedad citizenId\
-    \ en tarjeta ciudadana \n"
+    \nSe eliminan las descriciones de cambios de versiones anteriores a la 0.4.5,\
+    \ se pueden consultar en las versiones previas\n\n\n### 0.4.5\n***\n\n### FAQs\n\
+    Se renombran los métodos /faqs/file a /faqs/files para igualarlo con lo implementado\
+    \ en back\nse añade el método get  /faqs/files/{fileId} para la descarga de ficheros\n\
+    Se define corrctamente el método de subida de archivos post /faqs/files\nSe modifica\
+    \ FaqFile se añaden las propiedades fileName y fileType\n\n### 0.4.6\n***\n\n\
+    ###Campañas\nSe definen el esquema Campaign\nSe definen los mátodos de camapañ\
+    as\n\n\n###Users\nSe añade la propiedad citizen al esquema UserBasic que indica\
+    \ si es un usuario ciudadano\n\n### 0.4.7\n***\nmodifica _id y fieldMaps en el\
+    \ esquema Campaign\n\n### 0.4.8\n***\nSe añade text en campaign para usar como\
+    \ texto a enviar en campañas que no usan plantillas como las notificaciones push\n\
+    Se añade subject \nSe elimina campaignListId y se añade campaignListName\nSe añ\
+    ade la propiedad status (enumerado)\n\n    \n### 0.4.9\n***\nSe añade metodo POST\
+    \ /persons/personContact\n\n### 0.5.0\n***\n\n###Contacto Campaña\nSe define el\
+    \ esquema CampaignContact\nSe añaden los métodos para la obtención, creación y\
+    \ borrado masivo de contactos en una campaña\nSe añaden los métodos para la obtenció\
+    n, edición y borrado de contactos , de manera individual, en una campaña\n\n###CitizenCard\n\
+    Se añade la propiedad citizenId en tarjeta ciudadana \n\n### 0.5.0\n***\nSe declara\
+    \ el esquema Survey que almacenará valoraciones del ciudadano\n\n###Solicitudes\n\
+    Se depreca   /crmrequests/{crmRequestId}/bpsprocess\nAñade el método POST   /crmrequests/{crmRequestId}/survey\
+    \ para almacenar la respuesta a la valoración de la solicitud\nSe añade la propiedad\
+    \ survey a la solicitud para almacenar la valoración del ciudadano a la atenció\
+    n recibida\nSe modifica el método en el método /crmrequests/{crmRequestId}/situation\
+    \ la clase del objeto a enviar en el post de CrmRequest a Situation\n\n###Person\n\
+    Se añade la propiedad surveys para almacenar las valoraciones del ciudadano al\
+    \ servicio prestado por el ayuntamiento\nAñade el método POST   /persons/survey\
+    \ para almacenar una nueva respuesta de encuesta de valoración del servicio\n"
   contact:
     name: Cotesa
     url: https://cotesa.grupotecopy.es/
@@ -359,13 +290,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -407,7 +343,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -420,11 +359,16 @@ paths:
       tags:
       - Autorizaciones
       summary: Realiza el logout de un usuario invalidando su token de acceso
+      description: ""
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -454,13 +398,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -497,7 +446,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -547,7 +499,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -570,9 +525,14 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -596,9 +556,14 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -621,15 +586,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -655,9 +627,14 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -680,9 +657,14 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -692,7 +674,7 @@ paths:
       tags:
       - Procesos de negocio
       summary: Obtiene definiciones de procesos de negocio
-      description: Obtiene todas las definiciones de procesos de negocio (/applications/3/process-definitions)
+      description: Obtiene todas las definiciones de procesos de negocio (/applications/3/process-definitionscrmrsurve)
       responses:
         "200":
           description: ok
@@ -703,7 +685,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessDefinition'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -732,7 +716,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/BusinessProcessDefinition'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -782,7 +768,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessIndicator'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -816,7 +804,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessInstance'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -848,7 +838,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessTaskDefinition'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -887,7 +879,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessInstance'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -921,13 +915,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/BusinessProcessTaskActivity'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1064,7 +1063,9 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
           description: Unauthorized
         "403":
@@ -1090,15 +1091,22 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1121,15 +1129,22 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1161,15 +1176,22 @@ paths:
                 items:
                   $ref: '#/components/schemas/CampaignContact'
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1199,15 +1221,22 @@ paths:
               $ref: '#/components/schemas/id_contacts_body'
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1230,15 +1259,22 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1298,7 +1334,9 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
           description: Unauthorized
         "403":
@@ -1323,15 +1361,22 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -1355,7 +1400,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/ExternalAplication'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -1381,7 +1428,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExternalAplication'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -1410,7 +1459,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/ExternalAplication'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -1438,9 +1489,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -1462,9 +1517,13 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2388,7 +2447,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CrmRequest'
+              $ref: '#/components/schemas/Situation'
         required: true
       responses:
         "200":
@@ -2439,7 +2498,7 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
-      deprecated: false
+      deprecated: true
       security:
       - BearerToken: []
       - ApiKey: []
@@ -2517,6 +2576,67 @@ paths:
       security:
       - BearerToken: []
       - ApiKey: []
+  /crmrequests/{crmRequestId}/survey:
+    post:
+      tags:
+      - Solicitudes
+      parameters:
+      - name: crmRequestId
+        in: path
+        description: crmRequestId
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: token
+        in: query
+        description: token proveniente del enlace generado para la encuesta
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: email al que se envió que recibió el enlace para solicitar la
+          votación
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        description: Establece encuesta de valoración de la solicitud. Es un método
+          público pero valida los parámetros token e email
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Survey'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+        "403":
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "499":
+          description: parámetros token o email recibidos no válidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+      deprecated: false
   /customForm:
     get:
       tags:
@@ -2533,13 +2653,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/CustomForm'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2550,6 +2675,7 @@ paths:
       tags:
       - CustomForms
       summary: Actualiza un formulario
+      description: ""
       requestBody:
         content:
           application/json:
@@ -2558,17 +2684,25 @@ paths:
         required: true
       responses:
         "201":
-          description: Created
+          description: La petición ha sido completada y ha resultado en la creación
+            de un nuevo recurso.
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2594,13 +2728,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/CustomForm'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2720,9 +2859,13 @@ paths:
           format: ObjectId
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2749,7 +2892,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Faq'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -2860,15 +3005,22 @@ paths:
           format: ObjectId
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3010,15 +3162,22 @@ paths:
           format: ObjectId
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3043,7 +3202,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/FaqFile'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3066,7 +3227,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FaqFile'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3096,7 +3259,9 @@ paths:
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3116,11 +3281,15 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3141,7 +3310,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/UsersGroup'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3167,13 +3338,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/UsersGroup'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3202,7 +3378,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/UsersGroup'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3230,9 +3408,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3256,9 +3438,13 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3283,13 +3469,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/DataSource'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3317,13 +3508,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataSource'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3357,7 +3553,9 @@ paths:
                 additionalProperties:
                   type: string
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3385,7 +3583,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/CollectionName'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3477,13 +3677,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataSource'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3521,7 +3726,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataSource'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3550,13 +3757,18 @@ paths:
         "204":
           description: No Content
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "403":
-          description: insuficients rights
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
           content:
             application/json:
               schema:
@@ -3582,7 +3794,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Integration'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3608,7 +3822,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Integration'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3640,7 +3856,9 @@ paths:
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3669,11 +3887,15 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3696,11 +3918,15 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3732,7 +3958,9 @@ paths:
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3779,9 +4007,14 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
@@ -3789,7 +4022,9 @@ paths:
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3812,11 +4047,15 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3893,13 +4132,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Interaction'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3930,7 +4174,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Interaction'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3960,9 +4206,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -3987,7 +4237,9 @@ paths:
         "204":
           description: No content
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4023,7 +4275,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Situation'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4064,7 +4318,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Interaction'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4097,7 +4353,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Interaction'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4123,13 +4381,18 @@ paths:
         "202":
           description: Accepted
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4152,13 +4415,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/InteractionType'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4185,13 +4453,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4214,7 +4487,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Language'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4243,7 +4518,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/LanguageExtended'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4271,9 +4548,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4310,13 +4591,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/LanguageExtended'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4338,9 +4624,13 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4394,7 +4684,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganizationalUnit'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4423,13 +4715,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganizationalUnit'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4460,7 +4757,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganizationalUnit'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4492,9 +4791,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4528,9 +4831,13 @@ paths:
           type: boolean
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4562,7 +4869,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/OrganizationalUnit'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4615,7 +4924,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Avatar'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4646,13 +4957,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Person'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4683,7 +4999,9 @@ paths:
         "400":
           description: Invalid Path ID
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4748,7 +5066,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Person'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4785,15 +5105,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4835,7 +5162,9 @@ paths:
                   additionalProperties:
                     type: string
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4868,13 +5197,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Person'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4907,7 +5241,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Person'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4937,13 +5273,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_200'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -4972,13 +5313,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5002,13 +5348,18 @@ paths:
         "204":
           description: No Content
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5040,7 +5391,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Avatar'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5075,7 +5428,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/CensusViaViaType'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5140,6 +5495,39 @@ paths:
           description: Forbidden
         "404":
           description: Not Found
+      deprecated: false
+      security:
+      - ApiKey: []
+  /persons/survey:
+    post:
+      tags:
+      - Personas
+      requestBody:
+        description: Establece encuesta de valoración global del servicio del ayuntamiento
+          en el array de las valoracione de la persona del usuario en sesión.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Survey'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+        "403":
+          description: "La solicitud fue legal, pero el servidor rehúsa responderla\
+            \ dado que el cliente no tiene los privilegios para realizarla. En contraste\
+            \ a una respuesta 401 No autorizado, autenticarse previamente no va a\
+            \ cambiar la respuesta."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceResponseError'
+        "499":
+          description: el usuario de sesion no tiene persona asignada
       deprecated: false
       security:
       - ApiKey: []
@@ -5283,13 +5671,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/SituationType'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5315,13 +5708,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/SituationType'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5348,7 +5746,9 @@ paths:
         "200":
           $ref: '#/components/schemas/SituationType'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5381,15 +5781,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5413,9 +5820,13 @@ paths:
           format: ObjectId
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5452,7 +5863,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/SituationType'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5480,13 +5893,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/CitizenCard'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5516,15 +5934,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5560,15 +5985,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5597,13 +6029,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5641,13 +6078,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5661,6 +6103,7 @@ paths:
       tags:
       - Usuarios
       summary: Actualiza un usuario con el objeto recibido en el body
+      description: ""
       parameters:
       - name: userId
         in: path
@@ -5673,17 +6116,25 @@ paths:
         $ref: '#/components/requestBodies/UserRequest'
       responses:
         "201":
-          description: Created
+          description: La petición ha sido completada y ha resultado en la creación
+            de un nuevo recurso.
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5703,6 +6154,7 @@ paths:
       - Usuarios
       summary: Elimina un usuario. Realiza la baja en IS y marca como baja el perfil
         de la persona en CRM sin eliminar el documento.
+      description: ""
       parameters:
       - name: userId
         in: path
@@ -5714,9 +6166,13 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5750,15 +6206,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5789,13 +6252,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -5825,13 +6293,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6179,7 +6652,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/CrmParamType'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6212,7 +6687,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/CrmParam'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6240,9 +6717,13 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6276,7 +6757,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/CrmParam'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6307,9 +6790,13 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6343,7 +6830,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Dashboard'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6369,7 +6858,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Dashboard'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6398,7 +6889,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Dashboard'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6426,11 +6919,15 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6452,11 +6949,15 @@ paths:
           type: string
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "404":
           description: Resource Not found
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6484,13 +6985,18 @@ paths:
                   - $ref: '#/components/schemas/WidgetIndicator'
                   - $ref: '#/components/schemas/WidgetTable'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6516,13 +7022,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Widget'
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6548,7 +7059,9 @@ paths:
         "200":
           $ref: '#/components/schemas/Widget'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6582,15 +7095,22 @@ paths:
         required: true
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "400":
-          description: Invalid request body
+          description: "El servidor no procesará la solicitud, porque no puede, o\
+            \ no debe, debido a algo que es percibido como un error del cliente ej->\
+            \ solicitud malformada, sintaxis errónea, etc). La solicitud contiene\
+            \ sintaxis errónea y no debería repetirse."
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ServiceResponseError'
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -6613,9 +7133,13 @@ paths:
           format: ObjectId
       responses:
         "204":
-          description: No content
+          description: La petición se ha completado con éxito pero su respuesta no
+            tiene ningún contenido (la respuesta puede incluir información en sus
+            cabeceras HTTP).
         "401":
-          description: ApiKey is missing or invalid
+          description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero\
+            \ específicamente para su uso cuando la autentificación es posible pero\
+            \ ha fallado o aún no ha sido provista"
           content:
             application/json:
               schema:
@@ -7481,6 +8005,8 @@ components:
             $ref: '#/components/schemas/Comment'
         active:
           type: boolean
+        survey:
+          $ref: '#/components/schemas/Survey'
       description: 'Solicitud realizada en CRM de una persona o componente que precisa
         de una gestión y/o la intervención de otros sistemas por lo que dispone de
         un ciclo de vida y pasa por diferentes estados desde su inicio hasta su cierre.
@@ -7659,7 +8185,7 @@ components:
         dataSourceFieldForLabel:
           type: string
           description: campo de la fuente de datos a usar como label (etiqueta de
-            descripción) de los datos
+            descripciónperson) de los datos
         name:
           type: string
           description: nombre de la serie
@@ -8615,6 +9141,12 @@ components:
           description: Catálogo de integraciones disponibles para la persona
           items:
             $ref: '#/components/schemas/IntegrationItem'
+        surveys:
+          type: array
+          description: opiniones sobre el servicio prestado por el ayuntamiento. Un
+            ciudadano podrá valorar el servicio de forma general cuantas veces quiera
+          items:
+            $ref: '#/components/schemas/Survey'
       description: Objeto persona que almacena la información de cada persona física
         o jurídica
     PersonDto:
@@ -8937,6 +9469,38 @@ components:
         order:
           type: integer
           format: int64
+    Survey:
+      required:
+      - assessment
+      - comment
+      - sourceIp
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: se establece al crearla en backend
+          format: date-time
+          readOnly: true
+          example: 2017-07-21T17:32:28Z
+        sourceIp:
+          type: string
+          description: "ip origen de la valoración, se establece desde backend"
+          readOnly: true
+          example: 192.168.1.5
+        assessment:
+          maximum: 10
+          minimum: 0
+          type: number
+          description: Valoracion de la atención
+          example: 7
+        comment:
+          type: string
+          description: Comentario adicional a la valoración
+          example: La atención a la solicitud ha sido buena pero el tiempo de respuesta
+            podría mejorar
+      description: Encuesta de satisfacción sobre el desarrollo de  una solicitud
+        o a nivel general sobre un servicio
     TokenResponse:
       type: object
       properties:
@@ -9280,13 +9844,19 @@ components:
     Ok:
       description: Success
     NoContent:
-      description: No content
+      description: La petición se ha completado con éxito pero su respuesta no tiene
+        ningún contenido (la respuesta puede incluir información en sus cabeceras
+        HTTP).
     Created:
-      description: Created
+      description: La petición ha sido completada y ha resultado en la creación de
+        un nuevo recurso.
     InvalidID:
       description: Invalid Path ID
     InvalidRequestBody:
-      description: Invalid request body
+      description: "El servidor no procesará la solicitud, porque no puede, o no debe,\
+        \ debido a algo que es percibido como un error del cliente ej-> solicitud\
+        \ malformada, sintaxis errónea, etc). La solicitud contiene sintaxis erró\
+        nea y no debería repetirse."
       content:
         application/json:
           schema:
@@ -9294,13 +9864,18 @@ components:
     NotFound:
       description: Resource Not found
     UnauthorizedError:
-      description: ApiKey is missing or invalid
+      description: "ApiKey is missing or invalid. Similar al 403 Forbidden, pero especí\
+        ficamente para su uso cuando la autentificación es posible pero ha fallado\
+        \ o aún no ha sido provista"
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ServiceResponseError'
     ForbiddenError:
-      description: insuficients rights
+      description: "La solicitud fue legal, pero el servidor rehúsa responderla dado\
+        \ que el cliente no tiene los privilegios para realizarla. En contraste a\
+        \ una respuesta 401 No autorizado, autenticarse previamente no va a cambiar\
+        \ la respuesta."
       content:
         application/json:
           schema:

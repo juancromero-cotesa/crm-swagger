@@ -1,0 +1,4305 @@
+{
+  "openapi" : "3.0.3",
+  "info" : {
+    "title" : "PUERTO DE LA CRUZ SMART PARKING REST API",
+    "description" : "\n## 0.3.0\n- Se deprecan métodos no necesarios\n- Se crea método /commands/{id}/run para ejecutar un comando\n- Se define CommandRunParams\n- Se eliminan clases relacionadas con geometrías\n\n## 0.3.1\n- Se define correctamente el esquema de seguridad como Bearer token\n- Si incluye id en los PUT de usuarios y parking\n- Se añade atributo enabled en usuarios y roles\n\n## 0.3.2\n- Se cambia es esquema statistics\n- Se elimina el esquema StatisticPK\n- Se elimina la prop. statistics del esquema Parking\n- Se añade el método /parkings/{id}/stastistics/{date} para obtener las estadísticas de un día\n- Se definen los esquemas para el paso de mansajes con JSON-RPC WebSocketParkingAlertMessage,WebSocketParkingStatusMessage,WebSocketMessage\n- Se define el método   /connect para abrir la conexión mediante WS\n\n## 0.3.3\n- se añade la propiedad shortName al parking\n- put actionMaintenance con id\n- put elements con id\n\n## 0.3.4\n- Añade atributos nombre y descripcion al objeto elemento\n- Cambia en acciones de mantenimiento tipo parking por elemento.\n- Se añade el método /alerts/last\n- Se añade el método /alerts/parking/{id} \n- Se añade el método /maintenanceactions/parking/{id} \n- Cambio de formato de startTime y endTime en acciones de mantenimiento a fecha hora en formato utc\n\n##0.4.0\nSe define el método  /parkings/integration. Se definen los esquemas del método IntegrationParkingInterface y Skidata.",
+    "license" : {
+      "name" : "Apache License Version 2.0",
+      "url" : "https://www.apache.org/licenses/LICENSE-2.0\""
+    },
+    "version" : "0.4.0"
+  },
+  "servers" : [ {
+    "url" : "http://puertodelacruzsmartparkingdes.grupotecopy.es/puertodelacruzsmartparkingback",
+    "description" : "Entorno de pruebas"
+  } ],
+  "tags" : [ {
+    "name" : "Alertas",
+    "description" : "Métodos sobre alertas"
+  }, {
+    "name" : "Tipos de alertas",
+    "description" : "Métodos sobre tipos de alertas"
+  }, {
+    "name" : "Autenticación",
+    "description" : "Métodos de autenticacion"
+  }, {
+    "name" : "Comandos",
+    "description" : "Métodos de comandos y ejecución de comandos"
+  }, {
+    "name" : "Elementos",
+    "description" : "Métodos sobre elementos de parkings"
+  }, {
+    "name" : "Element State",
+    "description" : "Métodos sobre estados de elementos"
+  }, {
+    "name" : "Element Type",
+    "description" : "Element Type Controller"
+  }, {
+    "name" : "Mantenimiento",
+    "description" : "Mantenimiento Controller"
+  }, {
+    "name" : "Parkings",
+    "description" : "Parking Controller"
+  }, {
+    "name" : "Parking Area",
+    "description" : "Parking Area Controller"
+  }, {
+    "name" : "Parking Area State",
+    "description" : "Parking Area State Controller"
+  }, {
+    "name" : "Parking Area Type",
+    "description" : "Parking Area Type Controller"
+  }, {
+    "name" : "Roles",
+    "description" : "Roles Controller"
+  }, {
+    "name" : "Usuarios",
+    "description" : "Users Controller"
+  }, {
+    "name" : "WebSocket",
+    "description" : "Métodos de conexión mediante WS"
+  } ],
+  "paths" : {
+    "/alerts" : {
+      "get" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Get a list of all an alerts",
+        "operationId" : "findAllUsingGET",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "GESTOR", "ADMINISTRADOR" ]
+        } ]
+      }
+    },
+    "/alerts/{id}" : {
+      "get" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Get an alert given an id",
+        "operationId" : "findByIdUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Alert"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "GESTOR", "ADMINISTRADOR" ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Delete an alert given an id",
+        "operationId" : "deleteUsingDELETE",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ "ADMINISTRADOR" ]
+        } ]
+      }
+    },
+    "/alerts/element/{id}" : {
+      "get" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Get an alert given an element id",
+        "operationId" : "findByIdActorUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id del elemento",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "GESTOR", "ADMINISTRADOR" ]
+        } ]
+      }
+    },
+    "/alerts/parking/{id}" : {
+      "get" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Obtiene alertas de un parking",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id del parking",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "GESTOR", "ADMINISTRADOR" ]
+        } ]
+      }
+    },
+    "/alerts/last" : {
+      "get" : {
+        "tags" : [ "Alertas" ],
+        "summary" : "Obtiene las últimas 10 alertas de todos los parkings",
+        "responses" : {
+          "200" : {
+            "description" : "10 últimas alertas",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Alert"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/alertypes" : {
+      "get" : {
+        "tags" : [ "Tipos de alertas" ],
+        "summary" : "Get a list of all alert types",
+        "operationId" : "findAllUsingGET_1",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/AlertType"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/alertypes/{id}" : {
+      "get" : {
+        "tags" : [ "Tipos de alertas" ],
+        "summary" : "Get an alert type given an id",
+        "operationId" : "findByIdUsingGET_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AlertType"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/commands" : {
+      "get" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "Get a list of all alert types",
+        "operationId" : "findAllUsingGET_2",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Command"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "GESTOR", "ADMINISTRADOR" ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "Update an alert type",
+        "operationId" : "updateUsingPUT_2",
+        "requestBody" : {
+          "description" : "cameraState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Command"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Command"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "cameraState"
+      },
+      "post" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "Save an alert type",
+        "operationId" : "saveUsingPOST_2",
+        "requestBody" : {
+          "description" : "cameraState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Command"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Command"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "cameraState"
+      }
+    },
+    "/commands/{id}" : {
+      "get" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "Obtiene un comando por su id",
+        "operationId" : "findByIdUsingGET_2",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Command"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "Delete an alert type given an id",
+        "operationId" : "deleteUsingDELETE_2",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/commands/{id}/run" : {
+      "post" : {
+        "tags" : [ "Comandos" ],
+        "summary" : "ejecuta un comando en un elemento",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "Parametros de ejecución de un comando",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CommandRunParams"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/dologin" : {
+      "post" : {
+        "tags" : [ "Autenticación" ],
+        "summary" : "Login Puerto de la Cruz SmartParking",
+        "operationId" : "createAuthenticationTokenUsingPOST",
+        "requestBody" : {
+          "description" : "authenticationRequest",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/JwtRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JwtResponse"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "authenticationRequest"
+      }
+    },
+    "/elements" : {
+      "get" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Get a list of all elements",
+        "operationId" : "findAllUsingGET_3",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Element"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Save an element",
+        "operationId" : "saveUsingPOST_3",
+        "requestBody" : {
+          "description" : "camera",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Element"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Element"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "camera"
+      }
+    },
+    "/elements/parking/{id}" : {
+      "get" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Get an element given an id",
+        "operationId" : "findByIdActorUsingGET_1",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Element"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/elements/{id}" : {
+      "get" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Get an element given an id",
+        "operationId" : "findByIdUsingGET_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Element"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Update an element",
+        "operationId" : "updateUsingPUT_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "camera",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Element"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Element"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "camera"
+      },
+      "delete" : {
+        "tags" : [ "Elementos" ],
+        "summary" : "Delete an element given an id",
+        "operationId" : "deleteUsingDELETE_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/elementstates" : {
+      "get" : {
+        "tags" : [ "Estados de Elementos" ],
+        "summary" : "Get a list of all element states",
+        "operationId" : "findAllUsingGET_4",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ElementState"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Estados de Elementos" ],
+        "summary" : "Update an element state",
+        "operationId" : "updateUsingPUT_4",
+        "requestBody" : {
+          "description" : "elementState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ElementState"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementState"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "elementState"
+      },
+      "post" : {
+        "tags" : [ "Estados de Elementos" ],
+        "summary" : "Save an element state",
+        "operationId" : "saveUsingPOST_4",
+        "requestBody" : {
+          "description" : "elementState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ElementState"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementState"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "elementState"
+      }
+    },
+    "/elementstates/{id}" : {
+      "get" : {
+        "tags" : [ "Estados de Elementos" ],
+        "summary" : "Get an element state given an id",
+        "operationId" : "findByIdUsingGET_4",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementState"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Estados de Elementos" ],
+        "summary" : "Delete an element state given an id",
+        "operationId" : "deleteUsingDELETE_4",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/elementtypes" : {
+      "get" : {
+        "tags" : [ "Tipos de Elementos" ],
+        "summary" : "Get a list of all element types",
+        "operationId" : "findAllUsingGET_5",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ElementType"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Tipos de Elementos" ],
+        "summary" : "Update an element type",
+        "operationId" : "updateUsingPUT_5",
+        "requestBody" : {
+          "description" : "elementType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ElementType"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementType"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "elementType"
+      },
+      "post" : {
+        "tags" : [ "Tipos de Elementos" ],
+        "summary" : "Save an element type",
+        "operationId" : "saveUsingPOST_5",
+        "requestBody" : {
+          "description" : "elementType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ElementType"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementType"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "elementType"
+      }
+    },
+    "/elementtypes/{id}" : {
+      "get" : {
+        "tags" : [ "Tipos de Elementos" ],
+        "summary" : "Get an element type given an id",
+        "operationId" : "findByIdUsingGET_5",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ElementType"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Tipos de Elementos" ],
+        "summary" : "Delete an element type given an id",
+        "operationId" : "deleteUsingDELETE_5",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/logout" : {
+      "get" : {
+        "tags" : [ "Autenticación" ],
+        "summary" : "Logout of Puerto de la Cruz SmartParking",
+        "operationId" : "fetchSignoutSiteUsingGET",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/maintenanceactions" : {
+      "get" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Get a list of all maintenance actions",
+        "operationId" : "findAllUsingGET_6",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MaintenanceAction"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Save a maintenance action",
+        "operationId" : "saveUsingPOST_6",
+        "requestBody" : {
+          "description" : "maintenanceAction",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MaintenanceAction"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MaintenanceAction"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "maintenanceAction"
+      }
+    },
+    "/maintenanceactions/{id}" : {
+      "get" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Get a maintenance action given an id",
+        "operationId" : "findByIdUsingGET_6",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MaintenanceAction"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Update a maintenance action",
+        "operationId" : "updateUsingPUT_6",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "maintenanceAction",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MaintenanceAction"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MaintenanceAction"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "maintenanceAction"
+      },
+      "delete" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Delete a maintenance action given an id",
+        "operationId" : "deleteUsingDELETE_6",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/maintenanceactions/actor/{id}" : {
+      "get" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Obtiene acciones de mantenimiento por usuario de mantenimiento",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MaintenanceAction"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/maintenanceactions/parking/{id}" : {
+      "get" : {
+        "tags" : [ "Mantenimiento" ],
+        "summary" : "Obtiene acciones de mantenimiento de un parking",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id del parking dfel que obtener las acctuaciones",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "acciones de mantenimiento",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/MaintenanceAction"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkingareas" : {
+      "get" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Get a list of all parking areas",
+        "operationId" : "findAllUsingGET_7",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ParkingArea"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Update a parking area",
+        "operationId" : "updateUsingPUT_7",
+        "requestBody" : {
+          "description" : "parkingArea",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingArea"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingArea"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingArea"
+      },
+      "post" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Save a parking area",
+        "operationId" : "saveUsingPOST_7",
+        "requestBody" : {
+          "description" : "parkingArea",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingArea"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingArea"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingArea"
+      }
+    },
+    "/parkingareas/parking/{id}" : {
+      "get" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Get a parking area given an id",
+        "operationId" : "findByIdActorUsingGET_3",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ParkingArea"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkingareas/{id}" : {
+      "get" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Get a parking area given an id",
+        "operationId" : "findByIdUsingGET_7",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingArea"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Parking Area" ],
+        "summary" : "Delete a parking area given an id",
+        "operationId" : "deleteUsingDELETE_7",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkingareastates" : {
+      "get" : {
+        "tags" : [ "Parking Area State" ],
+        "summary" : "Get a list of all parking area states",
+        "operationId" : "findAllUsingGET_8",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ParkingAreaState"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Parking Area State" ],
+        "summary" : "Update a parking area state",
+        "operationId" : "updateUsingPUT_8",
+        "requestBody" : {
+          "description" : "parkingAreaState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingAreaState"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaState"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingAreaState"
+      },
+      "post" : {
+        "tags" : [ "Parking Area State" ],
+        "summary" : "Save a parking area state",
+        "operationId" : "saveUsingPOST_8",
+        "requestBody" : {
+          "description" : "parkingAreaState",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingAreaState"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaState"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingAreaState"
+      }
+    },
+    "/parkingareastates/{id}" : {
+      "get" : {
+        "tags" : [ "Parking Area State" ],
+        "summary" : "Get a parking area state given an id",
+        "operationId" : "findByIdUsingGET_8",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaState"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Parking Area State" ],
+        "summary" : "Delete a parking area state given an id",
+        "operationId" : "deleteUsingDELETE_8",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkingareatypes" : {
+      "get" : {
+        "tags" : [ "Parking Area Type" ],
+        "summary" : "Get a list of all parking area types",
+        "operationId" : "findAllUsingGET_9",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/ParkingAreaType"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Parking Area Type" ],
+        "summary" : "Update a parking area type",
+        "operationId" : "updateUsingPUT_9",
+        "requestBody" : {
+          "description" : "parkingAreaType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingAreaType"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaType"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingAreaType"
+      },
+      "post" : {
+        "tags" : [ "Parking Area Type" ],
+        "summary" : "Save a parking area type",
+        "operationId" : "saveUsingPOST_9",
+        "requestBody" : {
+          "description" : "parkingAreaType",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ParkingAreaType"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaType"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parkingAreaType"
+      }
+    },
+    "/parkingareatypes/{id}" : {
+      "get" : {
+        "tags" : [ "Parking Area Type" ],
+        "summary" : "Get a parking area type given an id",
+        "operationId" : "findByIdUsingGET_9",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ParkingAreaType"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Parking Area Type" ],
+        "summary" : "Delete a parking area type given an id",
+        "operationId" : "deleteUsingDELETE_9",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkings" : {
+      "get" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Get a list of all parkings",
+        "operationId" : "findAllUsingGET_10",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Parking"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ "admin", "user" ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Save a parking",
+        "operationId" : "saveUsingPOST_10",
+        "requestBody" : {
+          "description" : "parking",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Parking"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Parking"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parking"
+      }
+    },
+    "/parkings/init" : {
+      "put" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Create all parking areas that belongs to the parkings",
+        "operationId" : "initUsingPUT",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkings/{id}" : {
+      "get" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Get a parking given an id",
+        "operationId" : "findByIdUsingGET_10",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Parking"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Update a parking",
+        "operationId" : "updateUsingPUT_11",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "parking",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Parking"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Parking"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "parking"
+      },
+      "delete" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Delete a parking given an id",
+        "operationId" : "deleteUsingDELETE_10",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkings/{id}/stastistics/{date}" : {
+      "get" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Get a parking given an id",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "identificador del parking",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        }, {
+          "name" : "date",
+          "in" : "path",
+          "description" : "fecha de la estadística en formato aaa-mmm-dd",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "pattern" : "^\\d{4}-\\d{2}-\\d{2}$",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Statistic"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkings/integration" : {
+      "put" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Endpoint de integración de parking externo",
+        "requestBody" : {
+          "description" : "interfaz de integración",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/IntegrationParkingInterface"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/parkings/{id}/updateparkingarea" : {
+      "put" : {
+        "tags" : [ "Parkings" ],
+        "summary" : "Record a vehicle exit into a parking",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/roles" : {
+      "get" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Get a list of all roles",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Update a role",
+        "requestBody" : {
+          "description" : "role",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Role"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "role"
+      },
+      "post" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Save a role",
+        "operationId" : "saveUsingPOST_11",
+        "requestBody" : {
+          "description" : "role",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Role"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "role"
+      }
+    },
+    "/roles/{id}" : {
+      "get" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Get a role given an id",
+        "operationId" : "findRoleByIdUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "Roles" ],
+        "summary" : "Delete a role given an id",
+        "operationId" : "deleteUsingDELETE_11",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get a list of all users",
+        "operationId" : "findallUserUsingGET",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Save a user",
+        "operationId" : "saveUsingPOST_12",
+        "requestBody" : {
+          "description" : "user",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "user"
+      }
+    },
+    "/users/email" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get a user given an email",
+        "operationId" : "findByEmailUsingGET",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "description" : "email",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/me" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get my user",
+        "operationId" : "findMyUserUsingGET",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/role/{id}" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get a list of users given a role id",
+        "operationId" : "findByIdRoleUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/username" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get a user given an username",
+        "operationId" : "findByUsernameUsingGET",
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "username",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/validateemail" : {
+      "post" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Check if an email introduced is valid",
+        "operationId" : "validEmailUsingPOST",
+        "parameters" : [ {
+          "name" : "email",
+          "in" : "query",
+          "description" : "email",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/validateusername" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Check if an username introduced is valid",
+        "operationId" : "validateUsernameUsingGET",
+        "parameters" : [ {
+          "name" : "userName",
+          "in" : "query",
+          "description" : "userName",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "additionalProperties" : {
+                    "type" : "boolean"
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : true,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/users/{id}" : {
+      "get" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Get a user given an id",
+        "operationId" : "findUserByIdUsingGET",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Update a user",
+        "operationId" : "updateUsingPUT_13",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "requestBody" : {
+          "description" : "user",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "Created",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ],
+        "x-codegen-request-body-name" : "user"
+      },
+      "delete" : {
+        "tags" : [ "Usuarios" ],
+        "summary" : "Delete a user given an id",
+        "operationId" : "deleteUsingDELETE_12",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : { }
+          },
+          "204" : {
+            "description" : "No Content",
+            "content" : { }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "content" : { }
+          },
+          "403" : {
+            "description" : "Forbidden",
+            "content" : { }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    },
+    "/connect" : {
+      "summary" : "Métodos para realizar la conexión mediante web socket",
+      "get" : {
+        "tags" : [ "WebSocket" ],
+        "summary" : "abre una conexión mediante websocket con el backend",
+        "description" : "Método a modo de documentación de la conexión mediante websocket ws://. se define el esquema de los mensajes recibidos a traves del websocket. El método http GET no es funcional",
+        "responses" : {
+          "200" : {
+            "description" : "mensajes recibidos a traves de la conexión",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/WebSocketMessage"
+                }
+              }
+            }
+          }
+        },
+        "deprecated" : false,
+        "security" : [ {
+          "bearerAuth" : [ ]
+        } ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Alert" : {
+        "title" : "Alert",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "active" : {
+            "type" : "boolean"
+          },
+          "alertType" : {
+            "$ref" : "#/components/schemas/AlertType"
+          },
+          "date" : {
+            "type" : "string",
+            "example" : "dd-MM-yyyy HH:mm:ss"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "element" : {
+            "$ref" : "#/components/schemas/Element"
+          }
+        }
+      },
+      "AlertType" : {
+        "title" : "AlertType",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Command" : {
+        "title" : "Command",
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "disabled" : {
+            "type" : "boolean"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parameters" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CommandRunParams" : {
+        "title" : "Parámetros de ejecución de un comando",
+        "type" : "object",
+        "properties" : {
+          "elementId" : {
+            "type" : "string",
+            "description" : "Id del elemento sobre el que ejecutar el comando"
+          },
+          "params" : {
+            "type" : "string",
+            "description" : "parámetros de ejecución del comando, deben de ser un string con un json con los parámetros que espera el comando con sus valores de ejecución"
+          }
+        }
+      },
+      "Coordinate" : {
+        "title" : "Coordinate",
+        "type" : "object",
+        "properties" : {
+          "coordinate" : {
+            "$ref" : "#/components/schemas/Coordinate"
+          },
+          "m" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "valid" : {
+            "type" : "boolean"
+          },
+          "x" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "y" : {
+            "type" : "number",
+            "format" : "double"
+          },
+          "z" : {
+            "type" : "number",
+            "format" : "double"
+          }
+        }
+      },
+      "Element" : {
+        "title" : "Element",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "elementState" : {
+            "$ref" : "#/components/schemas/ElementState"
+          },
+          "elementType" : {
+            "$ref" : "#/components/schemas/ElementType"
+          },
+          "geometria" : {
+            "type" : "string",
+            "description" : "Geometría en formato WKT"
+          },
+          "parking" : {
+            "$ref" : "#/components/schemas/Parking"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "description" : "Elementos pertenecientes al parking"
+      },
+      "ElementState" : {
+        "title" : "ElementState",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ElementType" : {
+        "title" : "ElementType",
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "imageUrl" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "IntegrationParkingInterface" : {
+        "title" : "Interface para la integraciónde otros parkings con distintas interfaces",
+        "type" : "object",
+        "description" : "interfaz de integración, se deberán de ir definiento tantos esquemas como integraciones se implementen. En el backend se tratarán de diferente forma según el discriminador.",
+        "discriminator" : {
+          "propertyName" : "IntegrationType"
+        },
+        "oneOf" : [ {
+          "$ref" : "#/components/schemas/Skidata"
+        } ]
+      },
+      "JwtRequest" : {
+        "title" : "JwtRequest",
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "JwtResponse" : {
+        "title" : "JwtResponse",
+        "type" : "object",
+        "properties" : {
+          "token" : {
+            "type" : "string"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        }
+      },
+      "MaintenanceAction" : {
+        "title" : "MaintenanceAction",
+        "type" : "object",
+        "properties" : {
+          "actor" : {
+            "$ref" : "#/components/schemas/User"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "duration" : {
+            "type" : "number",
+            "description" : "Duración de la intervención en horas. Puede ser decimal",
+            "format" : "float"
+          },
+          "endTime" : {
+            "type" : "string",
+            "description" : "Timestamp de fin en formato UTC",
+            "format" : "date-time",
+            "example" : "2021-01-30T08:30:00Z"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "element" : {
+            "$ref" : "#/components/schemas/Element"
+          },
+          "startTime" : {
+            "type" : "string",
+            "description" : "Timestamp de incio en formato UTC",
+            "format" : "date-time",
+            "example" : "2021-01-30T08:30:00Z"
+          }
+        }
+      },
+      "Parking" : {
+        "title" : "Parking",
+        "type" : "object",
+        "properties" : {
+          "address" : {
+            "type" : "string"
+          },
+          "addressType" : {
+            "type" : "string"
+          },
+          "external" : {
+            "type" : "boolean"
+          },
+          "geometria" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "municipality" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "shortName" : {
+            "maxLength" : 20,
+            "type" : "string"
+          },
+          "number" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "province" : {
+            "type" : "string"
+          },
+          "totalSpaces" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "occupiedSpaces" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "unavailableSpaces" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "zipCode" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "ParkingArea" : {
+        "title" : "ParkingArea",
+        "type" : "object",
+        "properties" : {
+          "geometria" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "parking" : {
+            "$ref" : "#/components/schemas/Parking"
+          },
+          "parkingAreaState" : {
+            "$ref" : "#/components/schemas/ParkingAreaState"
+          },
+          "parkingAreaType" : {
+            "$ref" : "#/components/schemas/ParkingAreaType"
+          }
+        },
+        "deprecated" : true
+      },
+      "ParkingAreaState" : {
+        "title" : "ParkingAreaState",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "deprecated" : true
+      },
+      "ParkingAreaType" : {
+        "title" : "ParkingAreaType",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "deprecated" : true
+      },
+      "Role" : {
+        "title" : "Role",
+        "type" : "object",
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        }
+      },
+      "Statistic" : {
+        "title" : "Statistic",
+        "type" : "object",
+        "properties" : {
+          "parkingId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "year" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "month" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "hour" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "day" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "entries" : {
+            "type" : "integer",
+            "description" : "Numero de entradas en la hora",
+            "format" : "int32"
+          },
+          "exits" : {
+            "type" : "integer",
+            "description" : "Numero de salidas en la hora",
+            "format" : "int32"
+          },
+          "maxOccupiedSpaces" : {
+            "type" : "integer",
+            "description" : "Numero máximo de ocupación en la hora",
+            "format" : "int32"
+          },
+          "minOccupiedSpaces" : {
+            "type" : "integer",
+            "description" : "Numero mínimo de ocupación en la hora",
+            "format" : "int32"
+          },
+          "totalSpaces" : {
+            "type" : "integer",
+            "description" : "Numero espacios totales en la hora",
+            "format" : "int32"
+          },
+          "unavailableSpaces" : {
+            "type" : "integer",
+            "description" : "Numero espacios no disponibles en la hora",
+            "format" : "int32"
+          }
+        },
+        "description" : "estadísticas de un parking por horas"
+      },
+      "Skidata" : {
+        "title" : "Integración Skidata",
+        "type" : "object",
+        "properties" : {
+          "integrationType" : {
+            "type" : "string",
+            "description" : "tipo de integración, solo podrá ser el texto 'skidata'",
+            "example" : "skidata",
+            "enum" : [ "skidata" ]
+          },
+          "parkingId" : {
+            "type" : "integer",
+            "description" : "identificador del parking en el sistema. Se deberá proporcionar este id al sistema que consume el servicio",
+            "format" : "int64",
+            "example" : 2
+          },
+          "dateTime" : {
+            "type" : "string",
+            "description" : "Timestamp de los datos recibidos en formato utc",
+            "format" : "date-time",
+            "example" : "2021-01-30T08:30:00Z"
+          },
+          "counters" : {
+            "type" : "array",
+            "example" : [ {
+              "id" : 5,
+              "description" : "Plazas totales",
+              "value" : 600
+            }, {
+              "id" : 2,
+              "description" : "Plazas libres",
+              "value" : 240
+            } ],
+            "items" : {
+              "$ref" : "#/components/schemas/Skidata_counters"
+            }
+          }
+        },
+        "description" : "Esquema de integración de parking desde sistema skidata"
+      },
+      "User" : {
+        "title" : "User",
+        "type" : "object",
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "enabled" : {
+            "type" : "boolean"
+          },
+          "nif" : {
+            "type" : "string"
+          },
+          "roles" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/UserRoleParking"
+            }
+          },
+          "surname" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UserRoleParking" : {
+        "title" : "UserRoleParking",
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "parking" : {
+            "$ref" : "#/components/schemas/Parking"
+          },
+          "enabled" : {
+            "type" : "boolean"
+          },
+          "role" : {
+            "$ref" : "#/components/schemas/Role"
+          },
+          "user" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        }
+      },
+      "WebSocketMessage" : {
+        "title" : "Mensaje de comunicación por websocket para la comunicación se usarán JSON-RCP 2.0",
+        "type" : "object",
+        "properties" : {
+          "jsonrpc" : {
+            "type" : "string"
+          },
+          "method" : {
+            "type" : "string",
+            "enum" : [ "ParkingAlert", "ParkingStatus" ]
+          },
+          "params" : {
+            "type" : "object",
+            "description" : "Permisos de una feature",
+            "anyOf" : [ {
+              "$ref" : "#/components/schemas/WebSocketParkingStatusMessage"
+            }, {
+              "$ref" : "#/components/schemas/WebSocketParkingAlertMessage"
+            } ]
+          }
+        }
+      },
+      "WebSocketParkingStatusMessage" : {
+        "type" : "object",
+        "properties" : {
+          "parkingId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "totalSpaces" : {
+            "type" : "integer"
+          },
+          "occupiedSpaces" : {
+            "type" : "integer"
+          },
+          "unavailableSpaces" : {
+            "type" : "integer"
+          }
+        },
+        "description" : "Parámetros del mensaje de websocket para los cambios de estados del un parking. El estado puede cambiar por el movimiento de vehículos o por los cambios realizados manualmente. Se comunican por ws porque se pueden realizar desde ina instancia de la aplicación y deben quedar actualziados en todas en tiempo real"
+      },
+      "WebSocketParkingAlertMessage" : {
+        "title" : "Parámetros del mensaje de websocket para los cambios de estados del un parking.",
+        "type" : "object",
+        "properties" : {
+          "parkingId" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "alert" : {
+            "$ref" : "#/components/schemas/Alert"
+          }
+        }
+      },
+      "Skidata_counters" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "description" : "Identificador del contador"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "nombre o descripción del contador"
+          },
+          "value" : {
+            "type" : "integer",
+            "description" : "valor del contador"
+          }
+        },
+        "description" : "distintos contadores del parking",
+        "example" : null
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}
